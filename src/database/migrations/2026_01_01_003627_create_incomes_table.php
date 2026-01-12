@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('incomes', function (Blueprint $table) {
             $table->id();
+            $table->integer('income_purpose_id');
+            $table->integer('amount');
+            $table->dateTime('date_time');
+            $table->string('possession');
+            $table->text('detail')->nullable();
             $table->timestamps();
         });
     }

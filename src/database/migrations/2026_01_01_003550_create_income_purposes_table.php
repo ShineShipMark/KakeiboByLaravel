@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('income_purposes', function (Blueprint $table) {
             $table->id();
+            $table->string('purpose');
+            $table->integer('income_category_id');
             $table->timestamps();
         });
     }

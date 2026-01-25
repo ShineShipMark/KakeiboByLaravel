@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Services\Contracts\KakeiboServiceInterface;
 use DeleteExpense;
 use DeleteIncome;
 use GetExpense;
+use GetExpenseCategory;
+use GetExpensePurpose;
 use GetIncome;
+use GetIncomeCategory;
+use GetIncomePurpose;
 use RegisterExpense;
 use UpdateExpense;
 use Illuminate\Support\Arr;
@@ -74,5 +77,25 @@ class KakeiboController extends Controller
         $input = $request->all();
         $id = Arr::only($input, ['id'])['id'];
         return Inertia::render('delete/', ['data', $usecase->handle($id)]);
+    }
+
+    public function getExpensePurpose(GetExpensePurpose $usecase)
+    {
+        return Inertia::render('input/',['expensePurpose',$usecase->handle()]);
+    }
+
+    public function getIncomePurpose(GetIncomePurpose $usecase)
+    {
+        return Inertia::render('input/',['incomePurpose',$usecase->handle()]);
+    }
+
+    public function getExpenseCategory(GetExpenseCategory $usecase)
+    {
+        return Inertia::render('input/', ['expenseCategory',$usecase->handle()]);
+    }
+
+    public function getIncomeCategory(GetIncomeCategory $usecase)
+    {
+        return Inertia::render('input/', ['incomeCategory',$usecase->handle()]);
     }
 }

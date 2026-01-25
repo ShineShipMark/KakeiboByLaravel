@@ -23,9 +23,10 @@ import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover
 import { Calendar } from '@/components/ui/calendar';
 import { CalendarIcon } from 'lucide-vue-next'
 import { cn } from '@/lib/utils'
-import { ref, Ref } from 'vue';
+import { computed, onMounted, ref, Ref } from 'vue';
 import Textarea from '@/components/ui/textarea/Textarea.vue';
-import { sendPurpose } from '@/types/vue-types'
+import { sendPurpose, viewsPurpose } from '@/types/vue-types'
+import Switch from '@/components/ui/switch/Switch.vue';
 
 const defaultPlaceholder = today(getLocalTimeZone())
 const date = ref() as Ref<DateValue>
@@ -43,6 +44,29 @@ const possession = ref<'account' | 'wallet'>('account');
 
 const detail = ref<string>('');
 
+const purposeData = ref<viewsPurpose>({
+    id: 0,
+    category_id: 0,
+    purpose: '',
+});
+
+const witchSelected = ref<boolean>(true);
+const witchString = computed<string>(() => {
+    return witchSelected.value == true ? '支出' : '収入';
+})
+
+onMounted(async () => {
+    purposeData.value = await fetchs<viewsPurpose>('/get_expense_purpose', 'get');
+});
+
+const fetchs = async<T>(url: string, methods: string) => {
+    const response = await fetch(url, { method: methods });
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+    return response.json() as T;
+}
+
 const sendData = () => {
     console.log(555);
 }
@@ -50,6 +74,7 @@ const sendData = () => {
 </script>
 <template>
     <Card>
+        <Switch v-model="witchSelected">{{ witchString }}</Switch>
         <NumberField :model-value="amount">
             <Label for="age-disabled">金額</Label>
             <NumberFieldContent>

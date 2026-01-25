@@ -18,3 +18,7 @@ Route::post('/edit/expense', [KakeiboController::class, 'editExpense'])->name('e
 Route::post('/edit/income', [KakeiboController::class, 'editIncome'])->name('edit.income');
 Route::post('/delete/expense', [KakeiboController::class, 'deleteExpense'])->name('delete.expense');
 Route::post('/delete/income', [KakeiboController::class, 'deleteIncome'])->name('delete.income');
+Route::get('/get_expense_purpose',[KakeiboController::class, 'getExpensePurpose'])->name('get.expense_purpose');
+Route::get('/get_income_purpose',[KakeiboController::class, 'getIncomePurpose'])->name('get.income_purpose');
+Route::get('/get_expense_category',[KakeiboController::class, 'getExpenseCategory'])->name('get.expense_category');
+Route::get('/get_income_category',[KakeiboController::class, 'getIncomeCategory'])->name('get.income_category');

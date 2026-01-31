@@ -1,137 +1,49 @@
 <script setup lang="ts">
-import type { DateValue } from '@internationalized/date';
-import { DateFormatter, getLocalTimeZone, today } from '@internationalized/date';
 import Card from '@/components/ui/card/Card.vue';
 import Button from '@/components/ui/button/Button.vue';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectGroup,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select'
-import {
-    NumberField,
-    NumberFieldContent,
-    NumberFieldDecrement,
-    NumberFieldIncrement,
-    NumberFieldInput,
-} from '@/components/ui/number-field';
-import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
-import { Calendar } from '@/components/ui/calendar';
-import { CalendarIcon } from 'lucide-vue-next'
-import { cn } from '@/lib/utils'
-import { computed, onMounted, ref, Ref } from 'vue';
+import { computed, onMounted, reactive, ref, watch } from 'vue';
 import Textarea from '@/components/ui/textarea/Textarea.vue';
-import { sendPurpose, viewsPurpose } from '@/types/vue-types'
+import { postData, selectedObject, viewsPurpose } from '@/types/vue-types'
 import Switch from '@/components/ui/switch/Switch.vue';
+import { fetchs } from '@/composables/fetch';
+import setAmount from '@/components/inputParts/setAmount.vue';
+import setSelectPurpose from '@/components/inputParts/setSelectPurpose.vue';
+import setSelectPossession from '@/components/inputParts/setSelectPossession.vue';
+import setAtDate from '@/components/inputParts/setAtDate.vue';
 
-const defaultPlaceholder = today(getLocalTimeZone())
-const date = ref() as Ref<DateValue>
-const df = new DateFormatter('en-US', {
-    dateStyle: 'long',
-})
-
-const select_items = ref<sendPurpose[]>([]);
-
-const selected_purpose_id = ref<number>(0);
-
-const amount = ref<number>(0);
-
-const possession = ref<'account' | 'wallet'>('account');
 
 const detail = ref<string>('');
 
-const purposeData = ref<viewsPurpose>({
-    id: 0,
-    category_id: 0,
-    purpose: '',
-});
+const purposeData = ref<viewsPurpose[]>([]);
+
+const sendInputData = reactive<postData>({ id: 0, amount: 0, purpose_id: 0, at_date: new Date(), possession: 'account', detail: '' });
 
 const witchSelected = ref<boolean>(true);
-const witchString = computed<string>(() => {
-    return witchSelected.value == true ? '支出' : '収入';
+
+const witchString = computed<selectedObject>(() => {
+    return witchSelected.value == true ? { en: 'expense', jp: '支出' } : { en: 'income', jp: '収入' };
 })
 
 onMounted(async () => {
-    purposeData.value = await fetchs<viewsPurpose>('/get_expense_purpose', 'get');
+    purposeData.value = await fetchs<viewsPurpose[], string>('/get_expense_purpose', 'get', '');
 });
 
-const fetchs = async<T>(url: string, methods: string) => {
-    const response = await fetch(url, { method: methods });
-    if (!response.ok) {
-        throw new Error('Network response was not ok');
-    }
-    return response.json() as T;
-}
+watch(witchSelected, async () => {
+    purposeData.value = await fetchs<viewsPurpose[], string>(`/get_${witchString.value.en}_purpose`, 'get', '');
+})
 
-const sendData = () => {
-    console.log(555);
+const sendData = async () => {
+    await fetchs<string, string>(`/input/${witchString.value.en}`, 'post', '');
 }
 
 </script>
 <template>
     <Card>
-        <Switch v-model="witchSelected">{{ witchString }}</Switch>
-        <NumberField :model-value="amount">
-            <Label for="age-disabled">金額</Label>
-            <NumberFieldContent>
-                <NumberFieldDecrement />
-                <NumberFieldInput />
-                <NumberFieldIncrement />
-            </NumberFieldContent>
-        </NumberField>
-
-        <Select v-model="selected_purpose_id">
-            <SelectTrigger class="w-[180px]">
-                <SelectValue placeholder="Select a fruit" />
-            </SelectTrigger>
-            <SelectContent>
-                <SelectGroup>
-                    <SelectLabel>目的</SelectLabel>
-                    <SelectItem :key="item.id" v-for="item in select_items" :value="item.purpose">
-                        {{ item.purpose }}
-                    </SelectItem>
-                </SelectGroup>
-            </SelectContent>
-        </Select>
-
-        <label for="at_date">日時</label>
-        <Card id="at_date">
-            <Popover v-slot="{ close }">
-                <PopoverTrigger as-child>
-                    <Button variant="outline"
-                        :class="cn('w-[240px] justify-start text-left font-normal', !date && 'text-muted-foreground')">
-                        <CalendarIcon />
-                        {{ date ? df.format(date.toDate(getLocalTimeZone())) : "Pick a date" }}
-                    </Button>
-                </PopoverTrigger>
-                <PopoverContent class="w-auto p-0" align="start">
-                    <Calendar v-model="date" :default-placeholder="defaultPlaceholder" layout="month-and-year"
-                        initial-focus @update:model-value="close" />
-                </PopoverContent>
-            </Popover>
-        </Card>
-
-        <Select v-model="possession">
-            <SelectTrigger class="w-[180px]">
-                <SelectValue placeholder="Select a fruit" />
-            </SelectTrigger>
-            <SelectContent>
-                <SelectGroup>
-                    <SelectLabel>金額の所在・引き落とし元</SelectLabel>
-                    <SelectItem value="wallet">
-                        財布
-                    </SelectItem>
-                    <SelectItem value="account">
-                        口座
-                    </SelectItem>
-                </SelectGroup>
-            </SelectContent>
-        </Select>
-
+        <Switch v-model="witchSelected">{{ witchString.jp }}</Switch>
+        <setAmount v-model="sendInputData.amount" />
+        <setSelectPurpose v-model:purpose-id="sendInputData.purpose_id" v-model:select_items="purposeData" />
+        <setAtDate v-model="sendInputData.at_date" />
+        <setSelectPossession v-model="sendInputData.possession" />
         <Textarea v-model="detail" placeholder="Type your message here." />
         <Button @click="sendData()"></Button>
     </Card>

@@ -23,4 +23,24 @@ type postData = {
   detail: string;
 };
 
+type getData = {
+  id: number;
+  amount: number;
+  purpose: getExpensePurpose;
+  at_date: Date | null;
+  possession: possessionPlace;
+  detail: string;
+};
+
+type getExpensePurpose = {
+  id: number;
+  purpose: string;
+  category: getExpenseCategory;
+};
+
+type getExpenseCategory = {
+  id: number;
+  category: string;
+};
+
 type possessionPlace = "account" | "wallet";

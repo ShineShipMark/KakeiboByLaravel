@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import Card from '@/components/ui/card/Card.vue';
-import Table from '@/components/ui/table/Table.vue';
-import TableBody from '@/components/ui/table/TableBody.vue';
-import TableCaption from '@/components/ui/table/TableCaption.vue';
-import TableCell from '@/components/ui/table/TableCell.vue';
-import TableHead from '@/components/ui/table/TableHead.vue';
-import TableHeader from '@/components/ui/table/TableHeader.vue';
-import TableRow from '@/components/ui/table/TableRow.vue';
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Button } from '@/components/ui/button';
 import { fetchs } from '@/composables/fetch';
 import { getData, } from '@/types/vue-types';
 import { onMounted, ref } from 'vue';
+import {
+    Dialog,
+    DialogTrigger,
+} from '@/components/ui/dialog'
+import EditModal from '@/components/historyParts/editModal.vue';
 
 const listData = ref<getData[]>([]);
 
@@ -50,6 +50,16 @@ const columnName = ['日付', '大目的', '小目的', '金額', '所在', '詳
                     </TableCell>
                     <TableCell>
                         {{ data.detail }}
+                    </TableCell>
+                    <TableCell>
+                        <Dialog>
+                            <DialogTrigger as-child>
+                                <Button variant="outline">
+                                    Open Dialog
+                                </Button>
+                            </DialogTrigger>
+                            <EditModal />
+                        </Dialog>
                     </TableCell>
                 </TableRow>
             </TableBody>

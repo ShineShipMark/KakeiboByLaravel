@@ -13,7 +13,7 @@ services:
   app:
     build: ./docker/php
     container_name: kakeibobylaravel-app
-    # user: "1000:1000"
+    user: "${UID}:${GID}"
     volumes:
       - ./src:/var/www/html
     working_dir: /var/www/html

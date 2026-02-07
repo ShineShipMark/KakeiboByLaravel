@@ -11,7 +11,6 @@ import setSelectPurpose from '@/components/inputParts/setSelectPurpose.vue';
 import setSelectPossession from '@/components/inputParts/setSelectPossession.vue';
 import setAtDate from '@/components/inputParts/setAtDate.vue';
 
-
 const detail = ref<string>('');
 
 const purposeData = ref<viewsPurpose[]>([]);
@@ -33,7 +32,7 @@ watch(witchSelected, async () => {
 })
 
 const sendData = async () => {
-    await fetchs<string, string>(`/input/${witchString.value.en}`, 'post', '');
+    await fetchs<string, postData>(`/input/${witchString.value.en}`, 'post', sendInputData);
 }
 
 </script>

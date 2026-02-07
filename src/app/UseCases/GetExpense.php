@@ -1,11 +1,14 @@
 <?php
 
+use App\Http\Resources\ExpenseResource;
 use App\Models\Expense;
 
 class GetExpense
 {
-    public function handle():Expense
+    public function handle():ExpenseResource
     {
-        return Expense::find();
+        $expense = Expense::with(['expensesPurpose.expensesCategory'])->first();
+
+        return new ExpenseResource($expense);
     }
 }

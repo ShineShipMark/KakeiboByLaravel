@@ -1,11 +1,14 @@
 <?php
 
+use App\Http\Resources\IncomeResource;
 use App\Models\Income;
 
 class GetIncome
 {
-    public function handle():Income
+    public function handle():IncomeResource
     {
-        return Income::find();
+        $income = Income::with(['incomesPurpose.incomesCategory'])->first();
+
+        return new IncomeResource($income);
     }
 }

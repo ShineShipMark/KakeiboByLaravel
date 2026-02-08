@@ -8,20 +8,19 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import { sendPurpose } from '@/types/vue-types';
+import { useInputDataStore } from '@/stores/inputDataStore';
 
-const select_items = defineModel<sendPurpose[]>('select_items')
-const purposeId = defineModel<number>('purposeId');
+const store = useInputDataStore();
 </script>
 <template>
-    <Select v-model="purposeId">
+    <Select v-model="store.selectedPurposeId">
         <SelectTrigger class="w-[180px]">
             <SelectValue placeholder="Select a fruit" />
         </SelectTrigger>
         <SelectContent>
             <SelectGroup>
                 <SelectLabel>目的</SelectLabel>
-                <SelectItem :key="item.id" v-for="item in select_items" :value="item.purpose">
+                <SelectItem :key="item.id" v-for="item in store.purposeData" :value="item.id">
                     {{ item.purpose }}
                 </SelectItem>
             </SelectGroup>

@@ -1,20 +1,21 @@
 <script setup lang="ts">
+import { useInputDataStore } from '@/stores/inputDataStore'
 import Card from '@/components/ui/card/Card.vue';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { fetchs } from '@/composables/fetch';
-import { getData, } from '@/types/vue-types';
-import { onMounted, ref } from 'vue';
+import { onMounted } from 'vue';
 import {
     Dialog,
     DialogTrigger,
 } from '@/components/ui/dialog'
 import EditModal from '@/components/historyParts/editModal.vue';
 
-const listData = ref<getData[]>([]);
+const store = useInputDataStore();
 
 onMounted(async () => {
-    listData.value = await fetchs<getData[], string>('/history/exxpense', 'get', '');
+    store.resetData();
+    store.getData('/history/expense');
+    if (store.listData) store.setPurposes('/get_expense_purpose');
 });
 
 const columnName = ['日付', '大目的', '小目的', '金額', '所在', '詳細']
@@ -32,7 +33,7 @@ const columnName = ['日付', '大目的', '小目的', '金額', '所在', '詳
                 </TableRow>
             </TableHeader>
             <TableBody>
-                <TableRow v-for="data in listData" :key="data.id">
+                <TableRow v-for="(data, index) in store.listData" :key="data.id">
                     <TableCell>
                         {{ data.at_date }}
                     </TableCell>
@@ -58,7 +59,7 @@ const columnName = ['日付', '大目的', '小目的', '金額', '所在', '詳
                                     Open Dialog
                                 </Button>
                             </DialogTrigger>
-                            <EditModal />
+                            <EditModal v-model:datas="store.listData[index]" />
                         </Dialog>
                     </TableCell>
                 </TableRow>

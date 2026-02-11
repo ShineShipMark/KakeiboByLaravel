@@ -19,6 +19,9 @@ services:
     working_dir: /var/www/html
     depends_on:
       - mysql
+    ports:
+      - "8000:8000"
+      - "5173:5173"
 
   mysql:
     image: mariadb:11.7

@@ -1,8 +1,9 @@
+/// <reference types="vitest" />  // ← これを追加
 import { wayfinder } from "@laravel/vite-plugin-wayfinder";
 import tailwindcss from "@tailwindcss/vite";
 import vue from "@vitejs/plugin-vue";
 import laravel from "laravel-vite-plugin";
-import { defineConfig } from "vite";
+import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   plugins: [
@@ -28,5 +29,11 @@ export default defineConfig({
     globals: true,
     environment: "jsdom",
     include: ["resources/js/tests/**/*.{test,spec}.js"],
+  },
+  server: {
+    host: "0.0.0.0", // すべてのネットワークインターフェースを許可
+    hmr: {
+      host: "localhost", // ブラウザがHMR接続しに行く先
+    },
   },
 });

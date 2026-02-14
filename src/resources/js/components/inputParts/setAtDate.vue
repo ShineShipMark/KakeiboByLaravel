@@ -6,9 +6,9 @@ import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover
 import { Calendar } from '@/components/ui/calendar';
 import { CalendarIcon } from 'lucide-vue-next'
 import { Ref, ref, watch } from 'vue';
+import { useInputDataStore } from '@/stores/inputDataStore';
 
-const atDate = defineModel();
-
+const store = useInputDataStore();
 const defaultPlaceholder = today(getLocalTimeZone())
 const date = ref() as Ref<DateValue>
 const df = new DateFormatter('en-US', {
@@ -16,7 +16,7 @@ const df = new DateFormatter('en-US', {
 })
 
 watch(date, (value) => {
-    atDate.value = value ? value.toDate('jp') : null;
+    store.inputData.at_date = value ? value.toDate('jp') : null;
 })
 </script>
 <template>

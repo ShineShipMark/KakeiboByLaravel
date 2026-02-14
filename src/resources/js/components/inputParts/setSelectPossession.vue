@@ -8,11 +8,12 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import { possessionPlace } from '@/types/vue-types';
-const possession = defineModel<possessionPlace>();
+import { useInputDataStore } from '@/stores/inputDataStore';
+
+const store = useInputDataStore();
 </script>
 <template>
-    <Select v-model="possession">
+    <Select v-model="store.inputData.possession">
         <SelectTrigger class="w-[180px]">
             <SelectValue placeholder="Select a fruit" />
         </SelectTrigger>

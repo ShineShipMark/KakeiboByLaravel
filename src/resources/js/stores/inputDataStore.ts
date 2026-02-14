@@ -28,10 +28,8 @@ export const useInputDataStore = defineStore("inputData", () => {
 
   const sendData = async (data: postData, url: string): Promise<string> => {
     loading.value = true;
-
     try {
       const result = await fetchs<string, postData>(url, "POST", data);
-
       return result;
     } finally {
       loading.value = false;

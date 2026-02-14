@@ -6,11 +6,12 @@ import {
     NumberFieldIncrement,
     NumberFieldInput,
 } from '@/components/ui/number-field';
+import { useInputDataStore } from '@/stores/inputDataStore';
 
-const amount_number = defineModel<number>();
+const store = useInputDataStore();
 </script>
 <template>
-    <NumberField :model-value="amount_number">
+    <NumberField :model-value="store.inputData.amount">
         <Label for="age-disabled">金額</Label>
         <NumberFieldContent>
             <NumberFieldDecrement />

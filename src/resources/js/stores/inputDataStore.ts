@@ -2,7 +2,7 @@ import { getData, postData } from "@/types/vue-types";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { viewsPurpose } from "../types/vue-types";
-import { fetchs } from "@/composables/fetch";
+import { fetchAPIMethods } from "@/composables/fetch";
 
 export const useInputDataStore = defineStore("inputData", () => {
   const initialDataState = (): postData => {
@@ -28,6 +28,7 @@ export const useInputDataStore = defineStore("inputData", () => {
 
   const sendData = async (data: postData, url: string): Promise<string> => {
     loading.value = true;
+    const { fetchs } = fetchAPIMethods();
     try {
       const result = await fetchs<string, postData>(url, "POST", data);
       return result;
@@ -38,6 +39,7 @@ export const useInputDataStore = defineStore("inputData", () => {
 
   const getData = async <T>(url: string): Promise<T> => {
     loading.value = true;
+    const { fetchs } = fetchAPIMethods();
     try {
       const result = await fetchs<T, string>(url, "GET", "");
       return result;

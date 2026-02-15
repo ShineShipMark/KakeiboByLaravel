@@ -9,7 +9,7 @@ import {
     DialogTrigger,
 } from '@/components/ui/dialog';
 import Switch from '@/components/ui/switch/Switch.vue';
-import EditModal from '@/components/historyParts/editModal.vue';
+import EditModal from '@/components/historyParts/EditModal.vue';
 import { selectedObject } from '@/types/vue-types';
 
 const store = useInputDataStore();

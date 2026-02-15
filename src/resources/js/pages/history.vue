@@ -3,19 +3,25 @@ import { useInputDataStore } from '@/stores/inputDataStore'
 import Card from '@/components/ui/card/Card.vue';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { onMounted } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import {
     Dialog,
     DialogTrigger,
-} from '@/components/ui/dialog'
+} from '@/components/ui/dialog';
+import Switch from '@/components/ui/switch/Switch.vue';
 import EditModal from '@/components/historyParts/editModal.vue';
+import { selectedObject } from '@/types/vue-types';
 
 const store = useInputDataStore();
+const witchSelected = ref<boolean>(true);
+
+const witchExpenditure = computed<selectedObject>(() => {
+    return witchSelected.value == true ? { en: 'expense', jp: '支出' } : { en: 'income', jp: '収入' };
+})
 
 onMounted(async () => {
-    store.resetData();
-    store.getData('/history/expense');
-    if (store.listData) store.setPurposes('/get_expense_purpose');
+    store.setData('/history/expense');
+    if (store.listData) store.setPurposes('expense');
 });
 
 const columnName = ['日付', '大目的', '小目的', '金額', '所在', '詳細']
@@ -23,6 +29,8 @@ const columnName = ['日付', '大目的', '小目的', '金額', '所在', '詳
 </script>
 <template>
     <Card>
+        <Switch :checked="store.witchExpenditure === 'income'" :disabled="store.loading"
+            @update:checked="store.switchExpenditure">{{ witchExpenditure.jp }}</Switch>
         <Table>
             <TableCaption>test</TableCaption>
             <TableHeader>
@@ -33,7 +41,7 @@ const columnName = ['日付', '大目的', '小目的', '金額', '所在', '詳
                 </TableRow>
             </TableHeader>
             <TableBody>
-                <TableRow v-for="(data, index) in store.listData" :key="data.id">
+                <TableRow v-for="data in store.listData" :key="data.id">
                     <TableCell>
                         {{ data.at_date }}
                     </TableCell>
@@ -53,13 +61,13 @@ const columnName = ['日付', '大目的', '小目的', '金額', '所在', '詳
                         {{ data.detail }}
                     </TableCell>
                     <TableCell>
-                        <Dialog>
+                        <Dialog :open="store.isModalOpen" @update:open="store.closeModal">
                             <DialogTrigger as-child>
-                                <Button variant="outline">
+                                <Button @click="store.transData(data)" variant="outline">
                                     Open Dialog
                                 </Button>
                             </DialogTrigger>
-                            <EditModal v-model:datas="store.listData[index]" />
+                            <EditModal v-if="store.editData" />
                         </Dialog>
                     </TableCell>
                 </TableRow>

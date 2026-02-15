@@ -13,7 +13,7 @@ import { useInputDataStore } from '@/stores/inputDataStore';
 const store = useInputDataStore();
 </script>
 <template>
-    <Select v-model="store.selectedPurposeId">
+    <Select v-model="store.inputData.purpose_id">
         <SelectTrigger class="w-[180px]">
             <SelectValue placeholder="Select a fruit" />
         </SelectTrigger>

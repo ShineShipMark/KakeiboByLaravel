@@ -44,3 +44,20 @@ type getExpenseCategory = {
 };
 
 type possessionPlace = "account" | "wallet";
+
+type Language = "en" | "ja";
+
+type Expenditure = "expense" | "income";
+
+const config = {
+  expense: {
+    ja: { label: "支出" },
+    en: { label: "Expense" },
+  },
+  income: {
+    ja: { label: "収入" },
+    en: { label: "Income" },
+  },
+} as const;
+
+type PageKind = "input" | "history";

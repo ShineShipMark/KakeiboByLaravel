@@ -7,8 +7,17 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog'
-import SetSelectPurpose from '@/components/inputParts/setSelectPurpose.vue';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import FieldGroup from '@/components/ui/field/FieldGroup.vue';
+import FieldSet from '@/components/ui/field/FieldSet.vue';
+import Field from '@/components/ui/field/Field.vue';
+import FieldLabel from '@/components/ui/field/FieldLabel.vue';
 import { useInputDataStore } from '@/stores/inputDataStore';
+import setAmount from '@/components/inputParts/setAmount.vue';
+import setSelectPurpose from '@/components/inputParts/setSelectPurpose.vue';
+import setAtDate from '@/components/inputParts/setAtDate.vue';
+import setSelectPossession from '@/components/inputParts/setSelectPossession.vue';
 
 const store = useInputDataStore();
 
@@ -26,23 +35,46 @@ const editData = async () => {
                 各項目入力
             </DialogDescription>
         </DialogHeader>
-        <Card>
-            <setAmount />
-            <setSelectPurpose />
-            <setAtDate />
-            <setSelectPossession />
-            <Textarea v-model="store.inputData.detail" placeholder="Type your message here." />
-            <Button @click="editData()"></Button>
-        </Card>
-        <DialogFooter>
-            <DialogClose as-child>
-                <Button variant="outline">
-                    Cancel
+        <form @submit.prevent="editData">
+            <Card>
+                <FieldGroup>
+                    <FieldSet>
+                        <FieldGroup>
+                            <Field>
+                                <FieldLabel>
+                                    目的
+                                </FieldLabel>
+                                <setSelectPurpose />
+                            </Field>
+                            <Field>
+                                <setAmount />
+                            </Field>
+                            <Field>
+                                <setAtDate />
+                            </Field>
+                            <Field>
+                                <setSelectPossession />
+                            </Field>
+                            <Field>
+                                <Textarea v-model="store.inputData.detail" placeholder="Type your message here." />
+                            </Field>
+                        </FieldGroup>
+                    </FieldSet>
+                    <Field>
+                        <Button type="submit" :disabled="store.loading">登録</Button>
+                    </Field>
+                </FieldGroup>
+            </Card>
+            <DialogFooter>
+                <DialogClose as-child>
+                    <Button variant="outline">
+                        Cancel
+                    </Button>
+                </DialogClose>
+                <Button type="submit">
+                    編集
                 </Button>
-            </DialogClose>
-            <Button type="submit">
-                Save changes
-            </Button>
-        </DialogFooter>
+            </DialogFooter>
+        </form>
     </DialogContent>
 </template>

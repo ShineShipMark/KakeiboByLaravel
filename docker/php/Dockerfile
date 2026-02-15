@@ -14,3 +14,17 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 
 CMD ["php-fpm"]
+
+# ホストのUID/GIDを受け取るための変数
+ARG USER_ID=1000
+ARG GROUP_ID=1000
+
+# ユーザーの作成（名前は devuser としています）
+RUN groupadd -g ${GROUP_ID} devgroup || true && \
+    useradd -m -u ${USER_ID} -g ${GROUP_ID} devuser || true
+
+# 作業ディレクトリの所有者を変更（必要に応じて）
+# RUN chown -R devuser:devgroup /var/www/html
+
+# デフォルトユーザーを root から devuser に切り替え
+USER devuser

@@ -10,6 +10,15 @@ services:
     depends_on:
       - app
 
+  php: # または app など、PHPのサービス名
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+      args:
+        # ホストのユーザーIDと一致させる（通常は1000）
+        - USER_ID=1000
+        - GROUP_ID=1000
+
   app:
     build: ./docker/php
     container_name: kakeibobylaravel-app

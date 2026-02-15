@@ -29,24 +29,24 @@ class KakeiboController extends Controller
 
     public function getExpense(GetExpense $usecase)
     {
-        return Inertia::render('history/', ['data', $usecase->handle()]);;
+        return Inertia::render('History/', ['data', $usecase->handle()]);;
     }
 
     public function getIncome(GetIncome $usecase)
     {
-        return Inertia::render('history/', ['data', $usecase->handle()]);;
+        return Inertia::render('History/', ['data', $usecase->handle()]);;
     }
 
     public function inputExpense(Request $request, RegisterExpense $usecase)
     {
         $input = $request->all();
-        return Inertia::render('input/', ['data', $usecase->handle($input)]);
+        return Inertia::render('Input/', ['data', $usecase->handle($input)]);
     }
 
     public function inputIncome(Request $request, RegisterIncome $usecase)
     {
         $input = $request->all();
-        return Inertia::render('input/', ['data', $usecase->handle($input)]);
+        return Inertia::render('Input/', ['data', $usecase->handle($input)]);
     }
 
     public function editExpense(Request $request, UpdateExpense $usecase)
@@ -54,7 +54,7 @@ class KakeiboController extends Controller
         $input = $request->all();
         $id = Arr::only($input, ['id'])['id'];
         $data = Arr::except($input,['id']);
-        return Inertia::render('edit/', ['data', $usecase->handle($id, $data)]);
+        return Inertia::render('Edit/', ['data', $usecase->handle($id, $data)]);
     }
 
     public function editIncome(Request $request, UpdateIncome $usecase)
@@ -62,7 +62,7 @@ class KakeiboController extends Controller
         $input = $request->all();
         $id = Arr::only($input, ['id'])['id'];
         $data = Arr::except($input,['id']);
-        return Inertia::render('edit/', ['data', $usecase->handle($id, $data)]);
+        return Inertia::render('Edit/', ['data', $usecase->handle($id, $data)]);
     }
 
     public function deleteExpense(Request $request, DeleteExpense $usecase)
@@ -81,21 +81,21 @@ class KakeiboController extends Controller
 
     public function getExpensePurpose(GetExpensePurpose $usecase)
     {
-        return Inertia::render('input/',['expensePurpose',$usecase->handle()]);
+        return Inertia::render('Input/',['expensePurpose',$usecase->handle()]);
     }
 
     public function getIncomePurpose(GetIncomePurpose $usecase)
     {
-        return Inertia::render('input/',['incomePurpose',$usecase->handle()]);
+        return Inertia::render('Input/',['incomePurpose',$usecase->handle()]);
     }
 
     public function getExpenseCategory(GetExpenseCategory $usecase)
     {
-        return Inertia::render('input/', ['expenseCategory',$usecase->handle()]);
+        return Inertia::render('Input/', ['expenseCategory',$usecase->handle()]);
     }
 
     public function getIncomeCategory(GetIncomeCategory $usecase)
     {
-        return Inertia::render('input/', ['incomeCategory',$usecase->handle()]);
+        return Inertia::render('Input/', ['incomeCategory',$usecase->handle()]);
     }
 }

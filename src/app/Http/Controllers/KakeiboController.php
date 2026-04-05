@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\DTO\FindExpenseData;
+use App\DTO\FindIncomeData;
+use App\Models\Expense;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use DeleteExpense;
 use DeleteIncome;
+use FindExpense;
+use FindIncome;
 use GetExpense;
 use GetExpenseCategory;
 use GetExpensePurpose;
@@ -29,7 +34,7 @@ class KakeiboController extends Controller
 
     public function getExpense(GetExpense $usecase)
     {
-        return Inertia::render('History/', ['data', $usecase->handle()]);;
+        return Inertia::render('History/', ['data', $usecase->handle()]);
     }
 
     public function getIncome(GetIncome $usecase)
@@ -37,16 +42,30 @@ class KakeiboController extends Controller
         return Inertia::render('History/', ['data', $usecase->handle()]);;
     }
 
+    public function findExpense(Request $request, FindExpense $usecase)
+    {
+        $dataDTO=FindExpenseData::fromRequest($request);
+        return Inertia::render('History/',['data',$usecase->handle($dataDTO)]);
+    }
+
+    public function findIncome(Request $request, FindIncome $usecase)
+    {
+        $dataDTO=FindIncomeData::fromRequest($request);
+        return Inertia::render('History/',['data',$usecase->handle($dataDTO)]);
+    }
+
     public function inputExpense(Request $request, RegisterExpense $usecase)
     {
         $input = $request->all();
-        return Inertia::render('Input/', ['data', $usecase->handle($input)]);
+        $usecase->handle($input);
+        return Inertia::render('Input/');
     }
 
     public function inputIncome(Request $request, RegisterIncome $usecase)
     {
         $input = $request->all();
-        return Inertia::render('Input/', ['data', $usecase->handle($input)]);
+        $usecase->handle($input);
+        return Inertia::render('Input/');
     }
 
     public function editExpense(Request $request, UpdateExpense $usecase)

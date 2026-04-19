@@ -5,10 +5,10 @@ import Button from '@/components/ui/button/Button.vue';
 import { Field, FieldSet, FieldGroup, FieldLabel } from '@/components/ui/field';
 import Textarea from '@/components/ui/textarea/Textarea.vue';
 import Switch from '@/components/ui/switch/Switch.vue';
-import setAmount from '@/components/inputParts/SetAmount.vue';
-import setSelectPurpose from '@/components/inputParts/SetSelectPurpose.vue';
-import setSelectPossession from '@/components/inputParts/SetSelectPossession.vue';
-import setAtDate from '@/components/inputParts/SetAtDate.vue';
+import SetAmount from '@/components/inputParts/SetAmount.vue';
+import SetSelectPurpose from '@/components/inputParts/SetSelectPurpose.vue';
+import SetSelectPossession from '@/components/inputParts/SetSelectPossession.vue';
+import SetAtDate from '@/components/inputParts/SetAtDate.vue';
 import { useInputDataStore } from '@/stores/inputDataStore';
 
 const store = useInputDataStore();
@@ -36,16 +36,17 @@ const sendData = async () => {
                             <FieldLabel>
                                 目的
                             </FieldLabel>
-                            <setSelectPurpose />
+                            <SetSelectPurpose v-model:purpose-data="store.purposeData"
+                                v-model:purpose_id="store.inputData.purpose_id" />
                         </Field>
                         <Field>
-                            <setAmount />
+                            <SetAmount v-model="store.inputData.amount" />
                         </Field>
                         <Field>
-                            <setAtDate />
+                            <SetAtDate v-model="store.inputData.at_date" />
                         </Field>
                         <Field>
-                            <setSelectPossession />
+                            <SetSelectPossession v-model="store.inputData.possession" />
                         </Field>
                         <Field>
                             <Textarea v-model="store.inputData.detail" placeholder="Type your message here." />

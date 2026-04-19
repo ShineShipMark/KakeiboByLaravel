@@ -18,7 +18,7 @@ type postData = {
   id: number;
   amount: number;
   purpose_id: number;
-  at_date: Date | null;
+  at_date: Date | undefined;
   possession: possessionPlace;
   detail: string;
 };
@@ -27,9 +27,19 @@ type getData = {
   id: number;
   amount: number;
   purpose: getExpensePurpose;
-  at_date: Date | null;
+  at_date: Date | undefined;
   possession: possessionPlace;
   detail: string;
+};
+
+type toSearchParam = {
+  min_amount: number | undefined;
+  max_amount: number | undefined;
+  purpose_id: number | undefined;
+  first_date: Date | undefined;
+  last_date: Date | undefined;
+  possession: possessionPlace | undefined;
+  detail: string | undefined;
 };
 
 type getExpensePurpose = {

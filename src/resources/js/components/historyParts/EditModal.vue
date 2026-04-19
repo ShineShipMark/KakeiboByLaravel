@@ -11,10 +11,10 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Textarea from '@/components/ui/textarea/Textarea.vue';
 import { Field, FieldSet, FieldGroup, FieldLabel } from '@/components/ui/field';
-import setAmount from '@/components/inputParts/SetAmount.vue';
-import setSelectPurpose from '@/components/inputParts/SetSelectPurpose.vue';
-import setAtDate from '@/components/inputParts/SetAtDate.vue';
-import setSelectPossession from '@/components/inputParts/SetSelectPossession.vue';
+import SetAmount from '@/components/inputParts/SetAmount.vue';
+import SetSelectPurpose from '@/components/inputParts/SetSelectPurpose.vue';
+import SetAtDate from '@/components/inputParts/SetAtDate.vue';
+import SetSelectPossession from '@/components/inputParts/SetSelectPossession.vue';
 import { useInputDataStore } from '@/stores/inputDataStore';
 
 const store = useInputDataStore();
@@ -42,16 +42,16 @@ const editData = async () => {
                                 <FieldLabel>
                                     目的
                                 </FieldLabel>
-                                <setSelectPurpose />
+                                <SetSelectPurpose />
                             </Field>
                             <Field>
-                                <setAmount />
+                                <SetAmount />
                             </Field>
                             <Field>
-                                <setAtDate />
+                                <SetAtDate />
                             </Field>
                             <Field>
-                                <setSelectPossession />
+                                <SetSelectPossession />
                             </Field>
                             <Field>
                                 <Textarea v-model="store.inputData.detail" placeholder="Type your message here." />

@@ -13,5 +13,19 @@ export const fetchAPIMethods = () => {
     }
     return response.json() as T;
   };
-  return { fetchs };
+
+  const searchData = async <T, Y>(
+    url: string,
+    method: string,
+    param: Y,
+  ): Promise<T> => {
+    const { fetchs } = fetchAPIMethods();
+    try {
+      const result = await fetchs<T, Y>(url, `${method}`, param);
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  };
+  return { fetchs, searchData };
 };

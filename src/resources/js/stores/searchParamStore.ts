@@ -35,22 +35,8 @@ export const useSearchParamStore = defineStore("searchParam", () => {
     searchParam.value = initialParamState();
   };
 
-  const searchData = async <T, Y>(
-    url: string,
-    method: string,
-    param: Y,
-  ): Promise<T> => {
-    loading.value = true;
-    const { fetchs } = fetchAPIMethods();
-    try {
-      const result = await fetchs<T, Y>(url, `${method}`, param);
-      return result;
-    } finally {
-      loading.value = false;
-    }
-  };
-
   const setData = async (url: string, param: toSearchParam): Promise<void> => {
+    const { searchData } = fetchAPIMethods();
     listData.value = await searchData<getData[], toSearchParam>(
       url,
       "POST",
@@ -61,6 +47,7 @@ export const useSearchParamStore = defineStore("searchParam", () => {
   const setPurposes = async (
     currentExpensiture: Expenditure,
   ): Promise<void> => {
+    const { searchData } = fetchAPIMethods();
     purposeData.value = await searchData<viewsPurpose[], string>(
       `get_${currentExpensiture}_purpose`,
       "GET",
@@ -82,12 +69,12 @@ export const useSearchParamStore = defineStore("searchParam", () => {
   };
 
   return {
+    listData,
     searchParam,
     selectedPurposeId,
     loading,
     currentLabels,
     resetSearchParam,
-    searchData,
     setData,
     switchExpenditure,
   };

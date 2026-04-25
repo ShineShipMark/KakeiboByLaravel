@@ -5,37 +5,32 @@ import Card from '@/components/ui/card/Card.vue';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Button } from '@/components/ui/button';
-import { computed, onMounted, ref } from 'vue';
+import { onMounted } from 'vue';
 import {
     Dialog,
     DialogTrigger,
 } from '@/components/ui/dialog';
 import Switch from '@/components/ui/switch/Switch.vue';
 import EditModal from '@/components/historyParts/EditModal.vue';
-import { selectedObject } from '@/types/vue-types';
 import SetAtDate from '@/components/inputParts/SetAtDate.vue';
 import SetSelectPurpose from '@/components/inputParts/SetSelectPurpose.vue';
 import SetAmount from '@/components/inputParts/SetAmount.vue';
 import SetSelectPossession from '@/components/inputParts/SetSelectPossession.vue';
+import { useMasterDataStore } from '@/stores/masterDataStore';
 
 const inputStore = useInputDataStore();
 const searchStore = useSearchParamStore();
-
-const witchSelected = ref<boolean>(true);
-
-const witchExpenditure = computed<selectedObject>(() => {
-    return witchSelected.value == true ? { en: 'expense', jp: '支出' } : { en: 'income', jp: '収入' };
-})
+const masterStore = useMasterDataStore();
 
 onMounted(async () => {
     searchStore.setData('/history/expense', searchStore.searchParam);
-    if (inputStore.listData) inputStore.setPurposes('expense');
+    if (searchStore.listData) masterStore.setPurposes('expense');
 });
 
 const columnName = ['日付', '大目的', '小目的', '金額', '所在', '詳細']
 
 const sendSearchParam = async () => {
-    await searchStore.searchData(`/seach/${inputStore.currentLabels.en}`, 'POST', searchStore.searchParam);
+    await searchStore.setData(`/history/${inputStore.currentLabels.en}`, searchStore.searchParam);
 }
 
 </script>
@@ -88,8 +83,8 @@ const sendSearchParam = async () => {
 
 
     <Card>
-        <Switch :checked="inputStore.witchExpenditure === 'income'" :disabled="inputStore.loading"
-            @update:checked="inputStore.switchExpenditure">{{ witchExpenditure.jp }}</Switch>
+        <Switch :checked="masterStore.witchExpenditure === 'income'" :disabled="inputStore.loading"
+            @update:checked="masterStore.switchExpenditure">{{ masterStore.currentLabels.ja }}</Switch>
         <Table>
             <TableCaption>test</TableCaption>
             <TableHeader>

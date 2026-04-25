@@ -1,16 +1,14 @@
-import {
-  config,
-  Expenditure,
-  getData,
-  PageKind,
-  postData,
-} from "@/types/vue-types";
+/**
+ * データの入出力に関するストア
+ */
+import { config, Expenditure, getData, postData } from "@/types/vue-types";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 import { viewsPurpose } from "../types/vue-types";
 import { fetchAPIMethods } from "@/composables/fetch";
 
 export const useInputDataStore = defineStore("inputData", () => {
+  // 送信データの初期化
   const initialDataState = (): postData => {
     return {
       id: 0,
@@ -22,6 +20,7 @@ export const useInputDataStore = defineStore("inputData", () => {
     };
   };
 
+  // 各リアクティブ変数の定義
   const inputData = ref<postData>(initialDataState());
   const editData = ref<postData>(initialDataState());
   const listData = ref<getData[]>([]);
@@ -30,16 +29,18 @@ export const useInputDataStore = defineStore("inputData", () => {
   const loading = ref<boolean>(false);
   const isModalOpen = ref<boolean>(false);
   const witchExpenditure = ref<Expenditure>("expense");
-  const witchPage = ref<PageKind>("input");
 
+  // 登録データ変数のリセット
   const resetInputData = (): void => {
     inputData.value = initialDataState();
   };
 
+  // 編集データ変数のリセット
   const resetEditData = (): void => {
     editData.value = initialDataState();
   };
 
+  // データをPOST送信するメソッド
   const sendData = async (data: postData, url: string): Promise<string> => {
     loading.value = true;
     const { fetchs } = fetchAPIMethods();
@@ -51,29 +52,13 @@ export const useInputDataStore = defineStore("inputData", () => {
     }
   };
 
-  const getData = async <T>(url: string): Promise<T> => {
-    loading.value = true;
-    const { fetchs } = fetchAPIMethods();
-    try {
-      const result = await fetchs<T, string>(url, "GET", "");
-      return result;
-    } finally {
-      loading.value = false;
-    }
-  };
-
+  // 取得データをセットするメソッド
   const setData = async (url: string): Promise<void> => {
-    listData.value = await getData<getData[]>(url);
+    const { searchData } = fetchAPIMethods();
+    listData.value = await searchData<getData[], string>(url, "GET", "");
   };
 
-  const setPurposes = async (
-    currentExpensiture: Expenditure,
-  ): Promise<void> => {
-    purposeData.value = await getData<viewsPurpose[]>(
-      `get_${currentExpensiture}_purpose`,
-    );
-  };
-
+  // 編集データ用に変換するメソッド
   const transData = (selectedData: getData): void => {
     editData.value = {
       id: selectedData.id,
@@ -87,6 +72,7 @@ export const useInputDataStore = defineStore("inputData", () => {
     isModalOpen.value = true;
   };
 
+  // モーダルの開閉を制御するメソッド
   const closeModal = () => {
     isModalOpen.value = false;
     setTimeout(() => {
@@ -94,18 +80,10 @@ export const useInputDataStore = defineStore("inputData", () => {
     }, 300);
   };
 
+  // 収支の切り替えのcomputed
   const currentLabels = computed(() => {
     return config[witchExpenditure.value as Expenditure];
   });
-
-  const switchExpenditure = async () => {
-    witchExpenditure.value =
-      witchExpenditure.value === "expense" ? "income" : "expense";
-    await setPurposes(witchExpenditure.value);
-
-    if (witchPage.value === "history")
-      await setData(`/history/${witchExpenditure.value}`);
-  };
 
   return {
     inputData,
@@ -120,11 +98,8 @@ export const useInputDataStore = defineStore("inputData", () => {
     resetInputData,
     resetEditData,
     sendData,
-    getData,
     setData,
-    setPurposes,
     transData,
     closeModal,
-    switchExpenditure,
   };
 });

@@ -20,7 +20,7 @@ import { useInputDataStore } from '@/stores/inputDataStore';
 const store = useInputDataStore();
 
 const editData = async () => {
-    await store.sendData(store.inputData, `/edit/${store.witchExpenditure}`);
+    await store.sendData(store.editData, `/edit/${store.witchExpenditure}`);
     store.resetEditData();
 }
 
@@ -42,25 +42,23 @@ const editData = async () => {
                                 <FieldLabel>
                                     目的
                                 </FieldLabel>
-                                <SetSelectPurpose />
+                                <SetSelectPurpose v-model:purpose-data="store.purposeData"
+                                    v-model:purpose_id="store.editData.purpose_id" />
                             </Field>
                             <Field>
-                                <SetAmount />
+                                <SetAmount v-model="store.editData.amount" />
                             </Field>
                             <Field>
-                                <SetAtDate />
+                                <SetAtDate v-model="store.editData.at_date" />
                             </Field>
                             <Field>
-                                <SetSelectPossession />
+                                <SetSelectPossession v-model="store.editData.possession" />
                             </Field>
                             <Field>
-                                <Textarea v-model="store.inputData.detail" placeholder="Type your message here." />
+                                <Textarea v-model="store.editData.detail" placeholder="Type your message here." />
                             </Field>
                         </FieldGroup>
                     </FieldSet>
-                    <Field>
-                        <Button type="submit" :disabled="store.loading">登録</Button>
-                    </Field>
                 </FieldGroup>
             </Card>
             <DialogFooter>

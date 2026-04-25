@@ -10,24 +10,26 @@ import SetSelectPurpose from '@/components/inputParts/SetSelectPurpose.vue';
 import SetSelectPossession from '@/components/inputParts/SetSelectPossession.vue';
 import SetAtDate from '@/components/inputParts/SetAtDate.vue';
 import { useInputDataStore } from '@/stores/inputDataStore';
+import { useMasterDataStore } from '@/stores/masterDataStore';
 
-const store = useInputDataStore();
+const inputStore = useInputDataStore();
+const masterStore = useMasterDataStore();
 
-store.resetInputData();
+inputStore.resetInputData();
 
 onMounted(async () => {
-    await store.setPurposes('expense');
+    await masterStore.setPurposes('expense');
 });
 
 const sendData = async () => {
-    await store.sendData(store.inputData, `/input/${store.currentLabels.en}`);
-    store.resetInputData();
+    await inputStore.sendData(inputStore.inputData, `/input/${masterStore.currentLabels.en}`);
+    inputStore.resetInputData();
 }
 </script>
 <template>
     <Card>
-        <Switch :checked="store.witchExpenditure === 'income'" :disabled="store.loading"
-            @update:checked="store.switchExpenditure">{{ store.currentLabels.ja }}</Switch>
+        <Switch :checked="masterStore.witchExpenditure === 'income'" :disabled="inputStore.loading"
+            @update:checked="masterStore.switchExpenditure">{{ masterStore.currentLabels.ja }}</Switch>
         <form @submit.prevent="sendData">
             <FieldGroup>
                 <FieldSet>
@@ -36,25 +38,25 @@ const sendData = async () => {
                             <FieldLabel>
                                 目的
                             </FieldLabel>
-                            <SetSelectPurpose v-model:purpose-data="store.purposeData"
-                                v-model:purpose_id="store.inputData.purpose_id" />
+                            <SetSelectPurpose v-model:purpose-data="masterStore.purposeData"
+                                v-model:purpose_id="inputStore.inputData.purpose_id" />
                         </Field>
                         <Field>
-                            <SetAmount v-model="store.inputData.amount" />
+                            <SetAmount v-model="inputStore.inputData.amount" />
                         </Field>
                         <Field>
-                            <SetAtDate v-model="store.inputData.at_date" />
+                            <SetAtDate v-model="inputStore.inputData.at_date" />
                         </Field>
                         <Field>
-                            <SetSelectPossession v-model="store.inputData.possession" />
+                            <SetSelectPossession v-model="inputStore.inputData.possession" />
                         </Field>
                         <Field>
-                            <Textarea v-model="store.inputData.detail" placeholder="Type your message here." />
+                            <Textarea v-model="inputStore.inputData.detail" placeholder="Type your message here." />
                         </Field>
                     </FieldGroup>
                 </FieldSet>
                 <Field>
-                    <Button type="submit" :disabled="store.loading">登録</Button>
+                    <Button type="submit" :disabled="inputStore.loading">登録</Button>
                 </Field>
             </FieldGroup>
         </form>

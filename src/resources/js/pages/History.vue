@@ -81,7 +81,6 @@ const sendSearchParam = async () => {
         </FieldGroup>
     </form>
 
-
     <Card>
         <Switch :checked="masterStore.witchExpenditure === 'income'" :disabled="inputStore.loading"
             @update:checked="masterStore.switchExpenditure">{{ masterStore.currentLabels.ja }}</Switch>

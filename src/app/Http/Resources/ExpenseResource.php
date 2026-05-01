@@ -18,14 +18,7 @@ class ExpenseResource extends JsonResource
             'id' => $this->id,
             'at_date' => $this->at_date,
             'amount' => $this->amount,
-            `expensePurpose` => [
-                'id' => $this->expensePupose->id,
-                'purpose' => $this->expensePurpose->purpose,
-                'expenseCategory'=>[
-                    'id'=>$this->expensePurpose->expenseCategory->id,
-                    'category'=>$this->$this->expensePurpose->expenseCategory->category,
-                ]
-            ],
+            'expensePurpose' => new ExpensePurposeResourse($this->whenLoaded('expensePurpose')),
             'possession'=>$this->possession,
             'detail'=>$this->detail,
         ];

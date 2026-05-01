@@ -18,14 +18,7 @@ class IncomeResource extends JsonResource
             'id' => $this->id,
             'at_date' => $this->at_date,
             'amount' => $this->amount,
-            `incomePurpose` => [
-                'id' => $this->incomePupose->id,
-                'purpose' => $this->incomePurpose->purpose,
-                'incomeCategory'=>[
-                    'id'=>$this->incomePurpose->incomeCategory->id,
-                    'category'=>$this->$this->incomePurpose->incomeCategory->category,
-                ]
-            ],
+            'incomePurpose' => new IncomePurposeResource($this->whenLoaded('incomePurpose')),
             'possession'=>$this->possession,
             'detail'=>$this->detail,
         ];

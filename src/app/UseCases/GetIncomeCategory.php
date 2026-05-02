@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Resources\IncomeCategoryResourse;
 use App\Models\IncomeCategory;
 
 class GetIncomeCategory{
-    public function handle():IncomeCategory
+    public function handle():IncomeCategoryResourse
     {
-        return IncomeCategory::find();
+        $category= IncomeCategory::find();
+        return new IncomeCategoryResourse($category);
     }
 }

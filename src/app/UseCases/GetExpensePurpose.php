@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Resources\ExpensePurposeResourse;
 use App\Models\ExpensePurpose;
 
 class GetExpensePurpose
 {
-    public function handle(): ExpensePurpose
+    public function handle(): ExpensePurposeResourse
     {
-        return ExpensePurpose::find();
+        $purpose = ExpensePurpose::find();
+        return new ExpensePurposeResourse($purpose);
     }
 }

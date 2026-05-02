@@ -1,11 +1,12 @@
 <?php
 
 use App\DTO\FindExpenseDTO;
+use App\Http\Resources\ExpenseResource;
 use App\Models\Expense;
 
 class FindExpense
 {
-    public function handle(FindExpenseDTO $data): Expense
+    public function handle(FindExpenseDTO $data): ExpenseResource
     {
         $foundData=Expense::where('expense_purpose_id','=',$data->expense_purpose_id)
                             ->orWhere('amount','=',$data->amount)
@@ -14,6 +15,6 @@ class FindExpense
                             ->whereBetwheen('at_date', [$data->first_date_time, $data->last_date_time])
                             ->get();
 
-        return $foundData;
+        return new ExpenseResource($foundData);
     }
 }

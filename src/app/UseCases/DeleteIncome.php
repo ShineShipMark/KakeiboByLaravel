@@ -1,13 +1,14 @@
 <?php
 
+use App\Http\Resources\IncomeResource;
 use App\Models\Income;
 
 class DeleteIncome
 {
-    public function handle(int $id): Income
+    public function handle(int $id): IncomeResource
     {
-        Income::delete($id);
+        Income::destroy($id);
 
-        return Income::find();
+        return new IncomeResource(Income::find());
     }
 }

@@ -1,10 +1,13 @@
 <?php
+
+use App\Http\Resources\IncomePurposeResource;
 use App\Models\IncomePurpose;
 
 class GetIncomePurpose
 {
-    public function handle(): IncomePurpose
+    public function handle(): IncomePurposeResource
     {
-        return IncomePurpose::find();
+        $purpose= IncomePurpose::find();
+        return new IncomePurposeResource($purpose);
     }
 }

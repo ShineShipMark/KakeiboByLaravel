@@ -1,13 +1,14 @@
 <?php
 
+use App\Http\Resources\ExpenseResource;
 use App\Models\Expense;
 
 class DeleteExpense
 {
-    public function handle(int $id): Expense
+    public function handle(int $id): ExpenseResource
     {
-        Expense::delete($id);
+        Expense::destroy($id);
 
-        return Expense::find();
+        return new ExpenseResource(Expense::find());
     }
 }

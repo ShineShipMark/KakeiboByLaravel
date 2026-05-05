@@ -11,6 +11,8 @@ import SetSelectPossession from '@/components/inputParts/SetSelectPossession.vue
 import SetAtDate from '@/components/inputParts/SetAtDate.vue';
 import { useInputDataStore } from '@/stores/inputDataStore';
 import { useMasterDataStore } from '@/stores/masterDataStore';
+import { useForm } from '@inertiajs/vue3';
+import { postData } from '@/types/vue-types';
 
 const inputStore = useInputDataStore();
 const masterStore = useMasterDataStore();
@@ -21,9 +23,12 @@ onMounted(async () => {
     await masterStore.setPurposes('expense');
 });
 
+const form = useForm<postData>(inputStore.initialDataState());
+
 const sendData = async () => {
-    await inputStore.sendData(inputStore.inputData, `/input/${masterStore.currentLabels.en}`);
-    inputStore.resetInputData();
+    form.post(`/input/${masterStore.currentLabels.en}`, {
+        onSuccess: () => form.reset()
+    });
 }
 </script>
 <template>
@@ -39,19 +44,19 @@ const sendData = async () => {
                                 目的
                             </FieldLabel>
                             <SetSelectPurpose v-model:purpose-data="masterStore.purposeData"
-                                v-model:purpose_id="inputStore.inputData.purpose_id" />
+                                v-model:purpose_id="form.purpose_id" />
                         </Field>
                         <Field>
-                            <SetAmount v-model="inputStore.inputData.amount" />
+                            <SetAmount v-model="form.amount" />
                         </Field>
                         <Field>
-                            <SetAtDate v-model="inputStore.inputData.at_date" />
+                            <SetAtDate v-model="form.at_date" />
                         </Field>
                         <Field>
-                            <SetSelectPossession v-model="inputStore.inputData.possession" />
+                            <SetSelectPossession v-model="form.possession" />
                         </Field>
                         <Field>
-                            <Textarea v-model="inputStore.inputData.detail" placeholder="Type your message here." />
+                            <Textarea v-model="form.detail" placeholder="Type your message here." />
                         </Field>
                     </FieldGroup>
                 </FieldSet>

@@ -14,14 +14,15 @@ type selectedObject = {
   jp: string;
 };
 
-type postData = {
+interface postData {
   id: number;
   amount: number;
   purpose_id: number;
   at_date: Date | undefined;
   possession: possessionPlace;
   detail: string;
-};
+  [key: string]: any;
+}
 
 type getData = {
   id: number;
@@ -71,3 +72,9 @@ const config = {
 } as const;
 
 type PageKind = "input" | "history";
+
+type GraphParam = {
+  purpose_id: number | undefined;
+  first_date: Date | undefined;
+  last_date: Date | undefined;
+};

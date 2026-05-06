@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\DTO\FindExpenseData;
-use App\DTO\FindIncomeData;
-use App\Models\Expense;
+use App\DTO\FindExpenseDTO;
+use App\DTO\FindIncomeDTO;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use DeleteExpense;
@@ -44,13 +43,13 @@ class KakeiboController extends Controller
 
     public function findExpense(Request $request, FindExpense $usecase)
     {
-        $dataDTO=FindExpenseData::fromRequest($request);
+        $dataDTO=FindExpenseDTO::fromRequest($request);
         return Inertia::render('History/',['data',$usecase->handle($dataDTO)]);
     }
 
     public function findIncome(Request $request, FindIncome $usecase)
     {
-        $dataDTO=FindIncomeData::fromRequest($request);
+        $dataDTO=FindIncomeDTO::fromRequest($request);
         return Inertia::render('History/',['data',$usecase->handle($dataDTO)]);
     }
 

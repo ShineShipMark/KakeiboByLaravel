@@ -17,10 +17,16 @@ import SetSelectPurpose from '@/components/inputParts/SetSelectPurpose.vue';
 import SetAmount from '@/components/inputParts/SetAmount.vue';
 import SetSelectPossession from '@/components/inputParts/SetSelectPossession.vue';
 import { useMasterDataStore } from '@/stores/masterDataStore';
+import { useForm } from '@inertiajs/vue3';
+import { getData, toSearchParam } from '@/types/vue-types';
 
 const inputStore = useInputDataStore();
 const searchStore = useSearchParamStore();
 const masterStore = useMasterDataStore();
+
+const form = useForm<toSearchParam>(searchStore.initialParamState());
+
+const props = defineProps<{ searchedData: getData[] }>();
 
 onMounted(async () => {
     searchStore.setData('/history/expense', searchStore.searchParam);
@@ -29,50 +35,52 @@ onMounted(async () => {
 
 const columnName = ['日付', '大目的', '小目的', '金額', '所在', '詳細']
 
-const sendSearchParam = async () => {
-    await searchStore.setData(`/history/${inputStore.currentLabels.en}`, searchStore.searchParam);
+const searchData = async () => {
+    form.post(`/history/${masterStore.currentLabels.en}`, {
+        onSuccess: () => { searchStore.setSearchedData(props.searchedData) }
+    });
 }
 
 </script>
 <template>
-    <form @submit.prevent="sendSearchParam">
+    <form @submit.prevent="searchData">
         <FieldGroup>
             <FieldGroup>
                 <Field>
                     <FieldLabel>
                         検索期間
                     </FieldLabel>
-                    <SetAtDate v-model="searchStore.searchParam.first_date" />
+                    <SetAtDate v-model="form.first_date" />
                     ～
-                    <SetAtDate v-model="searchStore.searchParam.last_date" />
+                    <SetAtDate v-model="form.last_date" />
                 </Field>
                 <Field>
                     <FieldLabel>
                         目的
                     </FieldLabel>
-                    <SetSelectPurpose v-model:purpose-data="inputStore.purposeData"
-                        v-model:purpose_id="searchStore.searchParam.purpose_id" />
+                    <SetSelectPurpose v-model:purpose-data="masterStore.purposeData"
+                        v-model:purpose_id="form.purpose_id" />
                 </Field>
 
                 <Field>
                     <FieldLabel>
                         検索金額範囲
                     </FieldLabel>
-                    <SetAmount v-model="searchStore.searchParam.min_amount" />
+                    <SetAmount v-model="form.min_amount" />
                     ～
-                    <SetAmount v-model="searchStore.searchParam.max_amount" />
+                    <SetAmount v-model="form.max_amount" />
                 </Field>
                 <Field>
                     <FieldLabel>
                         所在
                     </FieldLabel>
-                    <SetSelectPossession v-model="searchStore.searchParam.possession" />
+                    <SetSelectPossession v-model="form.possession" />
                 </Field>
                 <Field>
                     <FieldLabel>
                         詳細キーワード
                     </FieldLabel>
-                    <Textarea v-model="searchStore.searchParam.detail" placeholder="Type your message here." />
+                    <Textarea v-model="form.detail" placeholder="Type your message here." />
                 </Field>
             </FieldGroup>
             <Field>
@@ -94,7 +102,7 @@ const sendSearchParam = async () => {
                 </TableRow>
             </TableHeader>
             <TableBody>
-                <TableRow v-for="data in inputStore.listData" :key="data.id">
+                <TableRow v-for="data in searchStore.listData" :key="data.id">
                     <TableCell>
                         {{ data.at_date }}
                     </TableCell>

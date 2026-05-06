@@ -16,12 +16,20 @@ import SetSelectPurpose from '@/components/inputParts/SetSelectPurpose.vue';
 import SetAtDate from '@/components/inputParts/SetAtDate.vue';
 import SetSelectPossession from '@/components/inputParts/SetSelectPossession.vue';
 import { useInputDataStore } from '@/stores/inputDataStore';
+import { useForm } from '@inertiajs/vue3';
+import { postData } from '@/types/vue-types';
+import { useMasterDataStore } from '@/stores/masterDataStore';
 
-const store = useInputDataStore();
+const inputStore = useInputDataStore();
+const masterStore = useMasterDataStore();
+
+const form = useForm<postData>(inputStore.editData);
 
 const editData = async () => {
-    await store.sendData(store.editData, `/edit/${store.witchExpenditure}`);
-    store.resetEditData();
+    form.post(`/edit/${masterStore.currentLabels.en}`, {
+        onSuccess: () => form.reset()
+    });
+    inputStore.closeModal();
 }
 
 </script>
@@ -42,20 +50,20 @@ const editData = async () => {
                                 <FieldLabel>
                                     目的
                                 </FieldLabel>
-                                <SetSelectPurpose v-model:purpose-data="store.purposeData"
-                                    v-model:purpose_id="store.editData.purpose_id" />
+                                <SetSelectPurpose v-model:purpose-data="masterStore.purposeData"
+                                    v-model:purpose_id="form.purpose_id" />
                             </Field>
                             <Field>
-                                <SetAmount v-model="store.editData.amount" />
+                                <SetAmount v-model="form.amount" />
                             </Field>
                             <Field>
-                                <SetAtDate v-model="store.editData.at_date" />
+                                <SetAtDate v-model="form.editData.at_date" />
                             </Field>
                             <Field>
-                                <SetSelectPossession v-model="store.editData.possession" />
+                                <SetSelectPossession v-model="form.possession" />
                             </Field>
                             <Field>
-                                <Textarea v-model="store.editData.detail" placeholder="Type your message here." />
+                                <Textarea v-model="form.detail" placeholder="Type your message here." />
                             </Field>
                         </FieldGroup>
                     </FieldSet>

@@ -95,6 +95,7 @@ export const useInputDataStore = defineStore("inputData", () => {
     isModalOpen,
     witchExpenditure,
     currentLabels,
+    initialDataState,
     resetInputData,
     resetEditData,
     sendData,

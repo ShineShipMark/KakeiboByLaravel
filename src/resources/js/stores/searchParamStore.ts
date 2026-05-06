@@ -3,7 +3,6 @@ import {
   config,
   Expenditure,
   getData,
-  PageKind,
   toSearchParam,
   viewsPurpose,
 } from "@/types/vue-types";
@@ -29,19 +28,13 @@ export const useSearchParamStore = defineStore("searchParam", () => {
   const purposeData = ref<viewsPurpose[]>([]);
   const selectedPurposeId = ref<number>(0);
   const witchExpenditure = ref<Expenditure>("expense");
-  const witchPage = ref<PageKind>("input");
 
   const resetSearchParam = (): void => {
     searchParam.value = initialParamState();
   };
 
-  const setData = async (url: string, param: toSearchParam): Promise<void> => {
-    const { searchData } = fetchAPIMethods();
-    listData.value = await searchData<getData[], toSearchParam>(
-      url,
-      "POST",
-      param,
-    );
+  const setSearchedData = (searchedData: getData[]): void => {
+    listData.value = searchedData;
   };
 
   const setPurposes = async (
@@ -59,13 +52,10 @@ export const useSearchParamStore = defineStore("searchParam", () => {
     return config[witchExpenditure.value as Expenditure];
   });
 
-  const switchExpenditure = async (param: toSearchParam) => {
+  const switchExpenditure = async () => {
     witchExpenditure.value =
       witchExpenditure.value === "expense" ? "income" : "expense";
     await setPurposes(witchExpenditure.value);
-
-    if (witchPage.value === "history")
-      await setData(`/history/${witchExpenditure.value}`, param);
   };
 
   return {
@@ -74,8 +64,9 @@ export const useSearchParamStore = defineStore("searchParam", () => {
     selectedPurposeId,
     loading,
     currentLabels,
+    initialParamState,
     resetSearchParam,
-    setData,
+    setSearchedData,
     switchExpenditure,
   };
 });

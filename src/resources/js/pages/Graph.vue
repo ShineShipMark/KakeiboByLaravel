@@ -4,14 +4,22 @@ import { Line, Bar, Pie } from 'vue-chartjs'
 import Card from '@/components/ui/card/Card.vue';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 import { useGraphDataStore } from '@/stores/grahpDataStore';
-import { ChartType } from 'chart.js';
+import { ChartData, ChartType } from 'chart.js';
 import { useSearchParamStore } from '@/stores/searchParamStore';
 import { useMasterDataStore } from '@/stores/masterDataStore';
+import SetAtDate from '@/components/inputParts/SetAtDate.vue';
+import SetSelectPurpose from '@/components/inputParts/SetSelectPurpose.vue';
+import Button from '@/components/ui/button/Button.vue';
+import { useForm } from '@inertiajs/vue3';
+import { GraphParam } from '@/types/vue-types';
 
-const graph_select = ref<ChartType>('bar');
+const graph_select = ref<ChartType>('line');
 const graphDataStore = useGraphDataStore();
 const searchParamStore = useSearchParamStore();
 const masterStore = useMasterDataStore();
+
+const form = useForm<GraphParam>(searchParamStore.initialParamState());
+const props = defineProps<{ searchedChartData: ChartData }>();
 
 const select_options = [
     { value: 'line', label: '折れ線グラフ' },
@@ -19,15 +27,23 @@ const select_options = [
     { value: 'pie', label: '円グラフ' }
 ];
 
-watch(graph_select, async (new_type) => {
-    const graph_type = new_type as ChartType;
-    graphDataStore.changeGraphType(graph_type);
-    await graphDataStore.getGraphData(masterStore.witchExpenditure, searchParamStore.searchParam)
+onMounted(async () => {
+    if (!masterStore.purposeData) await masterStore.setPurposes(masterStore.witchExpenditure);
+    form.post(`/graph/${masterStore.currentLabels.en}`, {
+        onSuccess: () => { console.log('success!') }
+    });
 })
 
-onMounted(async () => {
-    await graphDataStore.getGraphData(masterStore.witchExpenditure, searchParamStore.searchParam)
-})
+const submitParam = () => {
+    form.post(`/graph/${masterStore.currentLabels.en}`, {
+        onSuccess: () => { console.log('success!') }
+    });
+}
+
+
+watch(() => props.searchedChartData, (newData) => {
+    graphDataStore.setChartData(newData)
+}, { immediate: true });
 
 </script>
 <template>
@@ -46,6 +62,26 @@ onMounted(async () => {
                 </SelectContent>
             </Select>
         </Card>
+        <form @submit.prevent="submitParam">
+            <Card>
+                <Card>
+                    検索期間
+                </Card>
+                <SetAtDate v-model="form.first_date" />
+                ～
+                <SetAtDate v-model="form.last_date" />
+            </Card>
+            <Card>
+                <Card>
+                    目的
+                </Card>
+                <SetSelectPurpose v-if="graph_select !== 'pie'" v-model:purpose-data="masterStore.purposeData"
+                    v-model:purpose_id="form.purpose_id" />
+            </Card>
+            <Card>
+                <Button type="submit">検索</Button>
+            </Card>
+        </form>
         <Card>
             <Line v-if="graph_select === 'line'" :data="graphDataStore.setLineGraphData()"
                 :options="graphDataStore.setLineGraphOptions()" />

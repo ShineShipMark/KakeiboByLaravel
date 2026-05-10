@@ -2,11 +2,12 @@
 
 use App\Http\Resources\ExpenseCategoryResourse;
 use App\Models\ExpenseCategory;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class GetExpenseCategory{
-    public function handle():ExpenseCategoryResourse
+    public function handle():AnonymousResourceCollection
     {
-        $category =ExpenseCategory::find();
-        return new ExpenseCategoryResourse($category);
+        $category = ExpenseCategory::all();
+        return ExpenseCategoryResourse::collection($category);
     }
 }

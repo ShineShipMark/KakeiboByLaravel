@@ -1,9 +1,15 @@
 <?php
+
+use App\DTO\RegisterExpenseDTO;
 use App\Models\Expense;
+use Illuminate\Support\Facades\DB;
 
 class RegisterExpense
 {
-    public function handle(array $input): void{
-        Expense::create($input);
+    public function handle(RegisterExpenseDTO $data)
+    {
+        return DB::transaction(function () use($data) {
+            $expense=Expense::create($data);
+        });
     }
 }

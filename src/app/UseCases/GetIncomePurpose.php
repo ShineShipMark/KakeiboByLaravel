@@ -2,12 +2,13 @@
 
 use App\Http\Resources\IncomePurposeResource;
 use App\Models\IncomePurpose;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class GetIncomePurpose
 {
-    public function handle(): IncomePurposeResource
+    public function handle(): AnonymousResourceCollection
     {
-        $purpose= IncomePurpose::find();
-        return new IncomePurposeResource($purpose);
+        $purpose= IncomePurpose::all();
+        return IncomePurposeResource::collection($purpose);
     }
 }

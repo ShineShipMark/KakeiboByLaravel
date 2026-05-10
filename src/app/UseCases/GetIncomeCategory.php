@@ -2,11 +2,12 @@
 
 use App\Http\Resources\IncomeCategoryResourse;
 use App\Models\IncomeCategory;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class GetIncomeCategory{
-    public function handle():IncomeCategoryResourse
+    public function handle():AnonymousResourceCollection
     {
-        $category= IncomeCategory::find();
-        return new IncomeCategoryResourse($category);
+        $category= IncomeCategory::all();
+        return IncomeCategoryResourse::collection($category);
     }
 }

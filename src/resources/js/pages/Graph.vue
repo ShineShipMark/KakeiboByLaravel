@@ -40,7 +40,6 @@ const submitParam = () => {
     });
 }
 
-
 watch(() => props.searchedChartData, (newData) => {
     graphDataStore.setChartData(newData)
 }, { immediate: true });

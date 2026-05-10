@@ -2,12 +2,13 @@
 
 use App\Http\Resources\ExpensePurposeResourse;
 use App\Models\ExpensePurpose;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class GetExpensePurpose
 {
-    public function handle(): ExpensePurposeResourse
+    public function handle(): AnonymousResourceCollection
     {
-        $purpose = ExpensePurpose::find();
-        return new ExpensePurposeResourse($purpose);
+        $purpose = ExpensePurpose::all();
+        return ExpensePurposeResourse::collection($purpose);
     }
 }

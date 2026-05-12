@@ -1,14 +1,17 @@
 <?php
 
-use App\Http\Resources\IncomeResource;
+use App\DTO\RegisterIncomeDTO;
 use App\Models\Income;
+use Illuminate\Support\Facades\DB;
 
 class UpdateIncome
 {
-    public function handle(int $id, array $input): IncomeResource
+    public function handle(RegisterIncomeDTO $data)
     {
-        Income::where('id', $id)->save($input);
-
-        return new IncomeResource(Income::find());
+        return DB::transaction(function () use($data) {
+            $income = Income::findOrFail($data->id);
+            unset($data['id']);
+            $income->update($data->toArray());
+        });
     }
 }

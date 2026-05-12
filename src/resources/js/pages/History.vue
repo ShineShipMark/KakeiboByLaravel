@@ -131,7 +131,7 @@ watch(() => props.searchedData, (newData) => {
                         <Dialog :open="inputStore.isModalOpen" @update:open="inputStore.closeModal">
                             <DialogTrigger as-child>
                                 <Button @click="inputStore.transData(data)" variant="outline">
-                                    Open Dialog
+                                    編集
                                 </Button>
                             </DialogTrigger>
                             <EditModal v-if="inputStore.editData" />

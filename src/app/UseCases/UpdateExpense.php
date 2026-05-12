@@ -1,14 +1,17 @@
 <?php
 
-use App\Http\Resources\ExpenseResource;
+use App\DTO\RegisterExpenseDTO;
 use App\Models\Expense;
+use Illuminate\Support\Facades\DB;
 
 class UpdateExpense
 {
-    public function handle(int $id, array $input): ExpenseResource
+    public function handle(RegisterExpenseDTO $data)
     {
-        Expense::where('id', $id)->save($input);
-
-        return new ExpenseResource(Expense::find());
+        return DB::transaction(function () use($data) {
+            $expense = Expense::findOrFail($data->id);
+            unset($data['id']);
+            $expense->update($data->toArray());
+        });
     }
 }

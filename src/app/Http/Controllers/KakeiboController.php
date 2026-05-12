@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\DTO\FindExpenseDTO;
 use App\DTO\FindIncomeDTO;
+use App\DTO\RegisterExpenseDTO;
+use App\DTO\RegisterIncomeDTO;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use DeleteExpense;
@@ -55,32 +57,30 @@ class KakeiboController extends Controller
 
     public function inputExpense(Request $request, RegisterExpense $usecase)
     {
-        $input = $request->all();
-        $usecase->handle($input);
+        $inputDTO = RegisterExpenseDTO::fromRequest($request);
+        $usecase->handle($inputDTO);
         return Inertia::render('Input/');
     }
 
     public function inputIncome(Request $request, RegisterIncome $usecase)
     {
-        $input = $request->all();
-        $usecase->handle($input);
+        $inputDTO = RegisterIncomeDTO::fromRequest($request);
+        $usecase->handle($inputDTO);
         return Inertia::render('Input/');
     }
 
     public function editExpense(Request $request, UpdateExpense $usecase)
     {
-        $input = $request->all();
-        $id = Arr::only($input, ['id'])['id'];
-        $data = Arr::except($input,['id']);
-        return Inertia::render('Edit/', ['data', $usecase->handle($id, $data)]);
+        $updateDTO = RegisterExpenseDTO::fromRequest($request);
+        $usecase->handle($updateDTO);
+        return Inertia::render('Edit/');
     }
 
     public function editIncome(Request $request, UpdateIncome $usecase)
     {
-        $input = $request->all();
-        $id = Arr::only($input, ['id'])['id'];
-        $data = Arr::except($input,['id']);
-        return Inertia::render('Edit/', ['data', $usecase->handle($id, $data)]);
+        $updateDTO = RegisterIncomeDTO::fromRequest($request);
+        $usecase->handle($updateDTO);
+        return Inertia::render('Edit/');
     }
 
     public function deleteExpense(Request $request, DeleteExpense $usecase)

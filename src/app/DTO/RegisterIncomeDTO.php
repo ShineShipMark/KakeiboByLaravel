@@ -28,4 +28,16 @@ readonly class RegisterIncomeDTO
             detail:$request->string('detail')
         );
     }
+
+    public function toArray(): array
+    {
+        return [
+            'id'=>$this->id,
+            'income_purpose_id'=>$this->income_purpose_id,
+            'amount'=>$this->amount,
+            'at_date'=>$this->at_date,
+            'possession'=>$this->possession,
+            'detail'=>$this->detail
+        ];
+    }
 }

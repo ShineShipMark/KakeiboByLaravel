@@ -9,12 +9,12 @@ export type viewsPurpose = {
   purpose: string;
 };
 
-type selectedObject = {
+export type selectedObject = {
   en: string;
   jp: string;
 };
 
-interface postData {
+export interface postData {
   id: number;
   amount: number;
   purpose_id: number;
@@ -24,7 +24,7 @@ interface postData {
   [key: string]: any;
 }
 
-type getData = {
+export type getData = {
   id: number;
   amount: number;
   purpose: getExpensePurpose;
@@ -33,7 +33,7 @@ type getData = {
   detail: string;
 };
 
-type toSearchParam = {
+export type toSearchParam = {
   min_amount: number | undefined;
   max_amount: number | undefined;
   purpose_id: number | undefined;
@@ -43,24 +43,24 @@ type toSearchParam = {
   detail: string | undefined;
 };
 
-type getExpensePurpose = {
+export type getExpensePurpose = {
   id: number;
   purpose: string;
   category: getExpenseCategory;
 };
 
-type getExpenseCategory = {
+export type getExpenseCategory = {
   id: number;
   category: string;
 };
 
-type possessionPlace = "account" | "wallet";
+export type possessionPlace = "account" | "wallet";
 
-type Language = "en" | "ja";
+export type Language = "en" | "ja";
 
-type Expenditure = "expense" | "income";
+export type Expenditure = "expense" | "income";
 
-const config = {
+export const config = {
   expense: {
     ja: { label: "支出" },
     en: { label: "Expense" },
@@ -71,9 +71,9 @@ const config = {
   },
 } as const;
 
-type PageKind = "input" | "history";
+export type PageKind = "input" | "history";
 
-type GraphParam = {
+export type GraphParam = {
   purpose_id: number | undefined;
   first_date: Date | undefined;
   last_date: Date | undefined;

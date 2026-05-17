@@ -1,7 +1,9 @@
 /**
  * データの入出力に関するストア
  */
-import { config, Expenditure, getData, postData } from "@/types/vue-types";
+import { config } from "@/types/vue-types";
+import type { Expenditure, getData, postData } from "@/types/vue-types";
+
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 import { viewsPurpose } from "../types/vue-types";

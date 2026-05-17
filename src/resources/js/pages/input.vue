@@ -13,7 +13,7 @@ import { useInputDataStore } from '@/stores/inputDataStore';
 import { useMasterDataStore } from '@/stores/masterDataStore';
 import { useForm } from '@inertiajs/vue3';
 import { postData } from '@/types/vue-types';
-
+console.log(55);
 const inputStore = useInputDataStore();
 const masterStore = useMasterDataStore();
 

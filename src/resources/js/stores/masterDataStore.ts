@@ -1,5 +1,6 @@
 import { fetchAPIMethods } from "@/composables/fetch";
-import { config, Expenditure, viewsPurpose } from "@/types/vue-types";
+import { config } from "@/types/vue-types";
+import type { Expenditure, viewsPurpose } from "@/types/vue-types";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 

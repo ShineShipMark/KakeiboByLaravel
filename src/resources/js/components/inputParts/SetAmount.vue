@@ -6,6 +6,7 @@ import {
     NumberFieldIncrement,
     NumberFieldInput,
 } from '@/components/ui/number-field';
+import { Label } from '@/components/ui/label'
 
 const amount = defineModel<number>();
 

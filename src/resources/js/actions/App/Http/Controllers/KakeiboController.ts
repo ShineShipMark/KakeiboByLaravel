@@ -1,75 +1,75 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\KakeiboController::renderPage
-* @see app/Http/Controllers/KakeiboController.php:24
-* @route '/edit'
+* @see app/Http/Controllers/KakeiboController.php:30
+* @route '/input'
 */
-export const renderPage = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
-    url: renderPage.url(options),
+const renderPage9a8a9c23e6bfb87f9d56bc8c3a5c3be0 = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: renderPage9a8a9c23e6bfb87f9d56bc8c3a5c3be0.url(options),
     method: 'get',
 })
 
-renderPage.definition = {
+renderPage9a8a9c23e6bfb87f9d56bc8c3a5c3be0.definition = {
     methods: ["get","head"],
-    url: '/edit',
+    url: '/input',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
 * @see \App\Http\Controllers\KakeiboController::renderPage
-* @see app/Http/Controllers/KakeiboController.php:24
-* @route '/edit'
+* @see app/Http/Controllers/KakeiboController.php:30
+* @route '/input'
 */
-renderPage.url = (options?: RouteQueryOptions) => {
-    return renderPage.definition.url + queryParams(options)
+renderPage9a8a9c23e6bfb87f9d56bc8c3a5c3be0.url = (options?: RouteQueryOptions) => {
+    return renderPage9a8a9c23e6bfb87f9d56bc8c3a5c3be0.definition.url + queryParams(options)
 }
 
 /**
 * @see \App\Http\Controllers\KakeiboController::renderPage
-* @see app/Http/Controllers/KakeiboController.php:24
-* @route '/edit'
+* @see app/Http/Controllers/KakeiboController.php:30
+* @route '/input'
 */
-renderPage.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
-    url: renderPage.url(options),
+renderPage9a8a9c23e6bfb87f9d56bc8c3a5c3be0.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: renderPage9a8a9c23e6bfb87f9d56bc8c3a5c3be0.url(options),
     method: 'get',
 })
 
 /**
 * @see \App\Http\Controllers\KakeiboController::renderPage
-* @see app/Http/Controllers/KakeiboController.php:24
-* @route '/edit'
+* @see app/Http/Controllers/KakeiboController.php:30
+* @route '/input'
 */
-renderPage.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
-    url: renderPage.url(options),
+renderPage9a8a9c23e6bfb87f9d56bc8c3a5c3be0.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+    url: renderPage9a8a9c23e6bfb87f9d56bc8c3a5c3be0.url(options),
     method: 'head',
 })
 
 /**
 * @see \App\Http\Controllers\KakeiboController::renderPage
-* @see app/Http/Controllers/KakeiboController.php:24
-* @route '/edit'
+* @see app/Http/Controllers/KakeiboController.php:30
+* @route '/input'
 */
-const renderPageForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: renderPage.url(options),
+const renderPage9a8a9c23e6bfb87f9d56bc8c3a5c3be0Form = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: renderPage9a8a9c23e6bfb87f9d56bc8c3a5c3be0.url(options),
     method: 'get',
 })
 
 /**
 * @see \App\Http\Controllers\KakeiboController::renderPage
-* @see app/Http/Controllers/KakeiboController.php:24
-* @route '/edit'
+* @see app/Http/Controllers/KakeiboController.php:30
+* @route '/input'
 */
-renderPageForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: renderPage.url(options),
+renderPage9a8a9c23e6bfb87f9d56bc8c3a5c3be0Form.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: renderPage9a8a9c23e6bfb87f9d56bc8c3a5c3be0.url(options),
     method: 'get',
 })
 
 /**
 * @see \App\Http\Controllers\KakeiboController::renderPage
-* @see app/Http/Controllers/KakeiboController.php:24
-* @route '/edit'
+* @see app/Http/Controllers/KakeiboController.php:30
+* @route '/input'
 */
-renderPageForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: renderPage.url({
+renderPage9a8a9c23e6bfb87f9d56bc8c3a5c3be0Form.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: renderPage9a8a9c23e6bfb87f9d56bc8c3a5c3be0.url({
         [options?.mergeQuery ? 'mergeQuery' : 'query']: {
             _method: 'HEAD',
             ...(options?.query ?? options?.mergeQuery ?? {}),
@@ -78,11 +78,96 @@ renderPageForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> 
     method: 'get',
 })
 
-renderPage.form = renderPageForm
+renderPage9a8a9c23e6bfb87f9d56bc8c3a5c3be0.form = renderPage9a8a9c23e6bfb87f9d56bc8c3a5c3be0Form
+/**
+* @see \App\Http\Controllers\KakeiboController::renderPage
+* @see app/Http/Controllers/KakeiboController.php:30
+* @route '/edit'
+*/
+const renderPage6e4a800bb143fc58a0261e619f961c39 = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: renderPage6e4a800bb143fc58a0261e619f961c39.url(options),
+    method: 'get',
+})
+
+renderPage6e4a800bb143fc58a0261e619f961c39.definition = {
+    methods: ["get","head"],
+    url: '/edit',
+} satisfies RouteDefinition<["get","head"]>
+
+/**
+* @see \App\Http\Controllers\KakeiboController::renderPage
+* @see app/Http/Controllers/KakeiboController.php:30
+* @route '/edit'
+*/
+renderPage6e4a800bb143fc58a0261e619f961c39.url = (options?: RouteQueryOptions) => {
+    return renderPage6e4a800bb143fc58a0261e619f961c39.definition.url + queryParams(options)
+}
+
+/**
+* @see \App\Http\Controllers\KakeiboController::renderPage
+* @see app/Http/Controllers/KakeiboController.php:30
+* @route '/edit'
+*/
+renderPage6e4a800bb143fc58a0261e619f961c39.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: renderPage6e4a800bb143fc58a0261e619f961c39.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\KakeiboController::renderPage
+* @see app/Http/Controllers/KakeiboController.php:30
+* @route '/edit'
+*/
+renderPage6e4a800bb143fc58a0261e619f961c39.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+    url: renderPage6e4a800bb143fc58a0261e619f961c39.url(options),
+    method: 'head',
+})
+
+/**
+* @see \App\Http\Controllers\KakeiboController::renderPage
+* @see app/Http/Controllers/KakeiboController.php:30
+* @route '/edit'
+*/
+const renderPage6e4a800bb143fc58a0261e619f961c39Form = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: renderPage6e4a800bb143fc58a0261e619f961c39.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\KakeiboController::renderPage
+* @see app/Http/Controllers/KakeiboController.php:30
+* @route '/edit'
+*/
+renderPage6e4a800bb143fc58a0261e619f961c39Form.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: renderPage6e4a800bb143fc58a0261e619f961c39.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\KakeiboController::renderPage
+* @see app/Http/Controllers/KakeiboController.php:30
+* @route '/edit'
+*/
+renderPage6e4a800bb143fc58a0261e619f961c39Form.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: renderPage6e4a800bb143fc58a0261e619f961c39.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+renderPage6e4a800bb143fc58a0261e619f961c39.form = renderPage6e4a800bb143fc58a0261e619f961c39Form
+
+export const renderPage = {
+    '/input': renderPage9a8a9c23e6bfb87f9d56bc8c3a5c3be0,
+    '/edit': renderPage6e4a800bb143fc58a0261e619f961c39,
+}
 
 /**
 * @see \App\Http\Controllers\KakeiboController::getExpense
-* @see app/Http/Controllers/KakeiboController.php:30
+* @see app/Http/Controllers/KakeiboController.php:37
 * @route '/history/expense'
 */
 export const getExpense = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -97,7 +182,7 @@ getExpense.definition = {
 
 /**
 * @see \App\Http\Controllers\KakeiboController::getExpense
-* @see app/Http/Controllers/KakeiboController.php:30
+* @see app/Http/Controllers/KakeiboController.php:37
 * @route '/history/expense'
 */
 getExpense.url = (options?: RouteQueryOptions) => {
@@ -106,7 +191,7 @@ getExpense.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\KakeiboController::getExpense
-* @see app/Http/Controllers/KakeiboController.php:30
+* @see app/Http/Controllers/KakeiboController.php:37
 * @route '/history/expense'
 */
 getExpense.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -116,7 +201,7 @@ getExpense.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\KakeiboController::getExpense
-* @see app/Http/Controllers/KakeiboController.php:30
+* @see app/Http/Controllers/KakeiboController.php:37
 * @route '/history/expense'
 */
 getExpense.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -126,7 +211,7 @@ getExpense.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\KakeiboController::getExpense
-* @see app/Http/Controllers/KakeiboController.php:30
+* @see app/Http/Controllers/KakeiboController.php:37
 * @route '/history/expense'
 */
 const getExpenseForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -136,7 +221,7 @@ const getExpenseForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'>
 
 /**
 * @see \App\Http\Controllers\KakeiboController::getExpense
-* @see app/Http/Controllers/KakeiboController.php:30
+* @see app/Http/Controllers/KakeiboController.php:37
 * @route '/history/expense'
 */
 getExpenseForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -146,7 +231,7 @@ getExpenseForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> =
 
 /**
 * @see \App\Http\Controllers\KakeiboController::getExpense
-* @see app/Http/Controllers/KakeiboController.php:30
+* @see app/Http/Controllers/KakeiboController.php:37
 * @route '/history/expense'
 */
 getExpenseForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -163,7 +248,7 @@ getExpense.form = getExpenseForm
 
 /**
 * @see \App\Http\Controllers\KakeiboController::getIncome
-* @see app/Http/Controllers/KakeiboController.php:35
+* @see app/Http/Controllers/KakeiboController.php:42
 * @route '/history/income'
 */
 export const getIncome = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -178,7 +263,7 @@ getIncome.definition = {
 
 /**
 * @see \App\Http\Controllers\KakeiboController::getIncome
-* @see app/Http/Controllers/KakeiboController.php:35
+* @see app/Http/Controllers/KakeiboController.php:42
 * @route '/history/income'
 */
 getIncome.url = (options?: RouteQueryOptions) => {
@@ -187,7 +272,7 @@ getIncome.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\KakeiboController::getIncome
-* @see app/Http/Controllers/KakeiboController.php:35
+* @see app/Http/Controllers/KakeiboController.php:42
 * @route '/history/income'
 */
 getIncome.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -197,7 +282,7 @@ getIncome.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\KakeiboController::getIncome
-* @see app/Http/Controllers/KakeiboController.php:35
+* @see app/Http/Controllers/KakeiboController.php:42
 * @route '/history/income'
 */
 getIncome.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -207,7 +292,7 @@ getIncome.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\KakeiboController::getIncome
-* @see app/Http/Controllers/KakeiboController.php:35
+* @see app/Http/Controllers/KakeiboController.php:42
 * @route '/history/income'
 */
 const getIncomeForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -217,7 +302,7 @@ const getIncomeForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> 
 
 /**
 * @see \App\Http\Controllers\KakeiboController::getIncome
-* @see app/Http/Controllers/KakeiboController.php:35
+* @see app/Http/Controllers/KakeiboController.php:42
 * @route '/history/income'
 */
 getIncomeForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -227,7 +312,7 @@ getIncomeForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> =>
 
 /**
 * @see \App\Http\Controllers\KakeiboController::getIncome
-* @see app/Http/Controllers/KakeiboController.php:35
+* @see app/Http/Controllers/KakeiboController.php:42
 * @route '/history/income'
 */
 getIncomeForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -244,7 +329,7 @@ getIncome.form = getIncomeForm
 
 /**
 * @see \App\Http\Controllers\KakeiboController::inputExpense
-* @see app/Http/Controllers/KakeiboController.php:40
+* @see app/Http/Controllers/KakeiboController.php:59
 * @route '/input/expense'
 */
 export const inputExpense = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -259,7 +344,7 @@ inputExpense.definition = {
 
 /**
 * @see \App\Http\Controllers\KakeiboController::inputExpense
-* @see app/Http/Controllers/KakeiboController.php:40
+* @see app/Http/Controllers/KakeiboController.php:59
 * @route '/input/expense'
 */
 inputExpense.url = (options?: RouteQueryOptions) => {
@@ -268,7 +353,7 @@ inputExpense.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\KakeiboController::inputExpense
-* @see app/Http/Controllers/KakeiboController.php:40
+* @see app/Http/Controllers/KakeiboController.php:59
 * @route '/input/expense'
 */
 inputExpense.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -278,7 +363,7 @@ inputExpense.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\KakeiboController::inputExpense
-* @see app/Http/Controllers/KakeiboController.php:40
+* @see app/Http/Controllers/KakeiboController.php:59
 * @route '/input/expense'
 */
 const inputExpenseForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -288,7 +373,7 @@ const inputExpenseForm = (options?: RouteQueryOptions): RouteFormDefinition<'pos
 
 /**
 * @see \App\Http\Controllers\KakeiboController::inputExpense
-* @see app/Http/Controllers/KakeiboController.php:40
+* @see app/Http/Controllers/KakeiboController.php:59
 * @route '/input/expense'
 */
 inputExpenseForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -300,7 +385,7 @@ inputExpense.form = inputExpenseForm
 
 /**
 * @see \App\Http\Controllers\KakeiboController::inputIncome
-* @see app/Http/Controllers/KakeiboController.php:46
+* @see app/Http/Controllers/KakeiboController.php:66
 * @route '/input/income'
 */
 export const inputIncome = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -315,7 +400,7 @@ inputIncome.definition = {
 
 /**
 * @see \App\Http\Controllers\KakeiboController::inputIncome
-* @see app/Http/Controllers/KakeiboController.php:46
+* @see app/Http/Controllers/KakeiboController.php:66
 * @route '/input/income'
 */
 inputIncome.url = (options?: RouteQueryOptions) => {
@@ -324,7 +409,7 @@ inputIncome.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\KakeiboController::inputIncome
-* @see app/Http/Controllers/KakeiboController.php:46
+* @see app/Http/Controllers/KakeiboController.php:66
 * @route '/input/income'
 */
 inputIncome.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -334,7 +419,7 @@ inputIncome.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\KakeiboController::inputIncome
-* @see app/Http/Controllers/KakeiboController.php:46
+* @see app/Http/Controllers/KakeiboController.php:66
 * @route '/input/income'
 */
 const inputIncomeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -344,7 +429,7 @@ const inputIncomeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post
 
 /**
 * @see \App\Http\Controllers\KakeiboController::inputIncome
-* @see app/Http/Controllers/KakeiboController.php:46
+* @see app/Http/Controllers/KakeiboController.php:66
 * @route '/input/income'
 */
 inputIncomeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -356,7 +441,7 @@ inputIncome.form = inputIncomeForm
 
 /**
 * @see \App\Http\Controllers\KakeiboController::editExpense
-* @see app/Http/Controllers/KakeiboController.php:52
+* @see app/Http/Controllers/KakeiboController.php:73
 * @route '/edit/expense'
 */
 export const editExpense = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -371,7 +456,7 @@ editExpense.definition = {
 
 /**
 * @see \App\Http\Controllers\KakeiboController::editExpense
-* @see app/Http/Controllers/KakeiboController.php:52
+* @see app/Http/Controllers/KakeiboController.php:73
 * @route '/edit/expense'
 */
 editExpense.url = (options?: RouteQueryOptions) => {
@@ -380,7 +465,7 @@ editExpense.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\KakeiboController::editExpense
-* @see app/Http/Controllers/KakeiboController.php:52
+* @see app/Http/Controllers/KakeiboController.php:73
 * @route '/edit/expense'
 */
 editExpense.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -390,7 +475,7 @@ editExpense.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\KakeiboController::editExpense
-* @see app/Http/Controllers/KakeiboController.php:52
+* @see app/Http/Controllers/KakeiboController.php:73
 * @route '/edit/expense'
 */
 const editExpenseForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -400,7 +485,7 @@ const editExpenseForm = (options?: RouteQueryOptions): RouteFormDefinition<'post
 
 /**
 * @see \App\Http\Controllers\KakeiboController::editExpense
-* @see app/Http/Controllers/KakeiboController.php:52
+* @see app/Http/Controllers/KakeiboController.php:73
 * @route '/edit/expense'
 */
 editExpenseForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -412,7 +497,7 @@ editExpense.form = editExpenseForm
 
 /**
 * @see \App\Http\Controllers\KakeiboController::editIncome
-* @see app/Http/Controllers/KakeiboController.php:60
+* @see app/Http/Controllers/KakeiboController.php:80
 * @route '/edit/income'
 */
 export const editIncome = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -427,7 +512,7 @@ editIncome.definition = {
 
 /**
 * @see \App\Http\Controllers\KakeiboController::editIncome
-* @see app/Http/Controllers/KakeiboController.php:60
+* @see app/Http/Controllers/KakeiboController.php:80
 * @route '/edit/income'
 */
 editIncome.url = (options?: RouteQueryOptions) => {
@@ -436,7 +521,7 @@ editIncome.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\KakeiboController::editIncome
-* @see app/Http/Controllers/KakeiboController.php:60
+* @see app/Http/Controllers/KakeiboController.php:80
 * @route '/edit/income'
 */
 editIncome.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -446,7 +531,7 @@ editIncome.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\KakeiboController::editIncome
-* @see app/Http/Controllers/KakeiboController.php:60
+* @see app/Http/Controllers/KakeiboController.php:80
 * @route '/edit/income'
 */
 const editIncomeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -456,7 +541,7 @@ const editIncomeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'
 
 /**
 * @see \App\Http\Controllers\KakeiboController::editIncome
-* @see app/Http/Controllers/KakeiboController.php:60
+* @see app/Http/Controllers/KakeiboController.php:80
 * @route '/edit/income'
 */
 editIncomeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -468,7 +553,7 @@ editIncome.form = editIncomeForm
 
 /**
 * @see \App\Http\Controllers\KakeiboController::deleteExpense
-* @see app/Http/Controllers/KakeiboController.php:68
+* @see app/Http/Controllers/KakeiboController.php:87
 * @route '/delete/expense'
 */
 export const deleteExpense = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -483,7 +568,7 @@ deleteExpense.definition = {
 
 /**
 * @see \App\Http\Controllers\KakeiboController::deleteExpense
-* @see app/Http/Controllers/KakeiboController.php:68
+* @see app/Http/Controllers/KakeiboController.php:87
 * @route '/delete/expense'
 */
 deleteExpense.url = (options?: RouteQueryOptions) => {
@@ -492,7 +577,7 @@ deleteExpense.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\KakeiboController::deleteExpense
-* @see app/Http/Controllers/KakeiboController.php:68
+* @see app/Http/Controllers/KakeiboController.php:87
 * @route '/delete/expense'
 */
 deleteExpense.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -502,7 +587,7 @@ deleteExpense.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => (
 
 /**
 * @see \App\Http\Controllers\KakeiboController::deleteExpense
-* @see app/Http/Controllers/KakeiboController.php:68
+* @see app/Http/Controllers/KakeiboController.php:87
 * @route '/delete/expense'
 */
 const deleteExpenseForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -512,7 +597,7 @@ const deleteExpenseForm = (options?: RouteQueryOptions): RouteFormDefinition<'po
 
 /**
 * @see \App\Http\Controllers\KakeiboController::deleteExpense
-* @see app/Http/Controllers/KakeiboController.php:68
+* @see app/Http/Controllers/KakeiboController.php:87
 * @route '/delete/expense'
 */
 deleteExpenseForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -524,7 +609,7 @@ deleteExpense.form = deleteExpenseForm
 
 /**
 * @see \App\Http\Controllers\KakeiboController::deleteIncome
-* @see app/Http/Controllers/KakeiboController.php:75
+* @see app/Http/Controllers/KakeiboController.php:94
 * @route '/delete/income'
 */
 export const deleteIncome = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -539,7 +624,7 @@ deleteIncome.definition = {
 
 /**
 * @see \App\Http\Controllers\KakeiboController::deleteIncome
-* @see app/Http/Controllers/KakeiboController.php:75
+* @see app/Http/Controllers/KakeiboController.php:94
 * @route '/delete/income'
 */
 deleteIncome.url = (options?: RouteQueryOptions) => {
@@ -548,7 +633,7 @@ deleteIncome.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\KakeiboController::deleteIncome
-* @see app/Http/Controllers/KakeiboController.php:75
+* @see app/Http/Controllers/KakeiboController.php:94
 * @route '/delete/income'
 */
 deleteIncome.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -558,7 +643,7 @@ deleteIncome.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\KakeiboController::deleteIncome
-* @see app/Http/Controllers/KakeiboController.php:75
+* @see app/Http/Controllers/KakeiboController.php:94
 * @route '/delete/income'
 */
 const deleteIncomeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -568,7 +653,7 @@ const deleteIncomeForm = (options?: RouteQueryOptions): RouteFormDefinition<'pos
 
 /**
 * @see \App\Http\Controllers\KakeiboController::deleteIncome
-* @see app/Http/Controllers/KakeiboController.php:75
+* @see app/Http/Controllers/KakeiboController.php:94
 * @route '/delete/income'
 */
 deleteIncomeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -580,7 +665,7 @@ deleteIncome.form = deleteIncomeForm
 
 /**
 * @see \App\Http\Controllers\KakeiboController::getExpensePurpose
-* @see app/Http/Controllers/KakeiboController.php:82
+* @see app/Http/Controllers/KakeiboController.php:101
 * @route '/get_expense_purpose'
 */
 export const getExpensePurpose = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -595,7 +680,7 @@ getExpensePurpose.definition = {
 
 /**
 * @see \App\Http\Controllers\KakeiboController::getExpensePurpose
-* @see app/Http/Controllers/KakeiboController.php:82
+* @see app/Http/Controllers/KakeiboController.php:101
 * @route '/get_expense_purpose'
 */
 getExpensePurpose.url = (options?: RouteQueryOptions) => {
@@ -604,7 +689,7 @@ getExpensePurpose.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\KakeiboController::getExpensePurpose
-* @see app/Http/Controllers/KakeiboController.php:82
+* @see app/Http/Controllers/KakeiboController.php:101
 * @route '/get_expense_purpose'
 */
 getExpensePurpose.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -614,7 +699,7 @@ getExpensePurpose.get = (options?: RouteQueryOptions): RouteDefinition<'get'> =>
 
 /**
 * @see \App\Http\Controllers\KakeiboController::getExpensePurpose
-* @see app/Http/Controllers/KakeiboController.php:82
+* @see app/Http/Controllers/KakeiboController.php:101
 * @route '/get_expense_purpose'
 */
 getExpensePurpose.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -624,7 +709,7 @@ getExpensePurpose.head = (options?: RouteQueryOptions): RouteDefinition<'head'> 
 
 /**
 * @see \App\Http\Controllers\KakeiboController::getExpensePurpose
-* @see app/Http/Controllers/KakeiboController.php:82
+* @see app/Http/Controllers/KakeiboController.php:101
 * @route '/get_expense_purpose'
 */
 const getExpensePurposeForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -634,7 +719,7 @@ const getExpensePurposeForm = (options?: RouteQueryOptions): RouteFormDefinition
 
 /**
 * @see \App\Http\Controllers\KakeiboController::getExpensePurpose
-* @see app/Http/Controllers/KakeiboController.php:82
+* @see app/Http/Controllers/KakeiboController.php:101
 * @route '/get_expense_purpose'
 */
 getExpensePurposeForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -644,7 +729,7 @@ getExpensePurposeForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'
 
 /**
 * @see \App\Http\Controllers\KakeiboController::getExpensePurpose
-* @see app/Http/Controllers/KakeiboController.php:82
+* @see app/Http/Controllers/KakeiboController.php:101
 * @route '/get_expense_purpose'
 */
 getExpensePurposeForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -661,7 +746,7 @@ getExpensePurpose.form = getExpensePurposeForm
 
 /**
 * @see \App\Http\Controllers\KakeiboController::getIncomePurpose
-* @see app/Http/Controllers/KakeiboController.php:87
+* @see app/Http/Controllers/KakeiboController.php:106
 * @route '/get_income_purpose'
 */
 export const getIncomePurpose = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -676,7 +761,7 @@ getIncomePurpose.definition = {
 
 /**
 * @see \App\Http\Controllers\KakeiboController::getIncomePurpose
-* @see app/Http/Controllers/KakeiboController.php:87
+* @see app/Http/Controllers/KakeiboController.php:106
 * @route '/get_income_purpose'
 */
 getIncomePurpose.url = (options?: RouteQueryOptions) => {
@@ -685,7 +770,7 @@ getIncomePurpose.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\KakeiboController::getIncomePurpose
-* @see app/Http/Controllers/KakeiboController.php:87
+* @see app/Http/Controllers/KakeiboController.php:106
 * @route '/get_income_purpose'
 */
 getIncomePurpose.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -695,7 +780,7 @@ getIncomePurpose.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => 
 
 /**
 * @see \App\Http\Controllers\KakeiboController::getIncomePurpose
-* @see app/Http/Controllers/KakeiboController.php:87
+* @see app/Http/Controllers/KakeiboController.php:106
 * @route '/get_income_purpose'
 */
 getIncomePurpose.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -705,7 +790,7 @@ getIncomePurpose.head = (options?: RouteQueryOptions): RouteDefinition<'head'> =
 
 /**
 * @see \App\Http\Controllers\KakeiboController::getIncomePurpose
-* @see app/Http/Controllers/KakeiboController.php:87
+* @see app/Http/Controllers/KakeiboController.php:106
 * @route '/get_income_purpose'
 */
 const getIncomePurposeForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -715,7 +800,7 @@ const getIncomePurposeForm = (options?: RouteQueryOptions): RouteFormDefinition<
 
 /**
 * @see \App\Http\Controllers\KakeiboController::getIncomePurpose
-* @see app/Http/Controllers/KakeiboController.php:87
+* @see app/Http/Controllers/KakeiboController.php:106
 * @route '/get_income_purpose'
 */
 getIncomePurposeForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -725,7 +810,7 @@ getIncomePurposeForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'g
 
 /**
 * @see \App\Http\Controllers\KakeiboController::getIncomePurpose
-* @see app/Http/Controllers/KakeiboController.php:87
+* @see app/Http/Controllers/KakeiboController.php:106
 * @route '/get_income_purpose'
 */
 getIncomePurposeForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -742,7 +827,7 @@ getIncomePurpose.form = getIncomePurposeForm
 
 /**
 * @see \App\Http\Controllers\KakeiboController::getExpenseCategory
-* @see app/Http/Controllers/KakeiboController.php:92
+* @see app/Http/Controllers/KakeiboController.php:111
 * @route '/get_expense_category'
 */
 export const getExpenseCategory = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -757,7 +842,7 @@ getExpenseCategory.definition = {
 
 /**
 * @see \App\Http\Controllers\KakeiboController::getExpenseCategory
-* @see app/Http/Controllers/KakeiboController.php:92
+* @see app/Http/Controllers/KakeiboController.php:111
 * @route '/get_expense_category'
 */
 getExpenseCategory.url = (options?: RouteQueryOptions) => {
@@ -766,7 +851,7 @@ getExpenseCategory.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\KakeiboController::getExpenseCategory
-* @see app/Http/Controllers/KakeiboController.php:92
+* @see app/Http/Controllers/KakeiboController.php:111
 * @route '/get_expense_category'
 */
 getExpenseCategory.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -776,7 +861,7 @@ getExpenseCategory.get = (options?: RouteQueryOptions): RouteDefinition<'get'> =
 
 /**
 * @see \App\Http\Controllers\KakeiboController::getExpenseCategory
-* @see app/Http/Controllers/KakeiboController.php:92
+* @see app/Http/Controllers/KakeiboController.php:111
 * @route '/get_expense_category'
 */
 getExpenseCategory.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -786,7 +871,7 @@ getExpenseCategory.head = (options?: RouteQueryOptions): RouteDefinition<'head'>
 
 /**
 * @see \App\Http\Controllers\KakeiboController::getExpenseCategory
-* @see app/Http/Controllers/KakeiboController.php:92
+* @see app/Http/Controllers/KakeiboController.php:111
 * @route '/get_expense_category'
 */
 const getExpenseCategoryForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -796,7 +881,7 @@ const getExpenseCategoryForm = (options?: RouteQueryOptions): RouteFormDefinitio
 
 /**
 * @see \App\Http\Controllers\KakeiboController::getExpenseCategory
-* @see app/Http/Controllers/KakeiboController.php:92
+* @see app/Http/Controllers/KakeiboController.php:111
 * @route '/get_expense_category'
 */
 getExpenseCategoryForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -806,7 +891,7 @@ getExpenseCategoryForm.get = (options?: RouteQueryOptions): RouteFormDefinition<
 
 /**
 * @see \App\Http\Controllers\KakeiboController::getExpenseCategory
-* @see app/Http/Controllers/KakeiboController.php:92
+* @see app/Http/Controllers/KakeiboController.php:111
 * @route '/get_expense_category'
 */
 getExpenseCategoryForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -823,7 +908,7 @@ getExpenseCategory.form = getExpenseCategoryForm
 
 /**
 * @see \App\Http\Controllers\KakeiboController::getIncomeCategory
-* @see app/Http/Controllers/KakeiboController.php:97
+* @see app/Http/Controllers/KakeiboController.php:116
 * @route '/get_income_category'
 */
 export const getIncomeCategory = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -838,7 +923,7 @@ getIncomeCategory.definition = {
 
 /**
 * @see \App\Http\Controllers\KakeiboController::getIncomeCategory
-* @see app/Http/Controllers/KakeiboController.php:97
+* @see app/Http/Controllers/KakeiboController.php:116
 * @route '/get_income_category'
 */
 getIncomeCategory.url = (options?: RouteQueryOptions) => {
@@ -847,7 +932,7 @@ getIncomeCategory.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\KakeiboController::getIncomeCategory
-* @see app/Http/Controllers/KakeiboController.php:97
+* @see app/Http/Controllers/KakeiboController.php:116
 * @route '/get_income_category'
 */
 getIncomeCategory.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -857,7 +942,7 @@ getIncomeCategory.get = (options?: RouteQueryOptions): RouteDefinition<'get'> =>
 
 /**
 * @see \App\Http\Controllers\KakeiboController::getIncomeCategory
-* @see app/Http/Controllers/KakeiboController.php:97
+* @see app/Http/Controllers/KakeiboController.php:116
 * @route '/get_income_category'
 */
 getIncomeCategory.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -867,7 +952,7 @@ getIncomeCategory.head = (options?: RouteQueryOptions): RouteDefinition<'head'> 
 
 /**
 * @see \App\Http\Controllers\KakeiboController::getIncomeCategory
-* @see app/Http/Controllers/KakeiboController.php:97
+* @see app/Http/Controllers/KakeiboController.php:116
 * @route '/get_income_category'
 */
 const getIncomeCategoryForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -877,7 +962,7 @@ const getIncomeCategoryForm = (options?: RouteQueryOptions): RouteFormDefinition
 
 /**
 * @see \App\Http\Controllers\KakeiboController::getIncomeCategory
-* @see app/Http/Controllers/KakeiboController.php:97
+* @see app/Http/Controllers/KakeiboController.php:116
 * @route '/get_income_category'
 */
 getIncomeCategoryForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -887,7 +972,7 @@ getIncomeCategoryForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'
 
 /**
 * @see \App\Http\Controllers\KakeiboController::getIncomeCategory
-* @see app/Http/Controllers/KakeiboController.php:97
+* @see app/Http/Controllers/KakeiboController.php:116
 * @route '/get_income_category'
 */
 getIncomeCategoryForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({

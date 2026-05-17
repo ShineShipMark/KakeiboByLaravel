@@ -74,8 +74,89 @@ homeForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 home.form = homeForm
 
 /**
+* @see \App\Http\Controllers\KakeiboController::input
+* @see app/Http/Controllers/KakeiboController.php:30
+* @route '/input'
+*/
+export const input = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: input.url(options),
+    method: 'get',
+})
+
+input.definition = {
+    methods: ["get","head"],
+    url: '/input',
+} satisfies RouteDefinition<["get","head"]>
+
+/**
+* @see \App\Http\Controllers\KakeiboController::input
+* @see app/Http/Controllers/KakeiboController.php:30
+* @route '/input'
+*/
+input.url = (options?: RouteQueryOptions) => {
+    return input.definition.url + queryParams(options)
+}
+
+/**
+* @see \App\Http\Controllers\KakeiboController::input
+* @see app/Http/Controllers/KakeiboController.php:30
+* @route '/input'
+*/
+input.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: input.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\KakeiboController::input
+* @see app/Http/Controllers/KakeiboController.php:30
+* @route '/input'
+*/
+input.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+    url: input.url(options),
+    method: 'head',
+})
+
+/**
+* @see \App\Http\Controllers\KakeiboController::input
+* @see app/Http/Controllers/KakeiboController.php:30
+* @route '/input'
+*/
+const inputForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: input.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\KakeiboController::input
+* @see app/Http/Controllers/KakeiboController.php:30
+* @route '/input'
+*/
+inputForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: input.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\KakeiboController::input
+* @see app/Http/Controllers/KakeiboController.php:30
+* @route '/input'
+*/
+inputForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: input.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+input.form = inputForm
+
+/**
 * @see \App\Http\Controllers\KakeiboController::edit
-* @see app/Http/Controllers/KakeiboController.php:24
+* @see app/Http/Controllers/KakeiboController.php:30
 * @route '/edit'
 */
 export const edit = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -90,7 +171,7 @@ edit.definition = {
 
 /**
 * @see \App\Http\Controllers\KakeiboController::edit
-* @see app/Http/Controllers/KakeiboController.php:24
+* @see app/Http/Controllers/KakeiboController.php:30
 * @route '/edit'
 */
 edit.url = (options?: RouteQueryOptions) => {
@@ -99,7 +180,7 @@ edit.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\KakeiboController::edit
-* @see app/Http/Controllers/KakeiboController.php:24
+* @see app/Http/Controllers/KakeiboController.php:30
 * @route '/edit'
 */
 edit.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -109,7 +190,7 @@ edit.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\KakeiboController::edit
-* @see app/Http/Controllers/KakeiboController.php:24
+* @see app/Http/Controllers/KakeiboController.php:30
 * @route '/edit'
 */
 edit.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -119,7 +200,7 @@ edit.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\KakeiboController::edit
-* @see app/Http/Controllers/KakeiboController.php:24
+* @see app/Http/Controllers/KakeiboController.php:30
 * @route '/edit'
 */
 const editForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -129,7 +210,7 @@ const editForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\KakeiboController::edit
-* @see app/Http/Controllers/KakeiboController.php:24
+* @see app/Http/Controllers/KakeiboController.php:30
 * @route '/edit'
 */
 editForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -139,7 +220,7 @@ editForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\KakeiboController::edit
-* @see app/Http/Controllers/KakeiboController.php:24
+* @see app/Http/Controllers/KakeiboController.php:30
 * @route '/edit'
 */
 editForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({

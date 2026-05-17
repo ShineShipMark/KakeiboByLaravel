@@ -29,8 +29,9 @@ class KakeiboController extends Controller
 
     public function renderPage(Request $resuest)
     {
-        $pageName = $resuest->segments(1);
-        return Inertia::render($pageName);
+        $pageName = $resuest->segment(1);
+        
+        return Inertia::render($pageName,[]);
     }
 
     public function getExpense(GetExpense $usecase)

@@ -17,7 +17,7 @@ class IncomePurposeResource extends JsonResource
         return [
             'id'=>$this->id,
             'purpose'=>$this->purpose,
-            'category'=>new IncomeCategoryResourse($this->whenLoaded('incomeCategory'))
+            'category'=>new IncomeCategoryResource($this->whenLoaded('incomeCategory'))
         ];
     }
 }

@@ -1,6 +1,6 @@
 <?php
-
-use App\Http\Resources\ExpensePurposeResourse;
+namespace App\UseCases;
+use App\Http\Resources\ExpensePurposeResource;
 use App\Models\ExpensePurpose;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
@@ -9,6 +9,6 @@ class GetExpensePurpose
     public function handle(): AnonymousResourceCollection
     {
         $purpose = ExpensePurpose::all();
-        return ExpensePurposeResourse::collection($purpose);
+        return ExpensePurposeResource::collection($purpose);
     }
 }

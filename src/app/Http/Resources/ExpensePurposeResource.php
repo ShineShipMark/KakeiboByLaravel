@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ExpensePurposeResourse extends JsonResource
+class ExpensePurposeResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,7 +17,7 @@ class ExpensePurposeResourse extends JsonResource
         return [
             'id'=>$this->id,
             'purpose'=>$this->purpose,
-            'category'=>new ExpenseCategoryResourse($this->whenLoaded('expenseCategory'))
+            'category'=>new ExpenseCategoryResource($this->whenLoaded('expenseCategory'))
         ];
     }
 }

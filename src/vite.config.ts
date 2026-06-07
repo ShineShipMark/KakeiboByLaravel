@@ -35,5 +35,12 @@ export default defineConfig({
     hmr: {
       host: "localhost", // ブラウザがHMR接続しに行く先
     },
+    proxy: {
+      "/get_expense_purpose": {
+        // 💡 同一コンテナ内、あるいはDockerネットワーク内からNginxの窓口へ転送します
+        target: "http://nginx",
+        changeOrigin: true,
+      },
+    },
   },
 });

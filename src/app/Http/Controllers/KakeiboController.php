@@ -14,7 +14,7 @@ use FindExpense;
 use FindIncome;
 use GetExpense;
 use GetExpenseCategory;
-use GetExpensePurpose;
+use App\UseCases\GetExpensePurpose;
 use GetIncome;
 use GetIncomeCategory;
 use GetIncomePurpose;
@@ -95,12 +95,12 @@ class KakeiboController extends Controller
     {
         $input = $request->all();
         $id = Arr::only($input, ['id'])['id'];
-        return Inertia::render('delete/', ['data', $usecase->handle($id)]);
+        return Inertia::render('delete/', ['data'=>$usecase->handle($id)]);
     }
 
     public function getExpensePurpose(GetExpensePurpose $usecase)
     {
-        return Inertia::render('Input/',['expensePurpose',$usecase->handle()]);
+        return response()->json($usecase->handle());
     }
 
     public function getIncomePurpose(GetIncomePurpose $usecase)

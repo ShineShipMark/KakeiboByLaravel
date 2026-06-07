@@ -5,7 +5,7 @@ import Card from '@/components/ui/card/Card.vue';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Button } from '@/components/ui/button';
-import { onMounted, watch } from 'vue';
+import { onMounted } from 'vue';
 import {
     Dialog,
     DialogTrigger,
@@ -30,7 +30,7 @@ const props = defineProps<{ searchedData: getData[] }>();
 
 onMounted(async () => {
     form.post(`/history/${masterStore.currentLabels.en}`, {
-        onSuccess: () => { console.log('success!') }
+        onSuccess: () => searchStore.setSearchedData(props.searchedData)
     });
     if (searchStore.listData) masterStore.setPurposes('expense');
 });
@@ -39,13 +39,13 @@ const columnName = ['日付', '大目的', '小目的', '金額', '所在', '詳
 
 const searchData = () => {
     form.post(`/history/${masterStore.currentLabels.en}`, {
-        onSuccess: () => { console.log('success!') }
+        onSuccess: () => searchStore.setSearchedData(props.searchedData)
     });
 }
 
-watch(() => props.searchedData, (newData) => {
-    searchStore.setSearchedData(newData);
-}, { immediate: true });
+//watch(() => props.searchedData, (newData) => {
+//    searchStore.setSearchedData(newData);
+//}, { immediate: true });
 
 </script>
 <template>

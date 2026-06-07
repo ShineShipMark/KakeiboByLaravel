@@ -13,7 +13,7 @@ import { useInputDataStore } from '@/stores/inputDataStore';
 import { useMasterDataStore } from '@/stores/masterDataStore';
 import { useForm } from '@inertiajs/vue3';
 import { postData } from '@/types/vue-types';
-console.log(55);
+import Label from '@/components/ui/label/Label.vue';
 const inputStore = useInputDataStore();
 const masterStore = useMasterDataStore();
 
@@ -33,8 +33,9 @@ const sendData = async () => {
 </script>
 <template>
     <Card>
-        <Switch :checked="masterStore.witchExpenditure === 'income'" :disabled="inputStore.loading"
-            @update:checked="masterStore.switchExpenditure">{{ masterStore.currentLabels.ja }}</Switch>
+        <Switch id="expenditure" :checked="masterStore.witchExpenditure === 'income'" :disabled="inputStore.loading"
+            @update:checked="masterStore.switchExpenditure" />
+        <Label for="expenditure">{{ masterStore.currentLabels.ja.label }}</Label>
         <form @submit.prevent="sendData">
             <FieldGroup>
                 <FieldSet>

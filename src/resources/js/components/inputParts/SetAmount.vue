@@ -12,7 +12,7 @@ const amount = defineModel<number>();
 
 </script>
 <template>
-    <NumberField :model-value="amount">
+    <NumberField v-model="amount">
         <Label for="age-disabled">金額</Label>
         <NumberFieldContent>
             <NumberFieldDecrement />

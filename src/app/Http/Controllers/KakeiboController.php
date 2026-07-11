@@ -8,21 +8,21 @@ use App\DTO\RegisterExpenseDTO;
 use App\DTO\RegisterIncomeDTO;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use DeleteExpense;
-use DeleteIncome;
-use FindExpense;
-use FindIncome;
-use GetExpense;
-use GetExpenseCategory;
+use App\UseCases\DeleteExpense;
+use App\UseCases\DeleteIncome;
+use App\UseCases\FindExpense;
+use App\UseCases\FindIncome;
+use App\UseCases\GetExpense;
+use App\UseCases\GetExpenseCategory;
 use App\UseCases\GetExpensePurpose;
-use GetIncome;
-use GetIncomeCategory;
-use GetIncomePurpose;
-use RegisterExpense;
-use UpdateExpense;
+use App\UseCases\GetIncome;
+use App\UseCases\GetIncomeCategory;
+use App\UseCases\GetIncomePurpose;
+use App\UseCases\RegisterExpense;
+use App\UseCases\UpdateExpense;
 use Illuminate\Support\Arr;
-use RegisterIncome;
-use UpdateIncome;
+use App\UseCases\RegisterIncome;
+use App\UseCases\UpdateIncome;
 
 class KakeiboController extends Controller
 {
@@ -36,7 +36,7 @@ class KakeiboController extends Controller
 
     public function getExpense(GetExpense $usecase)
     {
-        return Inertia::render('History/', ['data', $usecase->handle()]);
+        return Inertia::render('history/expense', ['data', $usecase->handle()]);
     }
 
     public function getIncome(GetIncome $usecase)

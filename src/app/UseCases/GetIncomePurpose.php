@@ -1,5 +1,5 @@
 <?php
-
+namespace App\UseCases;
 use App\Http\Resources\IncomePurposeResource;
 use App\Models\IncomePurpose;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;

@@ -1,5 +1,5 @@
 <?php
-
+namespace App\UseCases;
 use App\DTO\FindExpenseDTO;
 use App\Http\Resources\ExpenseResource;
 use App\Models\Expense;

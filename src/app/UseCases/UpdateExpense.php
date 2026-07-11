@@ -1,5 +1,5 @@
 <?php
-
+namespace App\UseCases;
 use App\DTO\RegisterExpenseDTO;
 use App\Models\Expense;
 use Illuminate\Support\Facades\DB;

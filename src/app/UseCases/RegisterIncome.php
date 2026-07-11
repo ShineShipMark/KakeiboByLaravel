@@ -1,5 +1,5 @@
 <?php
-
+namespace App\UseCases;
 use App\DTO\RegisterIncomeDTO;
 use App\Models\Income;
 use Illuminate\Support\Facades\DB;

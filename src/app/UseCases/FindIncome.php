@@ -1,5 +1,5 @@
 <?php
-
+namespace App\UseCases;
 use App\DTO\FindIncomeDTO;
 use App\Http\Resources\IncomeResource;
 use App\Models\Income;

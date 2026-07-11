@@ -17,7 +17,7 @@ import SetSelectPurpose from '@/components/inputParts/SetSelectPurpose.vue';
 import SetAmount from '@/components/inputParts/SetAmount.vue';
 import SetSelectPossession from '@/components/inputParts/SetSelectPossession.vue';
 import { useMasterDataStore } from '@/stores/masterDataStore';
-import { useForm } from '@inertiajs/vue3';
+import { router, useForm } from '@inertiajs/vue3';
 import { getData, toSearchParam } from '@/types/vue-types';
 
 const inputStore = useInputDataStore();
@@ -27,6 +27,13 @@ const masterStore = useMasterDataStore();
 const form = useForm<toSearchParam>(searchStore.initialParamState());
 
 const props = defineProps<{ searchedData: getData[] }>();
+
+//const switchHistory = () => {
+//    router.reload({
+//        data: { expendenture: masterStore.currentLabels.en },
+//        only:{}
+//    })
+//}
 
 onMounted(async () => {
     form.post(`/history/${masterStore.currentLabels.en}`, {

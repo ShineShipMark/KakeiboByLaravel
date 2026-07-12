@@ -30,5 +30,6 @@
                 "mosapride.zenkaku"
             ]
         }
-    }
+    },
+    "postCreateCommand": "composer install && npm install && php artisan ide-helper:generate"
 }

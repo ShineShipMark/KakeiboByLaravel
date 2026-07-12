@@ -31,5 +31,5 @@
             ]
         }
     },
-    "postCreateCommand": "composer install && npm install && php artisan ide-helper:generate"
+    "postCreateCommand": "cd src && composer install && npm install && php artisan ide-helper:generate"
 }

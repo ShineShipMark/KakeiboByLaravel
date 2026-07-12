@@ -2,6 +2,12 @@
     "name": "Laravel-Setup",
     // 💡 【超重要】ベースとなる環境の指定を追加しました
     "image": "mcr.microsoft.com/devcontainers/php:1-8.3-bullseye",
+    // 💡 【超重要】Codespaces の中で Docker を動かせるようにする魔法の設定
+    "features": {
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {
+            "version": "latest"
+        }
+    },
     "customizations": {
         "vscode": {
             "extensions": [
@@ -33,5 +39,6 @@
             ]
         }
     },
-    "postCreateCommand": "cd src && composer install && npm install && php artisan ide-helper:generate"
+    // 💡 Docker が立ち上がってから実行するため、自動コマンドは一度シンプルにします
+    "postCreateCommand": "cd src && composer install"
 }

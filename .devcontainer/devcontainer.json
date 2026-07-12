@@ -1,6 +1,14 @@
 {
     "name": "Laravel-Setup",
     "image": "mcr.microsoft.com/devcontainers/php:1-8.3-bullseye",
+    "features": {
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {
+            "version": "latest"
+        }
+    },
+    "containerEnv": {
+        "PHP_EXTENSIONS": "mbstring zip pdo pdo_mysql bcmath intl gd"
+    },
     "customizations": {
         "vscode": {
             "extensions": [
@@ -32,5 +40,6 @@
             ]
         }
     },
+    // コンテナ側の準備を整えた状態で、安全にインストールを実行させます
     "postCreateCommand": "cd src && composer install"
 }

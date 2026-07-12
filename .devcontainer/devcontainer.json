@@ -1,5 +1,7 @@
 {
     "name": "Laravel-Setup",
+    // 💡 【超重要】ベースとなる環境の指定を追加しました
+    "image": "mcr.microsoft.com/devcontainers/php:1-8.3-bullseye",
     "customizations": {
         "vscode": {
             "extensions": [

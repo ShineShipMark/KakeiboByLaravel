@@ -81,6 +81,20 @@ class KakeiboController extends Controller
         ->with('message', '更新が完了しました');
     }
 
+    public function deleteData($id, Requesdt $request, DeleteExpense $expenseUsecase, DeleteIncome $incomeUsecase) 
+    {
+        $expenditure = $request->input('expenditure', 'Expense');
+        
+        if ($expenditure === 'Expense') {
+            $expenseUsecase->handle($id);
+        } else {
+            $incomeUsecase->handle($id);
+        }
+
+        redirect()->action([KakeiboController::class, 'history'])
+        ->with('message', '削除が完了しました');
+    }
+
     public function deleteExpense(Request $request, DeleteExpense $usecase)
     {
         $input = $request->all();

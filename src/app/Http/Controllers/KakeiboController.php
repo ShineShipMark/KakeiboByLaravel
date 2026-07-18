@@ -34,26 +34,18 @@ class KakeiboController extends Controller
         return Inertia::render($pageName,[]);
     }
 
-    public function getExpense(GetExpense $usecase)
-    {
-        return Inertia::render('history/expense', ['searchedData' => $usecase->handle()]);
-    }
+    public function getHistory(Request $request,FindExpense $expenseUsecase, FindIncome $incomeUseca) {
+        $expenditure = $request->input('expenditure', 'Expense');
+        if ($expenditure === 'Expense') {
+            $dataDTO=FindExpenseDTO::fromRequest($request);
+            $searchedData = $expenseUsecase->handle($dataDTO);
+        } else {
+            $dataDTO=FindIncomeDTO::fromRequest($request);
+            $searchedData = $incomeUsecase->handle($dataDTO);
+        }
 
-    public function getIncome(GetIncome $usecase)
-    {
-        return Inertia::render('History/', ['searchedData' => $usecase->handle()]);;
-    }
+        return Inertia::render('History/', ['searchedData' => $searchedData]);
 
-    public function findExpense(Request $request, FindExpense $usecase)
-    {
-        $dataDTO=FindExpenseDTO::fromRequest($request);
-        return Inertia::render('History/',['searchedData',$usecase->handle($dataDTO)]);
-    }
-
-    public function findIncome(Request $request, FindIncome $usecase)
-    {
-        $dataDTO=FindIncomeDTO::fromRequest($request);
-        return Inertia::render('History/',['searchedData',$usecase->handle($dataDTO)]);
     }
 
     public function inputExpense(Request $request, RegisterExpense $usecase)

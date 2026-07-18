@@ -8,12 +8,11 @@ Route::get('/', function () {
     return Inertia::render('Welcome');
 })->name('home');
 
-Route::get('/input', [KakeiboController::class, 'renderPage'])->name('input');
+Route::get('/input', [KakeiboController::class, 'renderPage']);
 Route::get('/edit', [KakeiboController::class, 'renderPage'])->name('edit');
 Roure::get('/history', [KakeiboController::class, 'getHistory']);
 Route::post('/history', [KakeiboController::class, 'getHistory'])->name('history');
-Route::post('/input/expense', [KakeiboController::class, 'inputExpense'])->name('input.expense');
-Route::post('/input/income', [KakeiboController::class, 'inputIncome'])->name('input.income');
+Route::post('/input', [KakeiboController::class, 'inputData'])->name('input');
 Route::post('/edit/expense', [KakeiboController::class, 'editExpense'])->name('edit.expense');
 Route::post('/edit/income', [KakeiboController::class, 'editIncome'])->name('edit.income');
 Route::post('/delete/expense', [KakeiboController::class, 'deleteExpense'])->name('delete.expense');

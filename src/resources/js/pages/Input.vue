@@ -20,20 +20,19 @@ const masterStore = useMasterDataStore();
 inputStore.resetInputData();
 
 onMounted(async () => {
-    await masterStore.setPurposes('expense');
+    await masterStore.setPurposes('Expense');
 });
 
 const form = useForm<postData>(inputStore.initialDataState());
 
 const sendData = async () => {
-    form.post(`/input/${masterStore.currentLabels.en}`, {
-        onSuccess: () => form.reset()
-    });
+    form.expenditure = masterStore.currentLabels.en.label;
+    form.post(window.location.pathname);
 }
 </script>
 <template>
     <Card>
-        <Switch id="expenditure" :checked="masterStore.witchExpenditure === 'income'" :disabled="inputStore.loading"
+        <Switch id="expenditure" :checked="masterStore.witchExpenditure === 'Income'" :disabled="inputStore.loading"
             @update:checked="masterStore.switchExpenditure" />
         <Label for="expenditure">{{ masterStore.currentLabels.ja.label }}</Label>
         <form @submit.prevent="sendData">

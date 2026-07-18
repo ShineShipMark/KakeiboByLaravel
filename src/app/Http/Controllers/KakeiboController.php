@@ -48,17 +48,18 @@ class KakeiboController extends Controller
 
     }
 
-    public function inputExpense(Request $request, RegisterExpense $usecase)
+    public function inputData(Request $request, RegisterExpense $expenseUsecase, RegisterIncome $incomeUsecase)
     {
-        $inputDTO = RegisterExpenseDTO::fromRequest($request);
-        $usecase->handle($inputDTO);
-        return Inertia::render('Input/');
-    }
+        $expenditure = $request->input('expenditure', 'Expense');
+        
+        if ($expenditure === 'Expense') {
+            $inputDTO = RegisterExpenseDTO::fromRequest($request);
+            $expenseUsecase->handle($inputDTO);
+        } else {
+            $dataDTO=RegisterIncomeDTO::fromRequest($request);
+            $incomeUsecase->handle($inputDTO);
+        }
 
-    public function inputIncome(Request $request, RegisterIncome $usecase)
-    {
-        $inputDTO = RegisterIncomeDTO::fromRequest($request);
-        $usecase->handle($inputDTO);
         return Inertia::render('Input/');
     }
 

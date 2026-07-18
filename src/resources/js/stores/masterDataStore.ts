@@ -6,7 +6,7 @@ import { computed, ref } from "vue";
 
 export const useMasterDataStore = defineStore("masterData", () => {
   const purposeData = ref<viewsPurpose[]>([]);
-  const witchExpenditure = ref<Expenditure>("expense");
+  const witchExpenditure = ref<Expenditure>("Expense");
 
   const setPurposes = async (
     currentExpensiture: Expenditure,
@@ -21,7 +21,7 @@ export const useMasterDataStore = defineStore("masterData", () => {
 
   const switchExpenditure = () => {
     witchExpenditure.value =
-      witchExpenditure.value === "expense" ? "income" : "expense";
+      witchExpenditure.value === "Expense" ? "Income" : "Expense";
   };
 
   // 収支の切り替えのcomputed

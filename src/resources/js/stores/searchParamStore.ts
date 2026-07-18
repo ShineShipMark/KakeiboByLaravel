@@ -19,6 +19,7 @@ export const useSearchParamStore = defineStore("searchParam", () => {
       last_date: undefined,
       possession: undefined,
       detail: undefined,
+      expenditure: "Expense",
     };
   };
 
@@ -27,7 +28,7 @@ export const useSearchParamStore = defineStore("searchParam", () => {
   const listData = ref<getData[]>([]);
   const purposeData = ref<viewsPurpose[]>([]);
   const selectedPurposeId = ref<number>(0);
-  const witchExpenditure = ref<Expenditure>("expense");
+  const witchExpenditure = ref<Expenditure>("Expense");
 
   const resetSearchParam = (): void => {
     searchParam.value = initialParamState();
@@ -54,7 +55,7 @@ export const useSearchParamStore = defineStore("searchParam", () => {
 
   const switchExpenditure = async () => {
     witchExpenditure.value =
-      witchExpenditure.value === "expense" ? "income" : "expense";
+      witchExpenditure.value === "Expense" ? "Income" : "Expense";
     await setPurposes(witchExpenditure.value);
   };
 

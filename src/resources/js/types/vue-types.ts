@@ -41,7 +41,7 @@ export type toSearchParam = {
   last_date: Date | undefined;
   possession: possessionPlace | undefined;
   detail: string | undefined;
-  expendenture: "Expense" | "Income";
+  expenditure: Expenditure;
 };
 
 export type getExpensePurpose = {
@@ -59,14 +59,14 @@ export type possessionPlace = "account" | "wallet";
 
 export type Language = "en" | "ja";
 
-export type Expenditure = "expense" | "income";
+export type Expenditure = "Expense" | "Income";
 
 export const config = {
-  expense: {
+  Expense: {
     ja: { label: "支出" },
     en: { label: "Expense" },
   },
-  income: {
+  Income: {
     ja: { label: "収入" },
     en: { label: "Income" },
   },

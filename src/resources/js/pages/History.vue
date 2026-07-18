@@ -30,32 +30,34 @@ const props = defineProps<{ searchedData: getData[] }>();
 
 
 onMounted(async () => {
-    form.post(`/history/${masterStore.currentLabels.en}`, {
-        only: ['searchedData'],
-        preserveState: true,
-        onSuccess: () => searchStore.setSearchedData(props.searchedData)
-    });
-    if (searchStore.listData) masterStore.setPurposes('expense');
+    searchData();
+    if (searchStore.listData) masterStore.setPurposes('Expense');
 });
 
 const columnName = ['日付', '大目的', '小目的', '金額', '所在', '詳細']
 
 const searchData = () => {
-    form.expendenture = masterStore.currentLabels.en;
-    form.post(`/history/${masterStore.currentLabels.en}`, {
+    form.expenditure = masterStore.currentLabels.en.label;
+    form.post(window.location.pathname, {
         only: ['searchedData'],
-        onSuccess: () => searchStore.setSearchedData(props.searchedData)
     });
 }
 
-watch(masterStore.currentLabels.en, (newExpendenture) => {
+watch(() => masterStore.currentLabels.en.label, (newExpenditure) => {
     router.reload({
         data: {
-            expenditure: newExpendenture
+            ...form.data(),
+            expenditure: newExpenditure
         },
-        only: ['searchedData']
+        only: ['searchedData'],
     })
 })
+
+watch(() => props.searchedData, (newData) => {
+    if (newData) {
+        searchStore.setSearchedData(newData);
+    }
+}, { immediate: true })
 
 </script>
 <template>
@@ -106,7 +108,7 @@ watch(masterStore.currentLabels.en, (newExpendenture) => {
     </form>
 
     <Card>
-        <Switch :checked="masterStore.witchExpenditure === 'income'" :disabled="inputStore.loading"
+        <Switch :checked="masterStore.witchExpenditure === 'Income'" :disabled="inputStore.loading"
             @update:checked="masterStore.switchExpenditure">{{ masterStore.currentLabels.ja }}</Switch>
         <Table>
             <TableCaption>test</TableCaption>

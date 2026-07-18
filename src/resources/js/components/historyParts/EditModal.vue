@@ -26,7 +26,8 @@ const masterStore = useMasterDataStore();
 const form = useForm<postData>(inputStore.editData);
 
 const editData = async () => {
-    form.post(`/edit/${masterStore.currentLabels.en}`, {
+    form.expenditure = masterStore.currentLabels.en.label;
+    form.post('/edit', {
         onSuccess: () => form.reset()
     });
     inputStore.closeModal();

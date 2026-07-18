@@ -9,11 +9,11 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/input', [KakeiboController::class, 'renderPage']);
-Route::get('/edit', [KakeiboController::class, 'renderPage'])->name('edit');
+Route::get('/edit', [KakeiboController::class, 'renderPage']);
 Roure::get('/history', [KakeiboController::class, 'getHistory']);
 Route::post('/history', [KakeiboController::class, 'getHistory'])->name('history');
 Route::post('/input', [KakeiboController::class, 'inputData'])->name('input');
-Route::post('/edit/expense', [KakeiboController::class, 'editExpense'])->name('edit.expense');
+Route::post('/edit', [KakeiboController::class, 'editData'])->name('edit');
 Route::post('/edit/income', [KakeiboController::class, 'editIncome'])->name('edit.income');
 Route::post('/delete/expense', [KakeiboController::class, 'deleteExpense'])->name('delete.expense');
 Route::post('/delete/income', [KakeiboController::class, 'deleteIncome'])->name('delete.income');

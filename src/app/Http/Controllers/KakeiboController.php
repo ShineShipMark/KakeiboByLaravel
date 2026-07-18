@@ -63,17 +63,18 @@ class KakeiboController extends Controller
         return Inertia::render('Input/');
     }
 
-    public function editExpense(Request $request, UpdateExpense $usecase)
+    public function editData(Request $request, UpdateExpense $expenseUsecase, UpdateIncome $incomeUsecase)
     {
-        $updateDTO = RegisterExpenseDTO::fromRequest($request);
-        $usecase->handle($updateDTO);
-        return Inertia::render('Edit/');
-    }
+        $expenditure = $request->input('expenditure', 'Expense');
+        
+        if ($expenditure === 'Expense') {
+            $updateDTO = RegisterExpenseDTO::fromRequest($request);
+            $expenseUsecase->handle($updateDTO);
+        } else {
+            $updateDTO=RegisterIncomeDTO::fromRequest($request);
+            $incomeUsecase->handle($updatetDTO);
+        }
 
-    public function editIncome(Request $request, UpdateIncome $usecase)
-    {
-        $updateDTO = RegisterIncomeDTO::fromRequest($request);
-        $usecase->handle($updateDTO);
         return Inertia::render('Edit/');
     }
 

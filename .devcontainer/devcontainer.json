@@ -35,5 +35,5 @@
         }
     },
     // リポジトリ直下にcomposer.jsonがある場合はこちら（エラー回避のために && exit 0 を付与）
-    "postCreateCommand": "composer install || true"
+    "postCreateCommand": "cd src && composer install || true"
 }

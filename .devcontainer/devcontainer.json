@@ -6,17 +6,12 @@
             "version": "latest"
         }
     },
-    "containerEnv": {
-        "PHP_EXTENSIONS": "mbstring zip pdo pdo_mysql bcmath intl gd"
-    },
     "customizations": {
         "vscode": {
             "extensions": [
                 "formulahendry.auto-close-tag",
                 "formulahendry.auto-rename-tag",
                 "kaiwood.endwise",
-                "hollowtree.vue-snippets",
-                "sdras.vue-vscode-snippets",
                 "dbaeumer.vscode-eslint",
                 "GitHub.vscode-pull-request-github",
                 "oderwat.indent-rainbow",
@@ -34,12 +29,11 @@
                 "rvest.vs-code-prettier-eslint",
                 "Prisma.prisma",
                 "pmneo.tsimporter",
-                "vue.volar",
-                "MisterJ.vue-volar-extention-pack",
+                "Vue.volar",
                 "mosapride.zenkaku"
             ]
         }
     },
-    // コンテナ側の準備を整えた状態で、安全にインストールを実行させます
-    "postCreateCommand": "cd src && composer install"
+    // リポジトリ直下にcomposer.jsonがある場合はこちら（エラー回避のために && exit 0 を付与）
+    "postCreateCommand": "composer install || true"
 }

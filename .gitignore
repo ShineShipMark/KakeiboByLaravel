@@ -9,6 +9,7 @@ src/storage/framework/
 # Docker
 docker/mysql/
 docker/redis/
+.devcontainer/devcontainer-lock.json
 
 # OS
 .DS_Store

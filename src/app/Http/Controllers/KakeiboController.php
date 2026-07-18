@@ -6,6 +6,8 @@ use App\DTO\FindExpenseDTO;
 use App\DTO\FindIncomeDTO;
 use App\DTO\RegisterExpenseDTO;
 use App\DTO\RegisterIncomeDTO;
+use App\DTO\UpdateExpenseDTO;
+use App\DTO\UpdateIncomeDTO;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\UseCases\DeleteExpense;
@@ -63,19 +65,20 @@ class KakeiboController extends Controller
         return Inertia::render('Input/');
     }
 
-    public function editData(Request $request, UpdateExpense $expenseUsecase, UpdateIncome $incomeUsecase)
+    public function editData($id,Request $request, UpdateExpense $expenseUsecase, UpdateIncome $incomeUsecase)
     {
         $expenditure = $request->input('expenditure', 'Expense');
         
         if ($expenditure === 'Expense') {
-            $updateDTO = RegisterExpenseDTO::fromRequest($request);
+            $updateDTO = UpdateExpenseDTO::fromRequest($request);
             $expenseUsecase->handle($updateDTO);
         } else {
             $updateDTO=RegisterIncomeDTO::fromRequest($request);
             $incomeUsecase->handle($updatetDTO);
         }
 
-        return Inertia::render('Edit/');
+        redirect()->action([KakeiboController::class, 'history'])
+        ->with('message', '更新が完了しました');
     }
 
     public function deleteExpense(Request $request, DeleteExpense $usecase)

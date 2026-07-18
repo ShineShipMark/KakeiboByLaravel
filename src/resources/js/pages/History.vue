@@ -43,6 +43,16 @@ const searchData = () => {
     });
 }
 
+const deleteData = (id: number) => {
+    if (confirm('本当に削除しますか？')) {
+        form.expenditure = masterStore.currentLabels.en.label;
+        form.delete(`${window.location.pathname}/${id}`, {
+            only: ['searchedData'],
+            onSuccess: () => searchStore.setSearchedData(props.searchedData)
+        })
+    }
+}
+
 watch(() => masterStore.currentLabels.en.label, (newExpenditure) => {
     router.reload({
         data: {
@@ -148,6 +158,9 @@ watch(() => props.searchedData, (newData) => {
                             </DialogTrigger>
                             <EditModal v-if="inputStore.editData" />
                         </Dialog>
+                    </TableCell>
+                    <TableCell>
+                        <Button @click="deleteData(data.id)">削除</Button>
                     </TableCell>
                 </TableRow>
             </TableBody>

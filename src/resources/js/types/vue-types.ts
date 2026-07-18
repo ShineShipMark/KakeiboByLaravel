@@ -41,6 +41,7 @@ export type toSearchParam = {
   last_date: Date | undefined;
   possession: possessionPlace | undefined;
   detail: string | undefined;
+  expendenture: "Expense" | "Income";
 };
 
 export type getExpensePurpose = {

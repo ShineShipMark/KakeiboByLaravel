@@ -5,7 +5,7 @@ import Card from '@/components/ui/card/Card.vue';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Button } from '@/components/ui/button';
-import { onMounted } from 'vue';
+import { onMounted, watch } from 'vue';
 import {
     Dialog,
     DialogTrigger,
@@ -28,15 +28,11 @@ const form = useForm<toSearchParam>(searchStore.initialParamState());
 
 const props = defineProps<{ searchedData: getData[] }>();
 
-//const switchHistory = () => {
-//    router.reload({
-//        data: { expendenture: masterStore.currentLabels.en },
-//        only:{}
-//    })
-//}
 
 onMounted(async () => {
     form.post(`/history/${masterStore.currentLabels.en}`, {
+        only: ['searchedData'],
+        preserveState: true,
         onSuccess: () => searchStore.setSearchedData(props.searchedData)
     });
     if (searchStore.listData) masterStore.setPurposes('expense');
@@ -45,14 +41,21 @@ onMounted(async () => {
 const columnName = ['日付', '大目的', '小目的', '金額', '所在', '詳細']
 
 const searchData = () => {
+    form.expendenture = masterStore.currentLabels.en;
     form.post(`/history/${masterStore.currentLabels.en}`, {
+        only: ['searchedData'],
         onSuccess: () => searchStore.setSearchedData(props.searchedData)
     });
 }
 
-//watch(() => props.searchedData, (newData) => {
-//    searchStore.setSearchedData(newData);
-//}, { immediate: true });
+watch(masterStore.currentLabels.en, (newExpendenture) => {
+    router.reload({
+        data: {
+            expenditure: newExpendenture
+        },
+        only: ['searchedData']
+    })
+})
 
 </script>
 <template>

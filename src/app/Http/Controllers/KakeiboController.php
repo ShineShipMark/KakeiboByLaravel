@@ -36,24 +36,24 @@ class KakeiboController extends Controller
 
     public function getExpense(GetExpense $usecase)
     {
-        return Inertia::render('history/expense', ['data', $usecase->handle()]);
+        return Inertia::render('history/expense', ['searchedData' => $usecase->handle()]);
     }
 
     public function getIncome(GetIncome $usecase)
     {
-        return Inertia::render('History/', ['data', $usecase->handle()]);;
+        return Inertia::render('History/', ['searchedData' => $usecase->handle()]);;
     }
 
     public function findExpense(Request $request, FindExpense $usecase)
     {
         $dataDTO=FindExpenseDTO::fromRequest($request);
-        return Inertia::render('History/',['data',$usecase->handle($dataDTO)]);
+        return Inertia::render('History/',['searchedData',$usecase->handle($dataDTO)]);
     }
 
     public function findIncome(Request $request, FindIncome $usecase)
     {
         $dataDTO=FindIncomeDTO::fromRequest($request);
-        return Inertia::render('History/',['data',$usecase->handle($dataDTO)]);
+        return Inertia::render('History/',['searchedData',$usecase->handle($dataDTO)]);
     }
 
     public function inputExpense(Request $request, RegisterExpense $usecase)
@@ -88,7 +88,7 @@ class KakeiboController extends Controller
     {
         $input = $request->all();
         $id = Arr::only($input, ['id'])['id'];
-        return Inertia::render('delete/', ['data', $usecase->handle($id)]);
+        return Inertia::render('delete/', ['data' => $usecase->handle($id)]);
     }
 
     public function deleteIncome(Request $request, DeleteIncome $usecase)

@@ -1,11 +1,6 @@
 {
     "name": "Laravel-Setup",
     "image": "mcr.microsoft.com/devcontainers/php:1-8.3-bullseye",
-    "features": {
-        "ghcr.io/devcontainers/features/docker-in-docker:2": {
-            "version": "latest"
-        }
-    },
     "customizations": {
         "vscode": {
             "extensions": [

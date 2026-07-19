@@ -2,8 +2,8 @@
 
 namespace App\DTO;
 
+use App\Http\Requests\HistoryRequest;
 use DateTime;
-use Illuminate\Http\Request;
 
 readonly class UpdateExpenseDTO
 {
@@ -15,7 +15,7 @@ readonly class UpdateExpenseDTO
         public string $possession,
         public string $detail) {}
 
-    public static function fromRequest(Request $request, int $id): self
+    public static function fromRequest( int $id, HistoryRequest $request): self
     {
         return new self(
             id: $id,

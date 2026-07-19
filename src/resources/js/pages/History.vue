@@ -37,16 +37,20 @@ onMounted(async () => {
 const columnName = ['日付', '大目的', '小目的', '金額', '所在', '詳細']
 
 const searchData = () => {
-    form.expenditure = masterStore.currentLabels.en.label;
-    form.post(window.location.pathname, {
+    form.transform((data) => ({
+        ...data,
+        expenditure: masterStore.currentLabels.en.label,
+    })).post(window.location.pathname, {
         only: ['searchedData'],
     });
 }
 
 const deleteData = (id: number) => {
     if (confirm('本当に削除しますか？')) {
-        form.expenditure = masterStore.currentLabels.en.label;
-        form.delete(`${window.location.pathname}/${id}`, {
+        form.transform((data) => ({
+            ...data,
+            expenditure: masterStore.currentLabels.en.label,
+        })).delete(`${window.location.pathname}/${id}`, {
             only: ['searchedData'],
             onSuccess: () => searchStore.setSearchedData(props.searchedData)
         })

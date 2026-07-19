@@ -27,7 +27,10 @@ const form = useForm<postData>(inputStore.initialDataState());
 
 const sendData = async () => {
     form.expenditure = masterStore.currentLabels.en.label;
-    form.post(window.location.pathname);
+    form.transform((data) => ({
+        ...data,
+        expenditure: masterStore.currentLabels.en.label,
+    })).post(window.location.pathname);
 }
 </script>
 <template>

@@ -37,11 +37,12 @@ onMounted(async () => {
 const columnName = ['日付', '大目的', '小目的', '金額', '所在', '詳細']
 
 const searchData = () => {
-    form.transform((data) => ({
-        ...data,
+    router.get(window.location.pathname, {
+        ...form.data(),
         expenditure: masterStore.currentLabels.en.label,
-    })).post(window.location.pathname, {
+    }, {
         only: ['searchedData'],
+        preserveState: true,
     });
 }
 

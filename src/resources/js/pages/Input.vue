@@ -26,7 +26,6 @@ onMounted(async () => {
 const form = useForm<postData>(inputStore.initialDataState());
 
 const sendData = async () => {
-    form.expenditure = masterStore.currentLabels.en.label;
     form.transform((data) => ({
         ...data,
         expenditure: masterStore.currentLabels.en.label,

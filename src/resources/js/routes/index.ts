@@ -1,6 +1,6 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../wayfinder'
 /**
-* @see routes/web.php:7
+* @see routes/web.php:8
 * @route '/'
 */
 export const home = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -14,7 +14,7 @@ home.definition = {
 } satisfies RouteDefinition<["get","head"]>
 
 /**
-* @see routes/web.php:7
+* @see routes/web.php:8
 * @route '/'
 */
 home.url = (options?: RouteQueryOptions) => {
@@ -22,7 +22,7 @@ home.url = (options?: RouteQueryOptions) => {
 }
 
 /**
-* @see routes/web.php:7
+* @see routes/web.php:8
 * @route '/'
 */
 home.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -31,7 +31,7 @@ home.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 })
 
 /**
-* @see routes/web.php:7
+* @see routes/web.php:8
 * @route '/'
 */
 home.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -40,7 +40,7 @@ home.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
 /**
-* @see routes/web.php:7
+* @see routes/web.php:8
 * @route '/'
 */
 const homeForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -49,7 +49,7 @@ const homeForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 })
 
 /**
-* @see routes/web.php:7
+* @see routes/web.php:8
 * @route '/'
 */
 homeForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -58,7 +58,7 @@ homeForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 })
 
 /**
-* @see routes/web.php:7
+* @see routes/web.php:8
 * @route '/'
 */
 homeForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -72,165 +72,3 @@ homeForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
 })
 
 home.form = homeForm
-
-/**
-* @see \App\Http\Controllers\KakeiboController::input
-* @see app/Http/Controllers/KakeiboController.php:30
-* @route '/input'
-*/
-export const input = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
-    url: input.url(options),
-    method: 'get',
-})
-
-input.definition = {
-    methods: ["get","head"],
-    url: '/input',
-} satisfies RouteDefinition<["get","head"]>
-
-/**
-* @see \App\Http\Controllers\KakeiboController::input
-* @see app/Http/Controllers/KakeiboController.php:30
-* @route '/input'
-*/
-input.url = (options?: RouteQueryOptions) => {
-    return input.definition.url + queryParams(options)
-}
-
-/**
-* @see \App\Http\Controllers\KakeiboController::input
-* @see app/Http/Controllers/KakeiboController.php:30
-* @route '/input'
-*/
-input.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
-    url: input.url(options),
-    method: 'get',
-})
-
-/**
-* @see \App\Http\Controllers\KakeiboController::input
-* @see app/Http/Controllers/KakeiboController.php:30
-* @route '/input'
-*/
-input.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
-    url: input.url(options),
-    method: 'head',
-})
-
-/**
-* @see \App\Http\Controllers\KakeiboController::input
-* @see app/Http/Controllers/KakeiboController.php:30
-* @route '/input'
-*/
-const inputForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: input.url(options),
-    method: 'get',
-})
-
-/**
-* @see \App\Http\Controllers\KakeiboController::input
-* @see app/Http/Controllers/KakeiboController.php:30
-* @route '/input'
-*/
-inputForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: input.url(options),
-    method: 'get',
-})
-
-/**
-* @see \App\Http\Controllers\KakeiboController::input
-* @see app/Http/Controllers/KakeiboController.php:30
-* @route '/input'
-*/
-inputForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: input.url({
-        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
-            _method: 'HEAD',
-            ...(options?.query ?? options?.mergeQuery ?? {}),
-        }
-    }),
-    method: 'get',
-})
-
-input.form = inputForm
-
-/**
-* @see \App\Http\Controllers\KakeiboController::edit
-* @see app/Http/Controllers/KakeiboController.php:30
-* @route '/edit'
-*/
-export const edit = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
-    url: edit.url(options),
-    method: 'get',
-})
-
-edit.definition = {
-    methods: ["get","head"],
-    url: '/edit',
-} satisfies RouteDefinition<["get","head"]>
-
-/**
-* @see \App\Http\Controllers\KakeiboController::edit
-* @see app/Http/Controllers/KakeiboController.php:30
-* @route '/edit'
-*/
-edit.url = (options?: RouteQueryOptions) => {
-    return edit.definition.url + queryParams(options)
-}
-
-/**
-* @see \App\Http\Controllers\KakeiboController::edit
-* @see app/Http/Controllers/KakeiboController.php:30
-* @route '/edit'
-*/
-edit.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
-    url: edit.url(options),
-    method: 'get',
-})
-
-/**
-* @see \App\Http\Controllers\KakeiboController::edit
-* @see app/Http/Controllers/KakeiboController.php:30
-* @route '/edit'
-*/
-edit.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
-    url: edit.url(options),
-    method: 'head',
-})
-
-/**
-* @see \App\Http\Controllers\KakeiboController::edit
-* @see app/Http/Controllers/KakeiboController.php:30
-* @route '/edit'
-*/
-const editForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: edit.url(options),
-    method: 'get',
-})
-
-/**
-* @see \App\Http\Controllers\KakeiboController::edit
-* @see app/Http/Controllers/KakeiboController.php:30
-* @route '/edit'
-*/
-editForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: edit.url(options),
-    method: 'get',
-})
-
-/**
-* @see \App\Http\Controllers\KakeiboController::edit
-* @see app/Http/Controllers/KakeiboController.php:30
-* @route '/edit'
-*/
-editForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: edit.url({
-        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
-            _method: 'HEAD',
-            ...(options?.query ?? options?.mergeQuery ?? {}),
-        }
-    }),
-    method: 'get',
-})
-
-edit.form = editForm

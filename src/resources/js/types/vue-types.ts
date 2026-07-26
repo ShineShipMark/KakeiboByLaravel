@@ -9,6 +9,11 @@ export type viewsPurpose = {
   purpose: string;
 };
 
+export type viewsCategory = {
+  id: number;
+  category: string;
+};
+
 export type selectedObject = {
   en: string;
   jp: string;
@@ -77,4 +82,23 @@ export type GraphParam = {
   purpose_id: number | undefined;
   first_date: Date | undefined;
   last_date: Date | undefined;
+};
+
+export type purposes = {
+  expense_purpose: viewsPurpose;
+  income_purpose: viewsPurpose;
+};
+
+export type PurposeAndCategory = {
+  expense: ExpensePurposeCategory;
+  income: IncomePurposeCategory;
+};
+
+export type ExpensePurposeCategory = {
+  purpose: viewsPurpose[];
+  category: viewsCategory[];
+};
+export type IncomePurposeCategory = {
+  purpose: viewsPurpose[];
+  category: viewsCategory[];
 };

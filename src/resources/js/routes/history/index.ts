@@ -1,75 +1,75 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../wayfinder'
 /**
-* @see \App\Http\Controllers\KakeiboController::expense
-* @see app/Http/Controllers/KakeiboController.php:37
-* @route '/history/expense'
+* @see \App\Http\Controllers\HistoryController::index
+* @see app/Http/Controllers/HistoryController.php:20
+* @route '/history'
 */
-export const expense = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
-    url: expense.url(options),
+export const index = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: index.url(options),
     method: 'get',
 })
 
-expense.definition = {
+index.definition = {
     methods: ["get","head"],
-    url: '/history/expense',
+    url: '/history',
 } satisfies RouteDefinition<["get","head"]>
 
 /**
-* @see \App\Http\Controllers\KakeiboController::expense
-* @see app/Http/Controllers/KakeiboController.php:37
-* @route '/history/expense'
+* @see \App\Http\Controllers\HistoryController::index
+* @see app/Http/Controllers/HistoryController.php:20
+* @route '/history'
 */
-expense.url = (options?: RouteQueryOptions) => {
-    return expense.definition.url + queryParams(options)
+index.url = (options?: RouteQueryOptions) => {
+    return index.definition.url + queryParams(options)
 }
 
 /**
-* @see \App\Http\Controllers\KakeiboController::expense
-* @see app/Http/Controllers/KakeiboController.php:37
-* @route '/history/expense'
+* @see \App\Http\Controllers\HistoryController::index
+* @see app/Http/Controllers/HistoryController.php:20
+* @route '/history'
 */
-expense.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
-    url: expense.url(options),
+index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: index.url(options),
     method: 'get',
 })
 
 /**
-* @see \App\Http\Controllers\KakeiboController::expense
-* @see app/Http/Controllers/KakeiboController.php:37
-* @route '/history/expense'
+* @see \App\Http\Controllers\HistoryController::index
+* @see app/Http/Controllers/HistoryController.php:20
+* @route '/history'
 */
-expense.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
-    url: expense.url(options),
+index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+    url: index.url(options),
     method: 'head',
 })
 
 /**
-* @see \App\Http\Controllers\KakeiboController::expense
-* @see app/Http/Controllers/KakeiboController.php:37
-* @route '/history/expense'
+* @see \App\Http\Controllers\HistoryController::index
+* @see app/Http/Controllers/HistoryController.php:20
+* @route '/history'
 */
-const expenseForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: expense.url(options),
+const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: index.url(options),
     method: 'get',
 })
 
 /**
-* @see \App\Http\Controllers\KakeiboController::expense
-* @see app/Http/Controllers/KakeiboController.php:37
-* @route '/history/expense'
+* @see \App\Http\Controllers\HistoryController::index
+* @see app/Http/Controllers/HistoryController.php:20
+* @route '/history'
 */
-expenseForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: expense.url(options),
+indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: index.url(options),
     method: 'get',
 })
 
 /**
-* @see \App\Http\Controllers\KakeiboController::expense
-* @see app/Http/Controllers/KakeiboController.php:37
-* @route '/history/expense'
+* @see \App\Http\Controllers\HistoryController::index
+* @see app/Http/Controllers/HistoryController.php:20
+* @route '/history'
 */
-expenseForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: expense.url({
+indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: index.url({
         [options?.mergeQuery ? 'mergeQuery' : 'query']: {
             _method: 'HEAD',
             ...(options?.query ?? options?.mergeQuery ?? {}),
@@ -78,92 +78,180 @@ expenseForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => 
     method: 'get',
 })
 
-expense.form = expenseForm
+index.form = indexForm
 
 /**
-* @see \App\Http\Controllers\KakeiboController::income
-* @see app/Http/Controllers/KakeiboController.php:42
-* @route '/history/income'
+* @see \App\Http\Controllers\HistoryController::update
+* @see app/Http/Controllers/HistoryController.php:33
+* @route '/history/{id}'
 */
-export const income = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
-    url: income.url(options),
-    method: 'get',
+export const update = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
+    url: update.url(args, options),
+    method: 'put',
 })
 
-income.definition = {
-    methods: ["get","head"],
-    url: '/history/income',
-} satisfies RouteDefinition<["get","head"]>
+update.definition = {
+    methods: ["put"],
+    url: '/history/{id}',
+} satisfies RouteDefinition<["put"]>
 
 /**
-* @see \App\Http\Controllers\KakeiboController::income
-* @see app/Http/Controllers/KakeiboController.php:42
-* @route '/history/income'
+* @see \App\Http\Controllers\HistoryController::update
+* @see app/Http/Controllers/HistoryController.php:33
+* @route '/history/{id}'
 */
-income.url = (options?: RouteQueryOptions) => {
-    return income.definition.url + queryParams(options)
+update.url = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions) => {
+    if (typeof args === 'string' || typeof args === 'number') {
+        args = { id: args }
+    }
+
+    if (Array.isArray(args)) {
+        args = {
+            id: args[0],
+        }
+    }
+
+    args = applyUrlDefaults(args)
+
+    const parsedArgs = {
+        id: args.id,
+    }
+
+    return update.definition.url
+            .replace('{id}', parsedArgs.id.toString())
+            .replace(/\/+$/, '') + queryParams(options)
 }
 
 /**
-* @see \App\Http\Controllers\KakeiboController::income
-* @see app/Http/Controllers/KakeiboController.php:42
-* @route '/history/income'
+* @see \App\Http\Controllers\HistoryController::update
+* @see app/Http/Controllers/HistoryController.php:33
+* @route '/history/{id}'
 */
-income.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
-    url: income.url(options),
-    method: 'get',
+update.put = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
+    url: update.url(args, options),
+    method: 'put',
 })
 
 /**
-* @see \App\Http\Controllers\KakeiboController::income
-* @see app/Http/Controllers/KakeiboController.php:42
-* @route '/history/income'
+* @see \App\Http\Controllers\HistoryController::update
+* @see app/Http/Controllers/HistoryController.php:33
+* @route '/history/{id}'
 */
-income.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
-    url: income.url(options),
-    method: 'head',
-})
-
-/**
-* @see \App\Http\Controllers\KakeiboController::income
-* @see app/Http/Controllers/KakeiboController.php:42
-* @route '/history/income'
-*/
-const incomeForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: income.url(options),
-    method: 'get',
-})
-
-/**
-* @see \App\Http\Controllers\KakeiboController::income
-* @see app/Http/Controllers/KakeiboController.php:42
-* @route '/history/income'
-*/
-incomeForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: income.url(options),
-    method: 'get',
-})
-
-/**
-* @see \App\Http\Controllers\KakeiboController::income
-* @see app/Http/Controllers/KakeiboController.php:42
-* @route '/history/income'
-*/
-incomeForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
-    action: income.url({
+const updateForm = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: update.url(args, {
         [options?.mergeQuery ? 'mergeQuery' : 'query']: {
-            _method: 'HEAD',
+            _method: 'PUT',
             ...(options?.query ?? options?.mergeQuery ?? {}),
         }
     }),
-    method: 'get',
+    method: 'post',
 })
 
-income.form = incomeForm
+/**
+* @see \App\Http\Controllers\HistoryController::update
+* @see app/Http/Controllers/HistoryController.php:33
+* @route '/history/{id}'
+*/
+updateForm.put = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: update.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'PUT',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'post',
+})
+
+update.form = updateForm
+
+/**
+* @see \App\Http\Controllers\HistoryController::destroy
+* @see app/Http/Controllers/HistoryController.php:48
+* @route '/history/{id}'
+*/
+export const destroy = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
+    url: destroy.url(args, options),
+    method: 'delete',
+})
+
+destroy.definition = {
+    methods: ["delete"],
+    url: '/history/{id}',
+} satisfies RouteDefinition<["delete"]>
+
+/**
+* @see \App\Http\Controllers\HistoryController::destroy
+* @see app/Http/Controllers/HistoryController.php:48
+* @route '/history/{id}'
+*/
+destroy.url = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions) => {
+    if (typeof args === 'string' || typeof args === 'number') {
+        args = { id: args }
+    }
+
+    if (Array.isArray(args)) {
+        args = {
+            id: args[0],
+        }
+    }
+
+    args = applyUrlDefaults(args)
+
+    const parsedArgs = {
+        id: args.id,
+    }
+
+    return destroy.definition.url
+            .replace('{id}', parsedArgs.id.toString())
+            .replace(/\/+$/, '') + queryParams(options)
+}
+
+/**
+* @see \App\Http\Controllers\HistoryController::destroy
+* @see app/Http/Controllers/HistoryController.php:48
+* @route '/history/{id}'
+*/
+destroy.delete = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
+    url: destroy.url(args, options),
+    method: 'delete',
+})
+
+/**
+* @see \App\Http\Controllers\HistoryController::destroy
+* @see app/Http/Controllers/HistoryController.php:48
+* @route '/history/{id}'
+*/
+const destroyForm = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: destroy.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'DELETE',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\HistoryController::destroy
+* @see app/Http/Controllers/HistoryController.php:48
+* @route '/history/{id}'
+*/
+destroyForm.delete = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: destroy.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'DELETE',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'post',
+})
+
+destroy.form = destroyForm
 
 const history = {
-    expense: Object.assign(expense, expense),
-    income: Object.assign(income, income),
+    index: Object.assign(index, index),
+    update: Object.assign(update, update),
+    destroy: Object.assign(destroy, destroy),
 }
 
 export default history

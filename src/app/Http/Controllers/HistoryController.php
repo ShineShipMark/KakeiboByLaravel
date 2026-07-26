@@ -17,20 +17,20 @@ use App\UseCases\DeleteIncome;
 
 class HistoryController extends Controller
 {
-    public function getHistory(HistoryRequest $request, FindExpense $expenseUsecase, FindIncome $incomeUsecase) {
+    public function index(HistoryRequest $request, FindExpense $expenseUsecase, FindIncome $incomeUsecase) {
         $expenditure = $request->input('expenditure', 'Expense');
         if ($expenditure === 'Expense') {
-            $dataDTO=FindExpenseDTO::fromRequest($request);
+            $dataDTO = FindExpenseDTO::fromRequest($request);
             $searchedData = $expenseUsecase->handle($dataDTO);
         } else {
-            $dataDTO=FindIncomeDTO::fromRequest($request);
+            $dataDTO = FindIncomeDTO::fromRequest($request);
             $searchedData = $incomeUsecase->handle($dataDTO);
         }
 
         return Inertia::render('History/', ['searchedData' => $searchedData]);
     }
 
-    public function editData(int $id, HistoryRequest $request, UpdateExpense $expenseUsecase, UpdateIncome $incomeUsecase)
+    public function update(int $id, HistoryRequest $request, UpdateExpense $expenseUsecase, UpdateIncome $incomeUsecase)
     {
         $expenditure = $request->input('expenditure', 'Expense');
         
@@ -42,11 +42,10 @@ class HistoryController extends Controller
             $incomeUsecase->handle($updateDTO);
         }
 
-        redirect()->action([HistoryController::class, 'history'])
-        ->with('message', '更新が完了しました');
+        return back()->with('message', '更新が完了しました');
     }
 
-    public function deleteData(int $id, HistoryRequest $request, DeleteExpense $expenseUsecase, DeleteIncome $incomeUsecase) 
+    public function destroy(int $id, HistoryRequest $request, DeleteExpense $expenseUsecase, DeleteIncome $incomeUsecase) 
     {
         $expenditure = $request->input('expenditure', 'Expense');
         
@@ -56,7 +55,6 @@ class HistoryController extends Controller
             $incomeUsecase->handle($id);
         }
 
-        redirect()->action([HistoryController::class, 'history'])
-        ->with('message', '削除が完了しました');
+        return back()->with('message', '削除が完了しました');
     }
 }

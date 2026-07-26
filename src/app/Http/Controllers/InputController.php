@@ -12,7 +12,7 @@ use Inertia\Inertia;
 
 class InputController extends Controller
 {
-    public function input()
+    public function index()
     {
         return Inertia::render('Input');
     }

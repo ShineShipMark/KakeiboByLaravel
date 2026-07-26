@@ -1,7 +1,9 @@
-import KakeiboController from './KakeiboController'
+import InputController from './InputController'
+import HistoryController from './HistoryController'
 
 const Controllers = {
-    KakeiboController: Object.assign(KakeiboController, KakeiboController),
+    InputController: Object.assign(InputController, InputController),
+    HistoryController: Object.assign(HistoryController, HistoryController),
 }
 
 export default Controllers

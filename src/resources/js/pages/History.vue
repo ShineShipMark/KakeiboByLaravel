@@ -5,7 +5,7 @@ import Card from '@/components/ui/card/Card.vue';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Button } from '@/components/ui/button';
-import { onMounted, watch } from 'vue';
+import { computed, onMounted, watch } from 'vue';
 import {
     Dialog,
     DialogTrigger,
@@ -16,9 +16,11 @@ import SetAtDate from '@/components/inputParts/SetAtDate.vue';
 import SetSelectPurpose from '@/components/inputParts/SetSelectPurpose.vue';
 import SetAmount from '@/components/inputParts/SetAmount.vue';
 import SetSelectPossession from '@/components/inputParts/SetSelectPossession.vue';
+import Label from '@/components/ui/label/Label.vue';
 import { useMasterDataStore } from '@/stores/masterDataStore';
 import { router, useForm } from '@inertiajs/vue3';
 import { getData, toSearchParam } from '@/types/vue-types';
+import { route } from 'ziggy-js'
 
 const inputStore = useInputDataStore();
 const searchStore = useSearchParamStore();
@@ -31,13 +33,39 @@ const props = defineProps<{ searchedData: getData[] }>();
 
 onMounted(async () => {
     searchData();
-    if (searchStore.listData) masterStore.setPurposes('Expense');
+    if (searchStore.listData) masterStore.setPurposes();
 });
+
+const currentPurposes = computed(() => {
+    if (!masterStore.purpose_category) return [];
+
+    const isExpense = masterStore.witchExpenditure === 'Expense';
+
+    return isExpense ? masterStore.purpose_category.expense.purpose : masterStore.purpose_category.income.purpose;
+});
+
+const currentCategories = computed(() => {
+    if (!masterStore.purpose_category) return [];
+
+    const isExpense = masterStore.witchExpenditure === 'Expense';
+
+    return isExpense ? masterStore.purpose_category.expense.category : masterStore.purpose_category.income.category;
+});
+
+const currentCategory = computed(() => {
+    if (!form.purpose_id) return null;
+    const purpose = currentPurposes.value.find(p => p.id === form.purpose_id);
+    if (!purpose) return null;
+    return currentCategories.value.find(c => c.id === purpose.category_id) ?? null;
+
+})
+
+
 
 const columnName = ['日付', '大目的', '小目的', '金額', '所在', '詳細']
 
 const searchData = () => {
-    router.get(window.location.pathname, {
+    router.get(route('input.store'), {
         ...form.data(),
         expenditure: masterStore.currentLabels.en.label,
     }, {
@@ -91,8 +119,8 @@ watch(() => props.searchedData, (newData) => {
                     <FieldLabel>
                         目的
                     </FieldLabel>
-                    <SetSelectPurpose v-model:purpose-data="masterStore.purposeData"
-                        v-model:purpose_id="form.purpose_id" />
+                    <Label>{{ currentCategory }}</Label>
+                    <SetSelectPurpose v-model:purpose-data="currentPurposes" v-model:purpose_id="form.purpose_id" />
                 </Field>
 
                 <Field>

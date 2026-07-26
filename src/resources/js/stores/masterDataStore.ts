@@ -1,22 +1,25 @@
-import { fetchAPIMethods } from "@/composables/fetch";
 import { config } from "@/types/vue-types";
-import type { Expenditure, viewsPurpose } from "@/types/vue-types";
+import type { Expenditure, PurposeAndCategory } from "@/types/vue-types";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
+import { route } from "ziggy-js";
+import axios from "axios";
 
 export const useMasterDataStore = defineStore("masterData", () => {
-  const purposeData = ref<viewsPurpose[]>([]);
+  const purpose_category = ref<PurposeAndCategory>();
   const witchExpenditure = ref<Expenditure>("Expense");
+  const isLoaded = ref<boolean>(false);
 
-  const setPurposes = async (
-    currentExpensiture: Expenditure,
-  ): Promise<void> => {
-    const { searchData } = fetchAPIMethods();
-    purposeData.value = await searchData<viewsPurpose[], string>(
-      `get_${currentExpensiture}_purpose`,
-      "GET",
-      "",
-    );
+  const setPurposes = async () => {
+    if (isLoaded.value) return;
+
+    try {
+      const response = await axios<PurposeAndCategory>(route("api.masters"));
+
+      purpose_category.value = response.data;
+    } catch (error) {
+      console.error("目的データの取得に失敗", error);
+    }
   };
 
   const switchExpenditure = () => {
@@ -31,7 +34,7 @@ export const useMasterDataStore = defineStore("masterData", () => {
   return {
     setPurposes,
     switchExpenditure,
-    purposeData,
+    purpose_category,
     witchExpenditure,
     currentLabels,
   };

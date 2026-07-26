@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { computed, onMounted } from 'vue';
 import Card from '@/components/ui/card/Card.vue';
 import Button from '@/components/ui/button/Button.vue';
 import { Field, FieldSet, FieldGroup, FieldLabel } from '@/components/ui/field';
@@ -19,8 +19,9 @@ const masterStore = useMasterDataStore();
 
 inputStore.resetInputData();
 
+
 onMounted(async () => {
-    await masterStore.setPurposes('Expense');
+    await masterStore.setPurposes();
 });
 
 const form = useForm<postData>(inputStore.initialDataState());
@@ -31,6 +32,31 @@ const sendData = async () => {
         expenditure: masterStore.currentLabels.en.label,
     })).post(window.location.pathname);
 }
+
+const currentPurposes = computed(() => {
+    if (!masterStore.purpose_category) return [];
+
+    const isExpense = masterStore.witchExpenditure === 'Expense';
+
+    return isExpense ? masterStore.purpose_category.expense.purpose : masterStore.purpose_category.income.purpose;
+});
+
+const currentCategories = computed(() => {
+    if (!masterStore.purpose_category) return [];
+
+    const isExpense = masterStore.witchExpenditure === 'Expense';
+
+    return isExpense ? masterStore.purpose_category.expense.category : masterStore.purpose_category.income.category;
+});
+
+const currentCategory = computed(() => {
+    if (!form.purpose_id) return null;
+    const purpose = currentPurposes.value.find(p => p.id === form.purpose_id);
+    if (!purpose) return null;
+    return currentCategories.value.find(c => c.id === purpose.category_id) ?? null;
+
+})
+
 </script>
 <template>
     <Card>
@@ -45,7 +71,8 @@ const sendData = async () => {
                             <FieldLabel>
                                 目的
                             </FieldLabel>
-                            <SetSelectPurpose v-model:purpose-data="masterStore.purposeData"
+                            <Label>{{ currentCategory }}</Label>
+                            <SetSelectPurpose v-model:purpose-data="currentPurposes"
                                 v-model:purpose_id="form.purpose_id" />
                         </Field>
                         <Field>

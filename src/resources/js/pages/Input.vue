@@ -19,7 +19,6 @@ const masterStore = useMasterDataStore();
 
 inputStore.resetInputData();
 
-
 onMounted(async () => {
     await masterStore.setPurposes();
 });
@@ -36,17 +35,17 @@ const sendData = async () => {
 const currentPurposes = computed(() => {
     if (!masterStore.purpose_category) return [];
 
-    const isExpense = masterStore.witchExpenditure === 'Expense';
+    const isExpense = masterStore.wichExpenditure === 'Expense';
 
-    return isExpense ? masterStore.purpose_category.expense.purpose : masterStore.purpose_category.income.purpose;
+    return isExpense ? (masterStore.purpose_category.expense?.purpose ?? []) : (masterStore.purpose_category.income?.purpose ?? []);
 });
 
 const currentCategories = computed(() => {
     if (!masterStore.purpose_category) return [];
 
-    const isExpense = masterStore.witchExpenditure === 'Expense';
+    const isExpense = masterStore.wichExpenditure === 'Expense';
 
-    return isExpense ? masterStore.purpose_category.expense.category : masterStore.purpose_category.income.category;
+    return isExpense ? (masterStore.purpose_category.expense?.category ?? []) : (masterStore.purpose_category.income?.category ?? []);
 });
 
 const currentCategory = computed(() => {
@@ -54,14 +53,12 @@ const currentCategory = computed(() => {
     const purpose = currentPurposes.value.find(p => p.id === form.purpose_id);
     if (!purpose) return null;
     return currentCategories.value.find(c => c.id === purpose.category_id) ?? null;
-
 })
-
 </script>
 <template>
     <Card>
-        <Switch id="expenditure" :checked="masterStore.witchExpenditure === 'Income'" :disabled="inputStore.loading"
-            @update:checked="masterStore.switchExpenditure" />
+        <Switch id="expenditure" :checked="masterStore.wichExpenditure === 'Expense'" :disabled="inputStore.loading"
+            @click="masterStore.switchExpenditure" />
         <Label for="expenditure">{{ masterStore.currentLabels.ja.label }}</Label>
         <form @submit.prevent="sendData">
             <FieldGroup>
@@ -71,9 +68,10 @@ const currentCategory = computed(() => {
                             <FieldLabel>
                                 目的
                             </FieldLabel>
-                            <Label>{{ currentCategory }}</Label>
-                            <SetSelectPurpose v-model:purpose-data="currentPurposes"
+                            <Label>{{ currentCategory?.category ?? '未選択' }}</Label>
+                            <SetSelectPurpose v-if="currentPurposes.length > 0" v-model:purpose-data="currentPurposes"
                                 v-model:purpose_id="form.purpose_id" />
+                            <div v-else class="text-sm text-gray-400">読み込み中...</div>
                         </Field>
                         <Field>
                             <SetAmount v-model="form.amount" />

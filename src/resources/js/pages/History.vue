@@ -39,7 +39,7 @@ onMounted(async () => {
 const currentPurposes = computed(() => {
     if (!masterStore.purpose_category) return [];
 
-    const isExpense = masterStore.witchExpenditure === 'Expense';
+    const isExpense = masterStore.wichExpenditure === 'Expense';
 
     return isExpense ? masterStore.purpose_category.expense.purpose : masterStore.purpose_category.income.purpose;
 });
@@ -47,7 +47,7 @@ const currentPurposes = computed(() => {
 const currentCategories = computed(() => {
     if (!masterStore.purpose_category) return [];
 
-    const isExpense = masterStore.witchExpenditure === 'Expense';
+    const isExpense = masterStore.wichExpenditure === 'Expense';
 
     return isExpense ? masterStore.purpose_category.expense.category : masterStore.purpose_category.income.category;
 });
@@ -104,6 +104,9 @@ watch(() => props.searchedData, (newData) => {
 
 </script>
 <template>
+    <Switch id="expenditure" :checked="masterStore.wichExpenditure === 'Expense'" :disabled="inputStore.loading"
+        @click="masterStore.switchExpenditure" />
+    <Label for="expenditure">{{ masterStore.currentLabels.ja.label }}</Label>
     <form @submit.prevent="searchData">
         <FieldGroup>
             <FieldGroup>
@@ -151,7 +154,7 @@ watch(() => props.searchedData, (newData) => {
     </form>
 
     <Card>
-        <Switch :checked="masterStore.witchExpenditure === 'Income'" :disabled="inputStore.loading"
+        <Switch :checked="masterStore.wichExpenditure === 'Income'" :disabled="inputStore.loading"
             @update:checked="masterStore.switchExpenditure">{{ masterStore.currentLabels.ja }}</Switch>
         <Table>
             <TableCaption>test</TableCaption>

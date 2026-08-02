@@ -30,7 +30,7 @@ export const useInputDataStore = defineStore("inputData", () => {
   const selectedPurposeId = ref<number>(0);
   const loading = ref<boolean>(false);
   const isModalOpen = ref<boolean>(false);
-  const witchExpenditure = ref<Expenditure>("expense");
+  const witchExpenditure = ref<Expenditure>("Expense");
 
   // 登録データ変数のリセット
   const resetInputData = (): void => {

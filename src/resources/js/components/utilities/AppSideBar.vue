@@ -27,11 +27,12 @@ const menuItems = [
             </div>
         </SidebarHeader>
         <SidebarContent>
-            <SidebarGroup>
+            <SidebarGroup class="bg-[oklch(0.80_0.08_200)] text-white px-3 py-1 rounded-md mb-2">
                 <SidebarGroupLabel>メニュー</SidebarGroupLabel>
-                <SidebarMenu>
+                <SidebarMenu class=" rounded-lg p-1">
                     <SidebarMenuItem v-for="item in menuItems" :key="item.title">
-                        <SidebarMenuButton as-child>
+                        <SidebarMenuButton as-child
+                            class="bg-sidebar-btn text-sidebar-btn-fg hover:bg-sidebar-btn-hover transition-colors rounded-md my-1">
                             <a :href="item.url" class="flex items-center gap-3 w-full">
                                 <span>{{ item.title }}</span>
                             </a>

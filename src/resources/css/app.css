@@ -93,9 +93,7 @@
   --sidebar-btn-bg: oklch(88.558% 0.1922 113.908);
   --sidebar-btn-fg: oklch(0.129 0.042 264.695); /* 👈 追加 */
   --sidebar-btn-hover: oklch(0.8 0.15 113.908); /* 👈 追加 */
-  --sidebar-btn-active: oklch(
-    0.7 0.18 113.908
-  ); /*
+  --sidebar-btn-active: oklch(0.7 0.18 113.908);
 }
 
 .dark {
@@ -131,7 +129,7 @@
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.551 0.027 264.364);
   --sidebar-btn-bg: oklch(58.778% 0.01384 122.02); /* 通常時のボタン背景 */
-  --sidebar-btn-fg: oklch(18.286% 0.02792 195.031); /* ボタンの文字色 */
+  --sidebar-btn-fg: oklch(0.98 0.01 200); /* ボタンの文字色 */
   --sidebar-btn-hover: oklch(0.5 0.12 184.704); /* ホバー時 */
   --sidebar-btn-active: oklch(0.4 0.13 184.704);
 }

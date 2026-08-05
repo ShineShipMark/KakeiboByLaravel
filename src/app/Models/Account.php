@@ -15,13 +15,25 @@ class Account extends Model
     protected $fillable = [
         'name',
         'type',
-        'balance'
+        'balance',
+        'is_active',
     ];
 
     protected $casts = [
         'type' => AccountType::class,
         'balance' => 'decimal:2',  
     ];
+
+    public function savingGoals(): HasMany
+    {
+        return $this->hasMany(SavingGoal::class)->orderBy('sort_order');
+    }
+
+    public function getUnallocatedBalanceAttribute(): float
+    {
+        $allocatedSum = $this->savingGoals()->sum('current_amount');
+        return (float) ($this->balance - $allocatedSum);
+    }
 
     public function outgoingTransactions(): HasMany
     {
@@ -62,6 +74,6 @@ class Account extends Model
 
     public function isCash():bool
     {
-        return $this->type === AccountType::class;
+        return $this->type === AccountType::Cash;
     }
 }

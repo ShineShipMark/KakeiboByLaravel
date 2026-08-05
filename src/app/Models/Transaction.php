@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use App\Enum\TransactionType;
@@ -7,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use InvalidArgumentException;
-use phpDocumentor\Reflection\Types\Boolean;
 
 class Transaction extends Model
 {
@@ -20,75 +18,89 @@ class Transaction extends Model
         'category_id',
         'amount',
         'date',
-        'description'
+        'description',
     ];
 
     protected $casts = [
-        'type' => TransactionType::class,
-        'amount'=>'decimal:2',
-        'date'=>'date'
+        'type'   => TransactionType::class,
+        'amount' => 'decimal:2',
+        'date'   => 'date',
     ];
 
-    protected function fromAccount():BelongsTo
+    /* =========================================================================
+     * リレーション (外部からアクセスするため public に変更)
+     * ========================================================================= */
+
+    public function fromAccount(): BelongsTo
     {
         return $this->belongsTo(Account::class, 'from_account_id');
     }
 
-    protected function toAccount(): BelongsTo
+    public function toAccount(): BelongsTo
     {
         return $this->belongsTo(Account::class, 'to_account_id');
     }
 
-    protected function category(): BelongsTo
+    public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
 
-    public function valodateInvariants():void
+    /* =========================================================================
+     * ドメインロジック (ビジネスルール)
+     * ========================================================================= */
+
+    /**
+     * 不変条件（バリデーション）チェック
+     */
+    public function validateInvariants(): void
     {
-        if($this->amount <= 0){
-            throw new InvalidArgumentException('金額が0より小さい');
+        if ($this->amount <= 0) {
+            throw new InvalidArgumentException('金額は0より大きい必要があります。');
         }
 
-        if($this->type === TransactionType::Expense && !$this->from_account_id){
-            throw new InvalidArgumentException('出金元口座が存在しない');
+        if ($this->type === TransactionType::Expense && !$this->from_account_id) {
+            throw new InvalidArgumentException('出金元口座が存在しません。');
         }
 
-        if($this->type === TransactionType::Income && !$this->to_account_id){
-            throw new InvalidArgumentException('入金咲口座が存在しない');
+        if ($this->type === TransactionType::Income && !$this->to_account_id) {
+            throw new InvalidArgumentException('入金先口座が存在しません。');
         }
 
-        if($this->type === TransactionType::Transfer && !$this->to_account_id){
-            if(!$this->from_account_id || !$this->to_account_id){
-                throw new InvalidArgumentException('振替元も先も存在しない');
+        if ($this->type === TransactionType::Transfer) {
+            if (!$this->from_account_id || !$this->to_account_id) {
+                throw new InvalidArgumentException('振替には振替元口座と振替先口座の両方が必要です。');
             }
 
-            if(!$this->to_account_id === $this->to_account_id){
-                throw new InvalidArgumentException('同一口座での振替は出来ない');
+            if ($this->from_account_id === $this->to_account_id) {
+                throw new InvalidArgumentException('同一口座間での振替はできません。');
             }
         }
     }
 
-    public function isIncome():bool
+    public function isIncome(): bool
     {
         return $this->type === TransactionType::Income;
     }
 
-    public function isExpense():bool
+    public function isExpense(): bool
     {
         return $this->type === TransactionType::Expense;
     }
 
-    public function isTransfer():bool
+    public function isTransfer(): bool
     {
         return $this->type === TransactionType::Transfer;
     }
 
-    public function getBalanceImpactForAccount(int $accountId):float
+    /**
+     * 指定した口座に対する金額影響度を算出
+     */
+    public function getBalanceImpactForAccount(int $accountId): float
     {
         $amount = (float) $this->amount;
 
-        if($this->to_account_id === $accountId) {
+        if ($this->to_account_id === $accountId) {
             return $amount;
         }
 

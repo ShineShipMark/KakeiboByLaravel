@@ -28,7 +28,7 @@ class Budget extends Model
         $this->amount = $newAmount;
     }
 
-    public function calulateUsageRate(float $spentAmount): float
+    public function calculateUsageRate(float $spentAmount): float
     {
         $budgetAmount = (float) $this->amount;
 

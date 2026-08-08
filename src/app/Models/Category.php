@@ -2,6 +2,9 @@
 namespace App\Models;
 
 use App\Enum\CategoryType; // ★ 追加
+use App\Enum\TransactionType;
+use App\ValueOjects\BillingPeriod;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -64,19 +67,15 @@ class Category extends Model
      * 大項目（親カテゴリがないもの）のみを取得するスコープ
      * 
      * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param CategoryType|string|null $type
      */
-    public function scopeMainCategories($query, CategoryType|string $type = null)
+    public function scopeMainCategories(Builder $query): Builder
     {
-        $query->whereNull('parent_id');
+        return $query->whereNull('parent_id');
+    }
 
-        if ($type) {
-            // Enum インスタンスまたは文字列のどちらが渡されても安全に処理
-            $typeValue = $type instanceof CategoryType ? $type->value : $type;
-            $query->where('type', $typeValue);
-        }
-
-        return $query;
+    public function scopeSubCategories(Builder $query): Builder
+    {
+        return $query->whereNotNull('parent_id');
     }
 
     public function isIncome(): bool
@@ -87,5 +86,36 @@ class Category extends Model
     public function isExpense(): bool
     {
         return $this->type === CategoryType::Expense;
+    }
+
+    public function calculateTotalSpentForPeriod(BillingPeriod $period): int
+    {
+        $directSpent = $this->transactions()
+            ->where('type', TransactionType::Expense)
+            ->whereBetween('date', [$period->startDate, $period->endDate])
+            ->sum('amount');
+
+        $childSpent = $this->childTransactions()
+            ->where('type', TransactionType::Expense)
+            ->sum('amount');
+        
+        return $directSpent + $childSpent;
+    }
+
+    public function calculateBudgetProgress(BillingPeriod $period, string $yearMonth): array
+    {
+        $budget = $this->budgets->firstWhere('year_month', $yearMonth);
+        $totalSpent = $this->calculateTotalSpentForPeriod($period);
+        $budgetAmount = $budget ? $budget->amount : 0;
+
+        return [
+            'category_id' => $this->id,
+            'category_name'=> $this->name,
+            'budget_amount' => $budgetAmount,
+            'spent_amount' => $totalSpent,
+            'remaining_amount' => max(0, $budgetAmount - $totalSpent),
+            'usage_rate' => $budget ? $budget->calculateUsageRate($totalSpent) : 0,
+            'is_over' => $budget ? $budget->isOverBudget($totalSpent) : false,
+        ];
     }
 }

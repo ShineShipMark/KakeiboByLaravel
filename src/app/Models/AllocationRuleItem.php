@@ -2,6 +2,8 @@
 namespace App\Models;
 
 use App\Enum\AllocationType;
+use App\Enum\TransactionType;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -67,5 +69,25 @@ class AllocationRuleItem extends Model
         }
 
         return 0.0;
+    }
+
+    public function createTransaction(int $fromAccountId, int $sourceAmount, Carbon $executeDate): ?Transaction
+    {
+        $allocatedAmount = $this->calculateAmount($sourceAmount);
+
+        if ($allocatedAmount <= 0) {
+            return null;
+        }
+
+        return new Transaction([
+            'from_account_id'  => $fromAccountId,
+            'to_account_id' =>  $this->to_account_id,
+            'category_is' => $this->category_id,
+            'amount' =>  $allocatedAmount,
+            'type' => TransactionType::Transfer,
+            'date' => $executeDate->toDateString(),
+            'description' => "自動配分: {$this->name}",
+
+        ]);
     }
 }

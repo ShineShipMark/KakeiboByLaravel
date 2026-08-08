@@ -35,12 +35,12 @@ class Account extends Model
         return (float) ($this->balance - $allocatedSum);
     }
 
-    public function outgoingTransactions(): HasMany
+    public function fromTransactions(): HasMany
     {
         return $this->hasMany(Transaction::class, 'from_account_id');
     }
 
-    public function incomingTransactions(): HasMany
+    public function toTransactions(): HasMany
     {
         return $this->hasMany(Transaction::class, 'to_account_id');
     }
@@ -76,4 +76,20 @@ class Account extends Model
     {
         return $this->type === AccountType::Cash;
     }
+
+    public function calculateActualBalance(): int
+    {
+        $totalIn = $this->toTransactions()->sum('amount');
+        $totalOut = $this->fromTransactions()->sum('amount');
+
+        return $totalIn - $totalOut;
+    }
+
+    public function calculateUnallocatedBalance(): int
+    {
+        $allocatedToGoals = $this->savingGoals()->sum('current_amount');
+
+        return $this->calculateActualBalance() - $allocatedToGoals;
+    }
+
 }

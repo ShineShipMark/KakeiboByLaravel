@@ -1,6 +1,8 @@
 <?php
 namespace App\Enum;
+use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
+#[TypeScript]
 enum CategoryType: string
 {
     case Income = 'income';   // 収入カテゴリ

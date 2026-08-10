@@ -1,6 +1,8 @@
 <?php
 namespace App\Enum;
+use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
+#[TypeScript]
 enum AccountType: string
 {
     case Bank = 'bank';

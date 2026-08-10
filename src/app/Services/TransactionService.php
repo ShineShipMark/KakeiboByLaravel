@@ -11,8 +11,17 @@ use Illuminate\Support\Facades\DB;
 
 class TransactionService
 {
+    /**
+     * ページ数で制限された取得結果を返す
+     * @param array $filters 検索条件
+     * @param int $perPage 1っページあたりの表示件数
+     * @return LengthAwarePaginator 取得結果
+     */
     public function getPaginatedTransactions(array $filters = [], int $perPage = 20): LengthAwarePaginator
     {
+        // ドメインモデルの各ロジック(categoryなど)からリレーション定義を取得して、
+        // 関連するキーでHWEREしたSELECTで自動取得してくれる
+        // (キーとなる外部キーはドメイン名+_idで自動で認識してくれる。category_idなど)
         $query = Transaction::with(['category','fromAccount', 'toAccount'])
             ->orderBy('date', 'desc')
             ->orderBy('id', 'desc');    
@@ -43,7 +52,11 @@ class TransactionService
         );
     }
 
-
+    /**
+     * 新規登録
+     * @param TransactionData $data 登録するデータ
+     * @return TransactionData 登録済みデータ
+     */
     public function createTransaction(TransactionData $data): TransactionData
     {
         return DB::transaction(function () use($data){
@@ -63,6 +76,12 @@ class TransactionService
         });
     }
 
+    /**
+     * 記録の更新・修正
+     * @param int $id 登録ID
+     * @param TransactionData $newData 新しく更新するためのデータ
+     * @return TransactionData 修正した新しいデータ
+     */
     public function upadateTransaction(int $id, TransactionData $newData): TransactionData
     {
         return DB::transaction(function() use($id, $newData) {
@@ -86,6 +105,11 @@ class TransactionService
         });
     }
 
+    /**
+     * データの削除
+     * @param int $id 削除対象のID
+     * @return void
+     */
     public function deleteTransaction(int $id): void
     {
         DB::Transaction(function() use ($id){
@@ -98,6 +122,11 @@ class TransactionService
         });
     }
 
+    /**
+     * 取引の種別に応じた口座残高の加減(出費・振替で減って、収入・振替で増えるという計算を行う)
+     * @param TransactionData $data
+     * @return void
+     */
     private function applyBalanceChanges(TransactionData $data): void
     {
         if ($data->fromAccountId && in_array($data->type, [TransactionType::Expense, TransactionType::Transfer])) {
@@ -109,6 +138,11 @@ class TransactionService
         }
     }
 
+    /**
+     * 取引のデータ削除・修正時に口座残高を元に戻す(出費・振替を削除で増えて、収入・振替削除で減るという計算を行う)
+     * @param TransactionData $data
+     * @return void
+     */
     private function revertBalanceChange(TransactionData $data): void 
     {
         if ($data->fromAccountId && in_array($data->type, [TransactionType::Expense, TransactionType::Transfer])) {

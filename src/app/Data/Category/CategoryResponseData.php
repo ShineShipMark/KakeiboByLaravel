@@ -6,7 +6,9 @@ use App\Enum\CategoryType;
 use App\Models\Category;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Lazy;
+use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
+#[TypeScript]
 class CategoryResponseData extends Data
 {
     public function __construct(

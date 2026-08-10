@@ -5,7 +5,9 @@ namespace App\Data\Budget;
 use App\Models\Category;
 use App\ValueObjects\BillingPeriod;
 use Spatie\LaravelData\Data;
+use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
+#[TypeScript]
 class BudgetProgressData extends Data
 {
     public function __construct(

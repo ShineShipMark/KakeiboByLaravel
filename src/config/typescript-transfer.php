@@ -13,6 +13,7 @@ return [
      * 使用するトランスフォーマーの設定
      */
     'transformers' => [
+        Spatie\LaravelData\Support\TypeScriptTransformer\DataTypeScriptTransformer::class,
         Spatie\TypeScriptTransformer\Transformers\EnumTransformer::class,
     ],
 
@@ -20,4 +21,5 @@ return [
      * 生成される TypeScript 型定義ファイルの出力先
      */
     'output_file' => resource_path('js/types/generated.d.ts'),
+    
 ];

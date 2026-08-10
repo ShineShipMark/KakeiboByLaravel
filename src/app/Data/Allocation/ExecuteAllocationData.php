@@ -6,7 +6,9 @@ use Carbon\Carbon;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Casts\DateTimeInterfaceCast;
+use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
+#[TypeScript]
 class ExecuteAllocationData extends Data
 {
     public function __construct(

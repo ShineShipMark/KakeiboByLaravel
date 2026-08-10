@@ -7,7 +7,9 @@ use App\Models\Transaction;
 use Spatie\LaravelData\Attributes\Validation\Min;
 use Spatie\LaravelData\Attributes\Validation\Required;
 use Spatie\LaravelData\Data;
+use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
+#[TypeScript]
 class TransactionData extends Data
 {
     public function __construct(

@@ -4,7 +4,9 @@ namespace App\Data\Account;
 
 use App\Models\Account;
 use Spatie\LaravelData\Data;
+use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
+#[TypeScript]
 class AccountBalanceSummaryData extends Data
 {
     public function __construct(

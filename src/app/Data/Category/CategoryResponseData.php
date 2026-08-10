@@ -29,7 +29,11 @@ class CategoryResponseData extends Data
             name:$category->name,
             type:$category->type,
             parentId:$category->parent_id,
-            parent:Lazy::whenLoaded('parent', $category, fn()=>CategoryResponseData::fromModel($category->parent)),
+            parent: Lazy::whenLoaded(
+                'parent', 
+                $category, 
+                fn() => $category->parent ? CategoryResponseData::fromModel($category->parent) : null
+            ),
             children: Lazy::whenLoaded('children', $category, fn()=> CategoryResponseData::collect($category->children)),
         );
     }

@@ -3,8 +3,7 @@
 namespace App\Data\Budget;
 
 use App\Models\Category;
-use App\ValueOjects\BillingPeriod;
-use League\Flysystem\UrlGeneration\PublicUrlGenerator;
+use App\ValueObjects\BillingPeriod;
 use Spatie\LaravelData\Data;
 
 class BudgetProgressData extends Data
@@ -17,8 +16,7 @@ class BudgetProgressData extends Data
         public int $remainingAmount,
         public float $usageRate,
         public bool $isOver,
-    )
-    {}
+    ) {}
 
     public static function fromCategory(Category $category, BillingPeriod $period, string $yearMonth): self
     {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\ValueOjects;
+namespace App\ValueObjects;
 
 use Illuminate\Support\Carbon;
 

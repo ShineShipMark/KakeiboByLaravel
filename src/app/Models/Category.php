@@ -3,7 +3,7 @@ namespace App\Models;
 
 use App\Enum\CategoryType; // ★ 追加
 use App\Enum\TransactionType;
-use App\ValueOjects\BillingPeriod;
+use App\ValueObjects\BillingPeriod;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

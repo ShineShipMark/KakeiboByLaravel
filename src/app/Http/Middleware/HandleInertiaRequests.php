@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Data\Category\CategoryResponseData;
+use App\Models\Category;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -36,15 +38,18 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
-
-        return [
-            ...parent::share($request),
-            'name' => config('app.name'),
-            'quote' => ['message' => trim($message), 'author' => trim($author)],
+        return array_merge(parent::share($request), [
             'auth' => [
                 'user' => $request->user(),
             ],
-        ];
+            // ★ここで渡した値が、Vue側の usePage().props に自動的にセットされます
+            'categories' => fn () => CategoryResponseData::collect(
+                    Category::with('children')->whereNull('parent_id')->get()
+                ),
+            'flash' => [
+                'message' => fn () => $request->session()->get('message'),
+            ],
+        ]);
+    
     }
 }

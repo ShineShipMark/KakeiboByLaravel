@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\InputController;
 use App\Http\Controllers\MasterController;
@@ -12,6 +13,7 @@ Route::get('/', function () {
 })->name('home');
 
 Route::resource('transactions', TransactionController::class);
+Route::resource('categories', CategoryController::class);
 
 Route::get('/input',[InputController::class, 'index'])->name('input.index');
 Route::post('/input', [InputController::class, 'store'])->name('input.store');

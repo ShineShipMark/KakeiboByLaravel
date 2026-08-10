@@ -7,6 +7,7 @@ use App\Models\Category;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Lazy;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
+use Spatie\TypeScriptTransformer\Attributes\TypeScriptType;
 
 #[TypeScript]
 class CategoryResponseData extends Data
@@ -16,8 +17,10 @@ class CategoryResponseData extends Data
         public string $name,
         public CategoryType $type,
         public ?int $parentId,
+        #[TypeScriptType('CategoryResponseData|null')]
         public Lazy|CategoryResponseData|null $parent,
-        /** @var Lazy|array(CategoryResponseData)|null */
+        
+        #[TypeScriptType('array<CategoryResponseData>|null')]
         public Lazy|array|null $children,
     ) {}
 

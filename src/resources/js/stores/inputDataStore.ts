@@ -8,39 +8,33 @@ import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 import { viewsPurpose } from "../types/vue-types";
 import { fetchAPIMethods } from "@/composables/fetch";
+import App from "@/actions/App";
+
+type TransactionData = App.Data.Transaction.TransactionData;
+
+type TransactionForm = Omit<TransactionData, "id">;
 
 export const useInputDataStore = defineStore("inputData", () => {
   // 送信データの初期化
-  const initialDataState = (): postData => {
+  const initialDataState = (): TransactionForm => {
     return {
-      id: 0,
-      purpose_id: 0,
+      type: "expense",
       amount: 0,
-      at_date: new Date(),
-      possession: "account",
-      detail: "",
+      date: new Date().toISOString().split("T")[0],
+      fromAccountId: null,
+      toAccountId: null,
+      categoryId: null,
+      description: null,
     };
   };
 
   // 各リアクティブ変数の定義
-  const inputData = ref<postData>(initialDataState());
-  const editData = ref<postData>(initialDataState());
   const listData = ref<getData[]>([]);
   const purposeData = ref<viewsPurpose[]>([]);
   const selectedPurposeId = ref<number>(0);
   const loading = ref<boolean>(false);
   const isModalOpen = ref<boolean>(false);
   const witchExpenditure = ref<Expenditure>("Expense");
-
-  // 登録データ変数のリセット
-  const resetInputData = (): void => {
-    inputData.value = initialDataState();
-  };
-
-  // 編集データ変数のリセット
-  const resetEditData = (): void => {
-    editData.value = initialDataState();
-  };
 
   // データをPOST送信するメソッド
   const sendData = async (data: postData, url: string): Promise<string> => {
@@ -60,20 +54,6 @@ export const useInputDataStore = defineStore("inputData", () => {
     listData.value = await searchData<getData[], string>(url, "GET", "");
   };
 
-  // 編集データ用に変換するメソッド
-  const transData = (selectedData: getData): void => {
-    editData.value = {
-      id: selectedData.id,
-      at_date: selectedData.at_date,
-      amount: selectedData.amount,
-      purpose_id: selectedData.purpose.id,
-      possession: selectedData.possession,
-      detail: selectedData.detail,
-    };
-
-    isModalOpen.value = true;
-  };
-
   // モーダルの開閉を制御するメソッド
   const closeModal = () => {
     isModalOpen.value = false;
@@ -88,8 +68,6 @@ export const useInputDataStore = defineStore("inputData", () => {
   });
 
   return {
-    inputData,
-    editData,
     listData,
     loading,
     selectedPurposeId,
@@ -98,11 +76,8 @@ export const useInputDataStore = defineStore("inputData", () => {
     witchExpenditure,
     currentLabels,
     initialDataState,
-    resetInputData,
-    resetEditData,
     sendData,
     setData,
-    transData,
     closeModal,
   };
 });

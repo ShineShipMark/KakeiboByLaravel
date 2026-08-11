@@ -4,16 +4,26 @@ import Card from '@/components/ui/card/Card.vue';
 import Button from '@/components/ui/button/Button.vue';
 import { Field, FieldSet, FieldGroup, FieldLabel } from '@/components/ui/field';
 import Textarea from '@/components/ui/textarea/Textarea.vue';
-import Switch from '@/components/ui/switch/Switch.vue';
 import SetAmount from '@/components/inputParts/SetAmount.vue';
 import SetSelectPurpose from '@/components/inputParts/SetSelectPurpose.vue';
-import SetSelectPossession from '@/components/inputParts/SetSelectPossession.vue';
 import SetAtDate from '@/components/inputParts/SetAtDate.vue';
 import { useInputDataStore } from '@/stores/inputDataStore';
 import { useMasterDataStore } from '@/stores/masterDataStore';
-import { useForm } from '@inertiajs/vue3';
-import { postData } from '@/types/vue-types';
+import { usePage, useForm } from '@inertiajs/vue3'
 import Label from '@/components/ui/label/Label.vue';
+
+type TransactionData = App.Data.Transaction.TransactionData
+type TransactionType = App.Enum.TransactionType;
+
+type CategoryData = App.Data.Category.CategoryResponseData;
+
+const page = usePage();
+
+const categories = page.props.categories as CategoryData[];
+
+type TransactionForm = Omit<TransactionData, 'id'>
+
+
 const inputStore = useInputDataStore();
 const masterStore = useMasterDataStore();
 
@@ -23,13 +33,10 @@ onMounted(async () => {
     await masterStore.setPurposes();
 });
 
-const form = useForm<postData>(inputStore.initialDataState());
+const form = useForm<TransactionForm>(inputStore.initialDataState());
 
 const sendData = async () => {
-    form.transform((data) => ({
-        ...data,
-        expenditure: masterStore.currentLabels.en.label,
-    })).post(window.location.pathname);
+    form.post(window.location.pathname);
 }
 
 const currentPurposes = computed(() => {
@@ -49,18 +56,37 @@ const currentCategories = computed(() => {
 });
 
 const currentCategory = computed(() => {
-    if (!form.purpose_id) return null;
-    const purpose = currentPurposes.value.find(p => p.id === form.purpose_id);
+    if (!form.categoryId) return null;
+    const purpose = currentPurposes.value.find(p => p.id === form.categoryId);
     if (!purpose) return null;
     return currentCategories.value.find(c => c.id === purpose.category_id) ?? null;
 })
+
+const handleTypeChange = (newType: TransactionType) => {
+    form.type = newType;
+
+    if (newType === 'expense') {
+        form.toAccountId = null
+    } else if (newType === 'income') {
+        form.fromAccountId = null
+    } else if (newType === 'transfer') {
+        form.categoryId = null
+    }
+}
 </script>
 <template>
     <Card>
-        <Switch id="expenditure" :checked="masterStore.wichExpenditure === 'Expense'" :disabled="inputStore.loading"
-            @click="masterStore.switchExpenditure" />
-        <Label for="expenditure">{{ masterStore.currentLabels.ja.label }}</Label>
         <form @submit.prevent="sendData">
+            <Button type="button" @click="handleTypeChange('expense')">
+                支出
+            </Button>
+            <Button type="button" @click="handleTypeChange('income')">
+                収入
+            </Button>
+            <Button type="button" @click="handleTypeChange('transfer')">
+                振替
+            </Button>
+            <Label for="expenditure">{{ masterStore.currentLabels.ja.label }}</Label>
             <FieldGroup>
                 <FieldSet>
                     <FieldGroup>
@@ -69,21 +95,20 @@ const currentCategory = computed(() => {
                                 目的
                             </FieldLabel>
                             <Label>{{ currentCategory?.category ?? '未選択' }}</Label>
-                            <SetSelectPurpose v-if="currentPurposes.length > 0" v-model:purpose-data="currentPurposes"
-                                v-model:purpose_id="form.purpose_id" />
+                            <SetSelectPurpose v-if="currentPurposes.length > 0" v-model:category-id="form.categoryId"
+                                :categories="categories" :transaction-type="form.type" />
                             <div v-else class="text-sm text-gray-400">読み込み中...</div>
                         </Field>
                         <Field>
                             <SetAmount v-model="form.amount" />
                         </Field>
                         <Field>
-                            <SetAtDate v-model="form.at_date" />
+                            <SetAtDate v-model="form.date" />
                         </Field>
                         <Field>
-                            <SetSelectPossession v-model="form.possession" />
-                        </Field>
-                        <Field>
-                            <Textarea v-model="form.detail" placeholder="Type your message here." />
+                            <Textarea :model-value="form.description ?? undefined"
+                                @update:model-value="form.description = $event ? String($event) : null"
+                                placeholder="Type your message here." />
                         </Field>
                     </FieldGroup>
                 </FieldSet>

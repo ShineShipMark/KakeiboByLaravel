@@ -8,29 +8,46 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import { viewsPurpose } from '@/types/vue-types';
+import { computed, watch } from 'vue';
 
-// 1. 変更される「選択されたID」は defineModel を使う（これで大正解！）
-const purpose_id = defineModel<number>('purpose_id');
+type CategoryData = App.Data.Category.CategoryResponseData
+type TransactionType = App.Enum.TransactionType
 
-// 2. 読み取り専用の「選択肢リスト」は、v-model ではなく通常の defineProps にする
-defineProps<{
-    purposeData: viewsPurpose[]
-}>();
+const props = defineProps<{
+    categories: CategoryData[]
+    transactionType: TransactionType
+}>()
+
+// 3. v-model:categoryId と同期するモデル定義
+const categoryId = defineModel<number | null>('categoryId')
+
+// 4. 種別（transactionType）に合わせてカテゴリを自動絞り込み
+const filteredCategories = computed(() => {
+    return props.categories.filter((cat) => cat.type === props.transactionType)
+})
+
+// 5. 種別が変わったら選択中の ID を自動リセット
+watch(() => props.transactionType, () => {
+    categoryId.value = null
+})
+
 </script>
 
 <template>
-    <Select v-model="purpose_id">
+    <Select v-if="filteredCategories.length > 0" v-model="categoryId">
         <SelectTrigger class="w-[180px]">
             <SelectValue placeholder="目的を選択" />
         </SelectTrigger>
         <SelectContent>
             <SelectGroup>
                 <SelectLabel>目的</SelectLabel>
-                <SelectItem :key="item.id" v-for="item in purposeData" :value="String(item.id)">
-                    {{ item.purpose }}
+                <SelectItem :key="child.id" v-for="child in filteredCategories" :value="String(child.id)">
+                    {{ child.children }}
                 </SelectItem>
             </SelectGroup>
         </SelectContent>
     </Select>
+    <div v-else class="text-sm text-gray-500 italic">
+        ※選択可能なカテゴリがありません
+    </div>
 </template>

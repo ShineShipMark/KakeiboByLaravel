@@ -10,6 +10,8 @@ import { useInputDataStore } from '@/stores/inputDataStore';
 import { useMasterDataStore } from '@/stores/masterDataStore';
 import { usePage, useForm } from '@inertiajs/vue3'
 import Label from '@/components/ui/label/Label.vue';
+import AllocationModal from '@/components/inputParts/AllocationModal.vue';
+import { ref } from 'vue';
 
 type TransactionData = App.Data.Transaction.TransactionData
 type TransactionType = App.Enum.TransactionType;
@@ -20,17 +22,15 @@ const page = usePage();
 
 const categories = page.props.categories as CategoryData[];
 
-type TransactionForm = Omit<TransactionData, 'id'>
+type TransactionForm = Omit<TransactionData, 'id'> & {
+    allocations?: Array<{ categoryId: number; amount: number }>
+}
 
 
 const inputStore = useInputDataStore();
 const masterStore = useMasterDataStore();
 
 const form = useForm<TransactionForm>(inputStore.initialDataState());
-
-const sendData = async () => {
-    form.post(window.location.pathname);
-}
 
 const handleTypeChange = (newType: TransactionType) => {
     form.type = newType;
@@ -43,10 +43,35 @@ const handleTypeChange = (newType: TransactionType) => {
         form.categoryId = null
     }
 }
+
+const isAllocationModalOpen = ref<boolean>(false);
+
+const handleSubmit = () => {
+    if (form.type === 'income' && form.amount > 0) {
+        isAllocationModalOpen.value = true;
+        return;
+    }
+
+    submitForm();
+}
+
+const submitForm = () => {
+    form.post('/transactions', {
+        onSuccess: () => {
+            isAllocationModalOpen.value = false
+        }
+    });
+}
+
+const handleAllocationConfirm = (allocations: Array<{ categoryId: number, amount: number }>) => {
+    form.allocations = allocations;
+    submitForm();
+}
+
 </script>
 <template>
     <Card>
-        <form @submit.prevent="sendData">
+        <form @submit.prevent="handleSubmit">
             <Button type="button" @click="handleTypeChange('expense')">
                 支出
             </Button>
@@ -81,6 +106,11 @@ const handleTypeChange = (newType: TransactionType) => {
                         </Field>
                     </FieldGroup>
                 </FieldSet>
+
+                <AllocationModal v-model:open="isAllocationModalOpen" :total-amount="form.amount"
+                    :categories="categories" @close="isAllocationModalOpen = false"
+                    @confirm="handleAllocationConfirm" />
+
                 <Field>
                     <Button type="submit" :disabled="inputStore.loading">登録</Button>
                 </Field>

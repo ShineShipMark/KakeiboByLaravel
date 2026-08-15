@@ -66,15 +66,27 @@ export type Language = "en" | "ja";
 export type Expenditure = "Expense" | "Income";
 
 export const config = {
-  Expense: {
+  all: {
+    ja: { label: "すべて" },
+    en: { label: "All" },
+  },
+  expense: {
     ja: { label: "支出" },
     en: { label: "Expense" },
   },
-  Income: {
+  income: {
     ja: { label: "収入" },
     en: { label: "Income" },
   },
+  transfer: {
+    ja: { label: "振替" },
+    en: { label: "transfer" },
+  },
 } as const;
+
+export type TransactionTypeWithAll = keyof typeof config;
+
+export type TransactionTypeConfig = (typeof config)[keyof typeof config];
 
 export type PageKind = "input" | "history";
 

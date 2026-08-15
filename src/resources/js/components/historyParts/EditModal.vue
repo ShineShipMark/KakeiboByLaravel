@@ -7,30 +7,51 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog'
-import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import Textarea from '@/components/ui/textarea/Textarea.vue';
-import { Field, FieldSet, FieldGroup, FieldLabel } from '@/components/ui/field';
-import SetAmount from '@/components/inputParts/SetAmount.vue';
-import SetSelectPurpose from '@/components/inputParts/SetSelectPurpose.vue';
-import SetAtDate from '@/components/inputParts/SetAtDate.vue';
-import SetSelectPossession from '@/components/inputParts/SetSelectPossession.vue';
-import { useInputDataStore } from '@/stores/inputDataStore';
+import { watch } from 'vue';
+import TransactionForm from '../utilities/TransactionForm.vue';
 import { useForm } from '@inertiajs/vue3';
-import { postData } from '@/types/vue-types';
-import { useMasterDataStore } from '@/stores/masterDataStore';
 
-const inputStore = useInputDataStore();
-const masterStore = useMasterDataStore();
+type TransactionData = App.Data.Transaction.TransactionData;
+type TransactionType = App.Enum.TransactionType;
 
-const form = useForm<postData>(inputStore.editData);
+type CategoryData = App.Data.Category.CategoryResponseData;
+type Allocations = Array<{ categoryId: number; amount: number }>;
 
-const editData = async () => {
-    form.expenditure = masterStore.currentLabels.en.label;
-    form.put(`/edit/${form.id}`, {
-        onSuccess: () => inputStore.closeModal()
-    });
+type TransactionFormType = Omit<TransactionData, 'id' | 'allocations'> & {
+    id?: number | null,
+    allocations?: Array<{ categoryId: number; amount: number }>
 }
+
+// デフォルト値
+const defaultValues = {
+    id: null,
+    type: 'expense' as TransactionType, // または該当の Enum 値
+    amount: 0,
+    date: new Date().toISOString().split('T')[0],
+    fromAccountId: null, // ← undefined にならないよう明確に null にする
+    toAccountId: null,   // ← undefined にならないよう明確に null にする
+    categoryId: null,
+    description: '',
+    allocations: [],     // ← defaultValues に型注釈 (: TransactionForm) を付けていれば never[] 回避できます
+}
+
+const props = defineProps<{ transaction?: TransactionData, categories: CategoryData[], allocations?: Allocations }>();
+
+const form = useForm<TransactionFormType>(defaultValues);
+
+watch(() => props.transaction, (newVal) => {
+    if (newVal) {
+        form.defaults({
+            ...defaultValues,
+            ...newVal,
+        })
+    } else {
+        form.defaults(defaultValues)
+    }
+    form.reset();
+}, { immediate: true });
+
 
 </script>
 <template>
@@ -41,44 +62,14 @@ const editData = async () => {
                 各項目入力
             </DialogDescription>
         </DialogHeader>
-        <form @submit.prevent="editData">
-            <Card>
-                <FieldGroup>
-                    <FieldSet>
-                        <FieldGroup>
-                            <Field>
-                                <FieldLabel>
-                                    目的
-                                </FieldLabel>
-                                <SetSelectPurpose v-model:purpose-data="masterStore.purposeData"
-                                    v-model:purpose_id="form.purpose_id" />
-                            </Field>
-                            <Field>
-                                <SetAmount v-model="form.amount" />
-                            </Field>
-                            <Field>
-                                <SetAtDate v-model="form.editData.at_date" />
-                            </Field>
-                            <Field>
-                                <SetSelectPossession v-model="form.possession" />
-                            </Field>
-                            <Field>
-                                <Textarea v-model="form.detail" placeholder="Type your message here." />
-                            </Field>
-                        </FieldGroup>
-                    </FieldSet>
-                </FieldGroup>
-            </Card>
-            <DialogFooter>
-                <DialogClose as-child>
-                    <Button variant="outline">
-                        Cancel
-                    </Button>
-                </DialogClose>
-                <Button type="submit">
-                    編集
+        <TransactionForm form-id="mo-dal-form" :transaction="transaction" :categories="categories" />
+        <DialogFooter>
+            <DialogClose as-child>
+                <Button type="button" variant="outline">
+                    キャンセル
                 </Button>
-            </DialogFooter>
-        </form>
+            </DialogClose>
+            <Button type="submit" form="modal-form">{{ form.id ? '更新する' : '登録する' }}</Button>
+        </DialogFooter>
     </DialogContent>
 </template>

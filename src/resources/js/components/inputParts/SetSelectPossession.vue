@@ -8,13 +8,14 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
-import { possessionPlace } from '@/types/vue-types';
 
-const possession = defineModel<possessionPlace>();
+type AccountType = App.Enum.AccountType
+
+const account = defineModel<AccountType>();
 
 </script>
 <template>
-    <Select v-model="possession">
+    <Select v-model="account">
         <SelectTrigger class="w-[180px]">
             <SelectValue placeholder="Select a fruit" />
         </SelectTrigger>

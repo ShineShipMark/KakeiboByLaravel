@@ -4,28 +4,40 @@ import {
   Expenditure,
   getData,
   toSearchParam,
+  TransactionTypeConfig,
+  TransactionTypeWithAll,
   viewsPurpose,
 } from "@/types/vue-types";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
+type AccountType = App.Enum.AccountType;
+
+type TransactionSearchForm = Omit<
+  App.Data.Transaction.TransactionSearchData,
+  "type" | "account"
+> & {
+  type: TransactionTypeWithAll;
+  account: AccountType;
+};
+
 export const useSearchParamStore = defineStore("searchParam", () => {
-  const initialParamState = (): toSearchParam => {
+  const initialParamState = (): TransactionSearchForm => {
     return {
-      min_amount: undefined,
-      max_amount: undefined,
-      purpose_id: undefined,
-      first_date: undefined,
-      last_date: undefined,
-      possession: undefined,
-      detail: undefined,
-      expenditure: "Expense",
+      keyword: null,
+      type: "all",
+      categoryId: null,
+      startDate: null,
+      endDate: null,
+      account: "cash",
+      page: 1,
+      perPage: 15,
     };
   };
 
   const searchParam = ref<toSearchParam>(initialParamState());
   const loading = ref<boolean>(false);
-  const listData = ref<getData[]>([]);
+  const listData = ref<TransactionData[]>([]);
   const purposeData = ref<viewsPurpose[]>([]);
   const selectedPurposeId = ref<number>(0);
   const witchExpenditure = ref<Expenditure>("Expense");

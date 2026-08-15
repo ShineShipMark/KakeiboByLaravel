@@ -12,7 +12,9 @@ import App from "@/actions/App";
 
 type TransactionData = App.Data.Transaction.TransactionData;
 
-type TransactionForm = Omit<TransactionData, "id">;
+type TransactionForm = Omit<TransactionData, "id"> & {
+  allocations?: Array<{ categoryId: number; amount: number }>;
+};
 
 export const useInputDataStore = defineStore("inputData", () => {
   // 送信データの初期化
@@ -25,8 +27,11 @@ export const useInputDataStore = defineStore("inputData", () => {
       toAccountId: null,
       categoryId: null,
       description: null,
+      allocations: [],
     };
   };
+
+  const editData = ref<TransactionForm>();
 
   // 各リアクティブ変数の定義
   const listData = ref<getData[]>([]);
@@ -46,6 +51,18 @@ export const useInputDataStore = defineStore("inputData", () => {
     } finally {
       loading.value = false;
     }
+  };
+
+  const setEditData = (data: TransactionForm) => {
+    editData.value = {
+      amount: data.amount,
+      categoryId: data.categoryId,
+      date: data.date,
+      description: data.description,
+      fromAccountId: data.fromAccountId,
+      toAccountId: data.toAccountId,
+      type: data.type,
+    };
   };
 
   // 取得データをセットするメソッド
@@ -75,7 +92,9 @@ export const useInputDataStore = defineStore("inputData", () => {
     isModalOpen,
     witchExpenditure,
     currentLabels,
+    editData,
     initialDataState,
+    setEditData,
     sendData,
     setData,
     closeModal,

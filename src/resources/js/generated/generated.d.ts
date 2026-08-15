@@ -53,12 +53,22 @@ declare namespace App {
         categoryId: number | null;
         description: string | null;
       };
+      export type TransactionSearchData = {
+        keyword: string | null;
+        type: string;
+        categoryId: number | null;
+        startDate: string | null;
+        endDate: string | null;
+        account: string;
+        page: number;
+        perPage: number;
+      };
     }
   }
   namespace Enum {
     export type AccountType = "bank" | "cash" | "e_money" | "credit_card";
     export type AllocationType = "fixed" | "percentage";
     export type CategoryType = "income" | "expense" | "transfer";
-    export type TransactionType = "income" | "expense" | "transfer";
+    export type TransactionType = "all" | "income" | "expense" | "transfer";
   }
 }

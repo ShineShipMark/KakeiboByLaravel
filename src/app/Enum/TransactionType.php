@@ -6,6 +6,7 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 #[TypeScript]
 enum TransactionType: string
 {
+    case All = 'all';
     case Income = 'income';
     case Expense = 'expense';
     case Transfer = 'transfer';

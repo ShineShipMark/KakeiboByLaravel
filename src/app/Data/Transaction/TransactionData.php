@@ -4,8 +4,10 @@ namespace App\Data\Transaction;
 
 use App\Enum\TransactionType;
 use App\Models\Transaction;
+use App\Data\Allocation\AllocationItemData;
 use Spatie\LaravelData\Attributes\Validation\Min;
 use Spatie\LaravelData\Attributes\Validation\Required;
+use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Data;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
@@ -27,6 +29,9 @@ class TransactionData extends Data
         public ?int $toAccountId,
         public ?int $categoryId,
         public ?string $description,
+        #[DataCollectionOf(AllocationItemData::class)]
+        /** @var AllocationItemData[]|null */
+        public ?array $allocations = [],
     ){}
 
     public static function fromModel(Transaction $transaction): self

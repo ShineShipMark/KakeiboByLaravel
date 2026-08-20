@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Data\Allocation\AllocationItemData;
 use App\Data\Transaction\TransactionData;
 use App\Enum\TransactionType;
 use App\Models\Account;
@@ -82,10 +83,10 @@ class TransactionService
      * @param TransactionData $newData 新しく更新するためのデータ
      * @return TransactionData 修正した新しいデータ
      */
-    public function upadateTransaction(int $id, TransactionData $newData): TransactionData
+    public function updateTransaction(int $id, TransactionData $newData): TransactionData
     {
         return DB::transaction(function() use($id, $newData) {
-            $transaction = Transaction::findOrFali($id);
+            $transaction = Transaction::findOrFail($id);
 
             $oldData = TransactionData::fromModel($transaction);
             $this->revertBalanceChange($oldData);
@@ -99,6 +100,14 @@ class TransactionService
                 'category_id'=>$newData->categoryId,
                 'description'=>$newData->description,
             ]);
+
+            $transaction->allocations()->delete();
+            if(!empty($newData->allocations)){
+                $allocationsArray = array_map(fn($item)=>$item instanceof AllocationItemData ? $item->toArray():$item,
+                $newData->allocations
+                );
+                $transaction->allocations()->createMany($allocationsArray);
+            }
 
             $this->applyBalanceChanges($newData);
             return TransactionData::fromModel($transaction);
@@ -146,7 +155,7 @@ class TransactionService
     private function revertBalanceChange(TransactionData $data): void 
     {
         if ($data->fromAccountId && in_array($data->type, [TransactionType::Expense, TransactionType::Transfer])) {
-            Account::where('id', $data->toAccountId)->increment('balance', $data->amount);
+            Account::where('id', $data->fromAccountId)->increment('balance', $data->amount);
         }
 
         if ($data->toAccountId && in_array($data->type, [TransactionType::Income, TransactionType::Transfer])) {

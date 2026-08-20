@@ -13,6 +13,7 @@ import TransactionForm from '../utilities/TransactionForm.vue';
 import { useForm } from '@inertiajs/vue3';
 
 type TransactionData = App.Data.Transaction.TransactionData;
+type AllocationItemData = App.Data.Allocation.AllocationItemData;
 type TransactionType = App.Enum.TransactionType;
 
 type CategoryData = App.Data.Category.CategoryResponseData;
@@ -20,11 +21,11 @@ type Allocations = Array<{ categoryId: number; amount: number }>;
 
 type TransactionFormType = Omit<TransactionData, 'id' | 'allocations'> & {
     id?: number | null,
-    allocations?: Array<{ categoryId: number; amount: number }>
+    allocations?: Array<AllocationItemData>
 }
 
 // デフォルト値
-const defaultValues = {
+const getDefaultValues = (): TransactionFormType => ({
     id: null,
     type: 'expense' as TransactionType, // または該当の Enum 値
     amount: 0,
@@ -34,22 +35,32 @@ const defaultValues = {
     categoryId: null,
     description: '',
     allocations: [],     // ← defaultValues に型注釈 (: TransactionForm) を付けていれば never[] 回避できます
-}
+});
 
 const props = defineProps<{ transaction?: TransactionData, categories: CategoryData[], allocations?: Allocations }>();
 
-const form = useForm<TransactionFormType>(defaultValues);
+const form = useForm<TransactionFormType>(getDefaultValues());
+
+const mapTransactionToForm = (data: TransactionData): TransactionFormType => {
+    return {
+        id: data.id ?? null,
+        type: data.type,
+        amount: data.amount,
+        date: data.date,
+        fromAccountId: data.fromAccountId ?? null, // ← undefined にならないよう明確に null にする
+        toAccountId: data.toAccountId ?? null,   // ← undefined にならないよう明確に null にする
+        categoryId: data.categoryId ?? null,
+        description: data.description ?? '',
+        allocations: data.allocations ?? [],     // ← defaultValues に型注釈 (: TransactionForm) を付けていれば never[] 回避できます
+    }
+}
 
 watch(() => props.transaction, (newVal) => {
     if (newVal) {
-        form.defaults({
-            ...defaultValues,
-            ...newVal,
-        })
+        form.defaults(mapTransactionToForm(newVal))
     } else {
-        form.defaults(defaultValues)
+        form.defaults(getDefaultValues());
     }
-    form.reset();
 }, { immediate: true });
 
 
@@ -62,7 +73,7 @@ watch(() => props.transaction, (newVal) => {
                 各項目入力
             </DialogDescription>
         </DialogHeader>
-        <TransactionForm form-id="mo-dal-form" :transaction="transaction" :categories="categories" />
+        <TransactionForm form-id="modal-form" :transaction="transaction" :categories="categories" />
         <DialogFooter>
             <DialogClose as-child>
                 <Button type="button" variant="outline">

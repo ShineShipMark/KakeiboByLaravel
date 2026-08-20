@@ -10,6 +10,10 @@ declare namespace App {
       };
     }
     namespace Allocation {
+      export type AllocationItemData = {
+        categoryId: number;
+        amount: number;
+      };
       export type ExecuteAllocationData = {
         allocationRuleId: number;
         sourceAmount: number;
@@ -52,6 +56,7 @@ declare namespace App {
         toAccountId: number | null;
         categoryId: number | null;
         description: string | null;
+        allocations: App.Data.Allocation.AllocationItemData[] | null;
       };
       export type TransactionSearchData = {
         keyword: string | null;

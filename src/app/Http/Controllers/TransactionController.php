@@ -47,10 +47,17 @@ class TransactionController extends Controller
         ]);
     }
 
-    public function store(TransactionData $data)
+    public function store(TransactionData $data, TransactionService $service)
     {
-        $this->transactionService->createTransaction($data);
+        $service->createTransaction($data);
 
         return redirect()->route('transaction.index')->with('success', '登録完了');
+    }
+
+    public function update(int $id, TransactionData $data,TransactionService $service)
+    {
+        $service->updateTransaction($id,$data);
+
+        return redirect()->back()->with('success', '編集完了');
     }
 }

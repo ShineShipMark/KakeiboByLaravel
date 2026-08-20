@@ -14,30 +14,39 @@ import TypeChangeButtons from '@/components/utilities/TypeChangeButtons.vue';
 
 type TransactionData = App.Data.Transaction.TransactionData;
 type CategoryData = App.Data.Category.CategoryResponseData;
+type AllocationItemData = App.Data.Allocation.AllocationItemData;
 type TransactionType = App.Enum.TransactionType;
 type TransactionFormType = Omit<TransactionData, 'id' | 'allocations'> & {
     id?: number | null,
-    allocations?: Array<{ categoryId: number; amount: number }>
+    allocations?: Array<AllocationItemData>
 }
 
 const props = withDefaults(defineProps<{
     transaction?: TransactionData, categories: CategoryData[], formId?: string, showSubmitButton?: boolean
 }>(), { formId: 'transaction-form', showSubmitButton: false });
 
-// デフォルト値
-const defaultValues = {
-    id: null,
-    type: 'expense' as TransactionType, // または該当の Enum 値
-    amount: 0,
-    date: new Date().toISOString().split('T')[0],
-    fromAccountId: null, // ← undefined にならないよう明確に null にする
-    toAccountId: null,   // ← undefined にならないよう明確に null にする
-    categoryId: null,
-    description: '',
-    allocations: [],     // ← defaultValues に型注釈 (: TransactionForm) を付けていれば never[] 回避できます
-}
+const getInitialValues = (): TransactionFormType => {
+    if (props.transaction) {
+        return {
+            ...props.transaction,
+            id: props.transaction.id,
+            allocations: props.transaction.allocations ?? []
+        };
+    }
 
-const form = useForm<TransactionFormType>({ ...defaultValues, ...(props.transaction ?? {}) });
+    return {
+        id: null,
+        type: 'expense' as TransactionType, // または該当の Enum 値
+        amount: 0,
+        date: new Date().toISOString().split('T')[0],
+        fromAccountId: null, // ← undefined にならないよう明確に null にする
+        toAccountId: null,   // ← undefined にならないよう明確に null にする
+        categoryId: null,
+        description: '',
+        allocations: [],     // ← defaultValues に型注釈 (: TransactionForm) を付けていれば never[] 回避できます
+    }
+}
+const form = useForm<TransactionFormType>(getInitialValues());
 
 const isAllocationModalOpen = ref<boolean>(false);
 const handleSubmit = () => {
@@ -93,7 +102,7 @@ const handleAllocationConfirm = (allocations: Array<{ categoryId: number, amount
 
             <Field>
                 <Button v-if="showSubmitButton" type="submit" :disabled="form.processing">{{ form.id ? '更新する' : '登録する'
-                }}</Button>
+                    }}</Button>
             </Field>
         </FieldGroup>
     </Card>

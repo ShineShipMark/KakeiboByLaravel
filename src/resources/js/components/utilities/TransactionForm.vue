@@ -14,6 +14,9 @@ import TypeChangeButtons from '@/components/utilities/TypeChangeButtons.vue';
 
 type TransactionData = App.Data.Transaction.TransactionData;
 type CategoryData = App.Data.Category.CategoryResponseData;
+type TransactionSearchedData = Omit<TransactionData, 'allocations'> & {
+    allocations?: Array<{ categoryId: number; amount: number }>
+}
 type AllocationItemData = App.Data.Allocation.AllocationItemData;
 type TransactionType = App.Enum.TransactionType;
 type TransactionFormType = Omit<TransactionData, 'id' | 'allocations'> & {
@@ -22,7 +25,7 @@ type TransactionFormType = Omit<TransactionData, 'id' | 'allocations'> & {
 }
 
 const props = withDefaults(defineProps<{
-    transaction?: TransactionData, categories: CategoryData[], formId?: string, showSubmitButton?: boolean
+    transaction?: TransactionData | TransactionSearchedData, categories: CategoryData[], formId?: string, showSubmitButton?: boolean
 }>(), { formId: 'transaction-form', showSubmitButton: false });
 
 const getInitialValues = (): TransactionFormType => {

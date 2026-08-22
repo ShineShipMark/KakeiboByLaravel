@@ -24,6 +24,10 @@ type TransactionFormType = Omit<TransactionData, 'id' | 'allocations'> & {
     allocations?: Array<AllocationItemData>
 }
 
+type TransactionSearchedData = Omit<TransactionData, 'allocations'> & {
+    allocations?: Array<{ categoryId: number; amount: number }>
+}
+
 // デフォルト値
 const getDefaultValues = (): TransactionFormType => ({
     id: null,
@@ -37,11 +41,11 @@ const getDefaultValues = (): TransactionFormType => ({
     allocations: [],     // ← defaultValues に型注釈 (: TransactionForm) を付けていれば never[] 回避できます
 });
 
-const props = defineProps<{ transaction?: TransactionData, categories: CategoryData[], allocations?: Allocations }>();
+const props = defineProps<{ transaction?: TransactionSearchedData, categories: CategoryData[], allocations?: Allocations }>();
 
 const form = useForm<TransactionFormType>(getDefaultValues());
 
-const mapTransactionToForm = (data: TransactionData): TransactionFormType => {
+const mapTransactionToForm = (data: TransactionSearchedData): TransactionFormType => {
     return {
         id: data.id ?? null,
         type: data.type,

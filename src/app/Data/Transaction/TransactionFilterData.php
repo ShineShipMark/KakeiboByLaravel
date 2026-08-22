@@ -9,18 +9,17 @@ use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 use Symfony\Contracts\Service\Attribute\Required;
 
 #[TypeScript]
-class TransactionSearchData extends Data
+class TransactionFilterData extends Data
 {
     public function __construct(
         #[Required]
         public ?string $keyword = null,
-        public string $type = 'all',
+        public TransactionType $type = TransactionType::All,
         public ?int $categoryId = null,
         public ?string $startDate = null,
         public ?string $endDate = null,
-        public string $account = 'cash',
+        public int $accountId = 1,
         public int $page = 1,
         public int $perPage =15,
-    )
-    {}
+    ){}
 }

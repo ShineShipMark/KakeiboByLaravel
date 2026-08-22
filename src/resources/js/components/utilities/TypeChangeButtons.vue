@@ -4,18 +4,14 @@ import Card from '@/components/ui/card/Card.vue';
 import Label from '@/components/ui/label/Label.vue';
 import { config } from '@/types/vue-types';
 import { InertiaForm } from '@inertiajs/vue3';
-import { TransactionTypeWithAll } from '@/types/vue-types';
 type TransactionData = App.Data.Transaction.TransactionData;
 type TransactionType = App.Enum.TransactionType;
-type AccountType = App.Enum.AccountType;
+
 type TransactionFormType = Omit<TransactionData, 'id' | 'allocations'> & {
     id?: number | null,
     allocations?: Array<{ categoryId: number; amount: number }>
 }
-type TransactionSearchForm = Omit<App.Data.Transaction.TransactionSearchData, 'type' | 'account'> & {
-    type: TransactionTypeWithAll,
-    account: AccountType
-}
+type TransactionSearchForm = App.Data.Transaction.TransactionFilterData;
 
 const form = defineModel<InertiaForm<TransactionFormType | TransactionSearchForm>>({ required: true });
 

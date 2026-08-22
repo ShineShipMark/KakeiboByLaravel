@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Data\Allocation\AllocationItemData;
 use App\Data\Transaction\TransactionData;
+use App\Data\Transaction\TransactionFilterData;
 use App\Enum\TransactionType;
 use App\Models\Account;
 use App\Models\Transaction;
@@ -14,11 +15,11 @@ class TransactionService
 {
     /**
      * ページ数で制限された取得結果を返す
-     * @param array $filters 検索条件
+     * @param TransactionFilterData $filters 検索条件
      * @param int $perPage 1っページあたりの表示件数
      * @return LengthAwarePaginator 取得結果
      */
-    public function getPaginatedTransactions(array $filters = [], int $perPage = 20): LengthAwarePaginator
+    public function getPaginatedTransactions(TransactionFilterData $filters, int $perPage = 20): LengthAwarePaginator
     {
         // ドメインモデルの各ロジック(categoryなど)からリレーション定義を取得して、
         // 関連するキーでHWEREしたSELECTで自動取得してくれる
@@ -27,23 +28,27 @@ class TransactionService
             ->orderBy('date', 'desc')
             ->orderBy('id', 'desc');    
 
-        if (!empty($filters['year_month'])) {
-            $query->where('date', 'like', $filters['year_month'] . '%');
+        if ($filters->startDate) {
+            $query->where('date', '>', $filters->startDate);
         }
 
-        if (!empty($filters['type'])) {
-            $query->where('type', $filters['type']);
+        if ($filters->endDate) {
+            $query->where('date', '<', $filters->endDate);
         }
 
-        if (!empty($filters['category_id'])) {
-            $query->where('category_id', $filters['category_id']);
+        if ($filters->type) {
+            $query->where('type', $filters->type);
+        }
+
+        if ($filters->categoryId) {
+            $query->where('category_id', $filters->categoryId);
         }
 
         // 特定の口座・財布に関わる取引（出金元 OR 入金先）
         if (!empty($filters['account_id'])) {
             $query->where(function ($q) use ($filters) {
-                $q->where('from_account_id', $filters['account_id'])
-                  ->orWhere('to_account_id', $filters['account_id']);
+                $q->where('from_account_id', $filters->accountId)
+                  ->orWhere('to_account_id', $filters->accountId);
             });
         }
 

@@ -58,13 +58,13 @@ declare namespace App {
         description: string | null;
         allocations: App.Data.Allocation.AllocationItemData[] | null;
       };
-      export type TransactionSearchData = {
+      export type TransactionFilterData = {
         keyword: string | null;
-        type: string;
+        type: App.Enum.TransactionType;
         categoryId: number | null;
         startDate: string | null;
         endDate: string | null;
-        account: string;
+        accountId: number;
         page: number;
         perPage: number;
       };

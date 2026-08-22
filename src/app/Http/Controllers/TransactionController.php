@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Data\Transaction\TransactionData;
+use App\Data\Transaction\TransactionFilterData;
 use App\Models\Account;
 use App\Models\Category;
 use App\Services\TransactionService;
@@ -19,17 +20,9 @@ class TransactionController extends Controller
         throw new \Exception('Not implemented');
     }
 
-    public function index(Request $request): Response
+    public function index(TransactionFilterData $filters, TransactionService $service): Response
     {
-        $filters = $request->only([
-            'keyword',
-            'year_month',
-            'type',
-            'category_id',
-            'account_id',
-        ]);
-
-        $transactions = $this->transactionService->getPaginatedTransactions($filters);
+        $transactions = $service->getPaginatedTransactions($filters);
 
         return Inertia::render('Transaction/Index', [
             'transactions' => $transactions,

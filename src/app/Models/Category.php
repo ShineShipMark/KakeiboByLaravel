@@ -25,6 +25,7 @@ class Category extends Model
     // ★ Enum 型キャストの追加
     protected $casts = [
         'type' => CategoryType::class,
+        'parent_id'=>'integer',
         'sort_order' => 'integer',
     ];
 
@@ -73,6 +74,11 @@ class Category extends Model
         return $query->whereNull('parent_id');
     }
 
+    /**
+     * 小項目（親カテゴリがあるもの）のみを取得するスコープ
+     * 
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     */
     public function scopeSubCategories(Builder $query): Builder
     {
         return $query->whereNotNull('parent_id');
@@ -86,6 +92,11 @@ class Category extends Model
     public function isExpense(): bool
     {
         return $this->type === CategoryType::Expense;
+    }
+
+    public function isTransfer():bool
+    {
+        return $this->type === CategoryType::Transfer;
     }
 
     public function calculateTotalSpentForPeriod(BillingPeriod $period): int

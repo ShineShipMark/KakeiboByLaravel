@@ -21,10 +21,22 @@ declare namespace App {
       };
     }
     namespace Budget {
+      export type BudgetData = {
+        id: number | null;
+        categoryId: number;
+        yearMonth: string;
+        amount: number;
+        carryoverAmount: number;
+        totalAmount: number;
+        isClosed: boolean;
+        category: App.Data.Category.CategoryResponseData | null;
+      };
       export type BudgetProgressData = {
         categoryId: number;
         categoryName: string;
-        budgetAmount: number;
+        baseBudgetAmount: number;
+        carryoverAmount: number;
+        totalBudgetAmount: number;
         spentAmount: number;
         remainingAmount: number;
         usageRate: number;
@@ -34,6 +46,17 @@ declare namespace App {
         categoryId: number;
         amount: number;
         yearMonth: string;
+      };
+      export type MonthlyBudgetRolloverRequestData = {
+        targetYearMonth: string;
+        actions: App.Data.Budget.RolloverActionData[];
+      };
+      export type RolloverActionData = {
+        budgetId: number;
+        actionType: App.Enum.RolloverActionType;
+        surplusAmount: number;
+        targetSavingsCategoryId: number | null;
+        customAmount: number | null;
       };
     }
     namespace Category {
@@ -74,6 +97,7 @@ declare namespace App {
     export type AccountType = "bank" | "cash" | "e_money" | "credit_card";
     export type AllocationType = "fixed" | "percentage";
     export type CategoryType = "income" | "expense" | "transfer";
+    export type RolloverActionType = "carryover" | "savings" | "discard";
     export type TransactionType = "all" | "income" | "expense" | "transfer";
   }
 }

@@ -2,16 +2,19 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use InvalidArgumentException;
 
 class Budget extends Model
 {
-    protected $fillable = ['category_id', 'year_month', 'amount'];
+    protected $fillable = ['category_id', 'year_month', 'amount','carryover_amount','is_closed'];
 
     protected $casts = [
-        'amount' => 'decimal:2'
+        'amount' => 'decimal:2',
+        'carryover_amount'=> 'decimal:2',
+        'is_close' => 'boolean'
     ];
 
     public function category(): BelongsTo
@@ -47,5 +50,12 @@ class Budget extends Model
     public function calculateRemainingAmount(float $spentAmount): float
     {
         return (float) $this->amount - $spentAmount;
+    }
+
+    public function totalAmount():Attribute
+    {
+        return Attribute::make(
+            get:fn()=>(float) $this->amount + (float) $this->carryover_amount,
+        );
     }
 }

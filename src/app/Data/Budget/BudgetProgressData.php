@@ -13,7 +13,9 @@ class BudgetProgressData extends Data
     public function __construct(
         public int $categoryId,
         public string $categoryName,
-        public int $budgetAmount,
+        public int $baseBudgetAmount,    // 基本設定額
+        public int $carryoverAmount,     // 💡 追加: 前月からの繰越額
+        public int $totalBudgetAmount,
         public int $spentAmount,
         public int $remainingAmount,
         public float $usageRate,
@@ -24,16 +26,20 @@ class BudgetProgressData extends Data
     {
         $budget = $category->budgets->firstWhere('year_month', $yearMonth);
         $totalSpent = $category->calculateTotalSpentForPeriod($period);
-        $budgetAmount = $budget ? $budget->amount : 0;
+        $baseAmount = $budget ? (int) $budget->amount : 0;
+        $carryoverAmount = $budget ? (int) $budget->carryover_amount : 0; // 💡 繰越額を取得
+        $totalBudget = $baseAmount + $carryoverAmount; // 💡 実質合計予算
 
         return new self(
             categoryId: $category->id,
             categoryName: $category->name,
-            budgetAmount: $budgetAmount,
+            baseBudgetAmount: $baseAmount,
+            carryoverAmount: $carryoverAmount,
+            totalBudgetAmount: $totalBudget,
             spentAmount: $totalSpent,
-            remainingAmount: max(0, $budgetAmount - $totalSpent),
-            usageRate: $budgetAmount > 0 ? round(($totalSpent / $budgetAmount) * 100, 1) : 0.0,
-            isOver: $budgetAmount > 0 && $totalSpent > $budgetAmount,
+            remainingAmount: max(0, $totalBudget - $totalSpent),
+            usageRate: $totalBudget > 0 ? round(($totalSpent / $totalBudget) * 100, 1) : 0.0,
+            isOver: $totalBudget > 0 && $totalSpent > $totalBudget,
         );
     }
 }

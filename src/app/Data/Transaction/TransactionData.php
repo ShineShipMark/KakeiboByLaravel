@@ -45,6 +45,10 @@ class TransactionData extends Data
             toAccountId:$transaction->to_account_id,
             categoryId:$transaction->category_id,
             description:$transaction->description,
+            // ↓ リレーションがロードされている場合は DTO の配列に自動マッピングする
+            allocations: $transaction->relationLoaded('allocations')
+            ? AllocationItemData::collect($transaction->allocations)->toArray()
+            : [],
         );
     }
 }

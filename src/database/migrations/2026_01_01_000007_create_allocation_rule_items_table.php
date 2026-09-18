@@ -23,9 +23,10 @@ return new class extends Migration
             $table->foreignId('category_id')
                 ->constrained('categories')
                 ->cascadeOnDelete();
-
+                
+            $table->integer('amount');
             $table->string('calc_type')->default('percentage'); 
-            $table->decimal('value', 10, 2); 
+            $table->decimal('value', 10, 2)->default(0); 
         
             $table->timestamps();
         });

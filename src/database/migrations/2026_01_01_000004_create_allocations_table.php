@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('transaction_id')->constrained()->cascadeOnDelete();
             $table->foreignId('category_id')->constrained()->cascadeOnDelete();
+            $table->string('year_month');
             $table->integer('amount');
             $table->string('memo')->nullable();
             $table->timestamps();

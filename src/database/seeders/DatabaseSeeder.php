@@ -13,9 +13,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->call(ExpenseCategorySeeder::class);
-        $this->call(IncomeCategorySeeder::class);
-        $this->call(ExpensePurposeSeeder::class);
-        $this->call(IncomePurposeSeeder::class);
+        $this->call([
+            CategorySeeder::class,
+            AccountSeeder::class,
+            SavingGoalSeeder::class,
+            AllocationRuleSeeder::class,
+            AllocationRuleItemSeeder::class,
+            BudgetSeeder::class,
+            TransactionSeeder::class,
+            AllocationSeeder::class,
+        ]);
     }
 }

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('allocation_saving_goals', function (Blueprint $table) {
+        Schema::create('saving_goals', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->integer('target_amount');
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('allocation_saving_goals');
+        Schema::dropIfExists('saving_goals');
     }
 };

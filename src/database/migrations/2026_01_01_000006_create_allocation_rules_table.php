@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('allocation_rules', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('keyword');
+            $table->string('keyword')->default('');
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });

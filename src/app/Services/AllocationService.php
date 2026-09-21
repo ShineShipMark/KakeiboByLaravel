@@ -1,5 +1,6 @@
 <?php
 
+use App\DTO\AllocationDTO;
 use App\Models\AllocationRule;
 use App\Models\AllocationRuleItem;
 use App\Models\Transaction;
@@ -9,6 +10,12 @@ use Illuminate\Support\Facades\DB;
 
 class AllocationService
 {
+
+    public function executeCustomAllocation(array $customAllocations, int $fromAccountId, Carbon $executeDate):Collection
+    {
+        return $this->saveAllocations(collect($customAllocations), $fromAccountId, $executeDate);
+    }
+
     /**
      * 割り当てを実行
      * @param int $allocationRuleId 配分ルールのID
@@ -16,26 +23,38 @@ class AllocationService
      * @param Carbon $executeDate 配分の実行日
      * @return Collection 結果の一覧
      */
-    public function executeAllocation(int $allocationRuleId, int $sourceAmount, Carbon $executeDate): Collection
+    public function executeRuleAllocation(int $allocationRuleId, int $sourceAmount, int $fromAccountId, Carbon $executeDate): Collection
     {
-        // トランザクション
-        return DB::transaction(function() use($allocationRuleId, $sourceAmount,$executeDate) {
-            // 配分ルールと内訳項目(家、スマホ料金など)を取得            
-            $rule = AllocationRule::with('items')->findOrFail($allocationRuleId);
+        // 配分ルールと内訳項目(家、スマホ料金など)を取得            
+        $rule = AllocationRule::with('items')->findOrFail($allocationRuleId);
+        $allocations = $rule->items->map(function(AllocationRuleItem $item) use ($sourceAmount){
+            return [
+                'category_id' => $item->category_id,
+                'amount' => $item->calculateAmount($sourceAmount),
+                'to_account_id' => $item->to_account_id,
+            ];
+        });
+        
+        return $this->saveAllocations($allocations, $fromAccountId, $executeDate);
+    }
 
-            // バリデーション
-            $rule->validateTotalPercentage();
-
+    private function saveAllocations(Collection $allocations, int $fromAccountId, Carbon $executeDate):Collection
+    {
+        return DB::transaction(function() use($allocations, $fromAccountId, $executeDate) {
             // Transactionインスタンスを生成し、null項目を除外、個別の取引ルールをチェックして、取引をDBへ保存する
-            return $rule->items
-                ->map(fn(AllocationRuleItem $item) => $item->createTransaction($rule->from_account_id, $sourceAmount, $executeDate))
-                ->filter()
-                ->map(function (Transaction $transaction) {
-                    $transaction->validateInvariants();
-                    $transaction->save();
-
-                    return $transaction;
-                });
+            return $allocations->map(function (AllocationDTO $item) use ($fromAccountId, $executeDate){
+                $transaction = new Transaction([
+                    'from_account_id' => $fromAccountId,
+                    'to_account_id' => $item->toAccountId,
+                    'category_id' => $item->categoryId,
+                    'amount' => $item->amount,
+                    'date' => $executeDate,
+                    'type' => 'transfer',
+                ]);
+                $transaction->validateInvariants();
+                $transaction->save();
+                return $transaction;
+            });
         });
     }
 }

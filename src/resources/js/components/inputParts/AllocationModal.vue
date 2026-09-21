@@ -16,17 +16,20 @@ import Button from '../ui/button/Button.vue';
 
 type CategoryData = App.Data.Category.CategoryResponseData;
 
+// 分配内容についてのPropsを受け取る
 const props = defineProps<{
     totalAmount: number,
     categories: CategoryData[],
     initialAllocations?: Array<{ categoryId: number, amount: number }>
 }>();
 
+// モーダルの開閉についての真偽値をPropsで受け取る
 const isOpen = defineModel<boolean>('open', { default: false });
 
+// emitイベントの型定義
 const emit = defineEmits<{ confirm: [allocations: Array<{ categoryId: number, amount: number }>] }>();
 
-
+// カテゴリごとに分かれている分配ルールについて、選択中のカテゴリに合致したデータを取得する
 const localAllocations = ref<Array<{ categoryId: number; amount: number }>>(
     props.categories.map(p => {
         const exist = props.initialAllocations?.find(a => a.categoryId === p.id);
@@ -37,21 +40,26 @@ const localAllocations = ref<Array<{ categoryId: number; amount: number }>>(
     })
 )
 
+// 分配の合計値を計算
 const allocatedSum = computed(() => {
     return localAllocations.value.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
 });
 
+// 収入などの合計値から分配の合計値を引いた余剰分を計算
 const remainingAmount = computed(() => {
     return props.totalAmount - allocatedSum.value;
 })
 
+// モーダルを閉じる
 const handleClose = () => {
     isOpen.value = false;
 }
 
 const handleConfirm = () => {
     if (remainingAmount.value !== 0) return;
+    // 『confirm』という名前のイベントを発行し、データを親コンポーネントに渡す
     emit('confirm', localAllocations.value);
+    //　モーダルを閉じる
     handleClose();
 }
 

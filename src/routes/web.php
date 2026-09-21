@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AllocationController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\InputController;
@@ -21,3 +22,4 @@ Route::get('/history', [HistoryController::class, 'index'])->name('history.index
 Route::put('/history/{id}', [HistoryController::class, 'update'])->name('history.update');
 Route::delete('/history/{id}', [HistoryController::class, 'destroy'])->name('history.destroy');
 Route::get('/api/masters', [MasterController::class, 'index'])->name('api.masters');
+Route::patch('/allocations/preview', [AllocationController::class, 'preview'])->name('allocations.preview');

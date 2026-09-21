@@ -26,35 +26,43 @@ type TransactionSearchedData = Omit<TransactionData, 'allocations'> & {
     allocations?: Array<{ categoryId: number; amount: number }>
 }
 
+// 検索結果を受け取る
 const props = defineProps<{
     transaction?: TransactionSearchedData[], filters?: TransactionSearchForm,
     categories: CategoryData[], accounts: AccountBalanceSummaryData[]
 }>();
 
+// 受け取った結果から、一致する口座とカテゴリの情報を算出
 const accountMap = computed(() => { return new Map(props.accounts.map(acc => [acc.accountId, acc.accountName])) });
 const categoryMap = computed(() => { return new Map(props.categories.map(cat => [cat.id, cat])) });
 
+// 口座名を取得
 const getAccountName = (id?: number | null) => id ? (accountMap.value.get(id) ?? '-') : '-';
 
+//親カテゴリを取得
 const getParentCategoryName = (categoryId: number | null): string => {
     if (!categoryId) return '未設定';
     const category = categoryMap.value.get(categoryId)?.parent
     return category?.parent?.name ?? '未設定';
 }
 
+// 子カテゴリを取得
 const getChildrenCategoryName = (categoryId: number | null): string => {
     if (!categoryId) return '未設定';
     const category = categoryMap.value.get(categoryId)
     return category?.name ?? '未設定';
 }
 
+// 検索条件の初期値を設定
 const getInitialValues = (): TransactionSearchForm => {
+    // 検索条件が既に存在するときは、これを初期値をとして設定
     if (props.filters) {
         return {
             ...props.filters
         };
     }
 
+    // 検索条件の初期値を未入力に設定
     return {
         keyword: null,
         type: 'expense' as TransactionType, // または該当の Enum 値
@@ -67,21 +75,27 @@ const getInitialValues = (): TransactionSearchForm => {
     }
 }
 
+// フォームの初期値を設定
 const form = useForm<TransactionSearchForm>(getInitialValues());
 
-
+// ロード時に検索実行
 onMounted(async () => {
     searchData();
 });
 
+// モーダルの開閉決定の真偽値
 const isModalOpen = ref(false)
+// 選択された記録
 const selectedTransaction = ref<TransactionSearchedData | undefined>(undefined)
 
+// 編集モーダルを開く
 const openEditModal = (data: TransactionSearchedData) => {
+    // 選択された記録に、引数で渡されたデータを格納
     selectedTransaction.value = data;
     isModalOpen.value = true;
 }
 
+// カラム名
 const columnName = {
     type: '種類',
     category: '大目的',
@@ -91,6 +105,7 @@ const columnName = {
     description: '詳細'
 }
 
+// 検索を実行
 const searchData = () => {
     router.get('transactions', {
         ...form.data(),
@@ -100,17 +115,19 @@ const searchData = () => {
     });
 }
 
+// データを削除
 const deleteData = (id: number) => {
     if (confirm('本当に削除しますか？')) {
         form.delete(`${window.location.pathname}/${id}`)
     }
 }
 
-
+// 現在の条件のまま検索のGET送信実行
 const handleSubmit = () => {
     form.get('/transactions', { preserveState: true, preserveScroll: true });
 }
 
+// 収支がボタンで変更されたとき、再検索実行
 const handleTypeChange = (newType: TransactionType) => {
     form.type = newType;
     handleSubmit();

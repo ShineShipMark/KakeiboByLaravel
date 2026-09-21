@@ -5,6 +5,7 @@ import TransactionForm from '@/components/utilities/TransactionForm.vue';
 
 type CategoryData = App.Data.Category.CategoryResponseData;
 
+// HandlerInertiaReqiests.phpのshareメソッドによって、カテゴリデータを一度取得する
 const page = usePage();
 
 const categories = page.props.categories as CategoryData[];

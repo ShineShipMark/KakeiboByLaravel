@@ -127,7 +127,7 @@ const handleSubmit = () => {
     form.get('/transactions', { preserveState: true, preserveScroll: true });
 }
 
-// 収支がボタンで変更されたとき、再検索実行
+// 収支がボタンで変更されたとき、
 const handleTypeChange = (newType: TransactionType) => {
     form.type = newType;
     handleSubmit();

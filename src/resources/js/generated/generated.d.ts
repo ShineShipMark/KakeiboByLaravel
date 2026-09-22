@@ -13,11 +13,13 @@ declare namespace App {
       export type AllocationItemData = {
         categoryId: number;
         amount: number;
+        toAccountId: number | null;
+        id: number | null;
       };
       export type ExecuteAllocationData = {
         allocationRuleId: number;
         sourceAmount: number;
-        executeData: string;
+        executeDate: string;
       };
     }
     namespace Budget {

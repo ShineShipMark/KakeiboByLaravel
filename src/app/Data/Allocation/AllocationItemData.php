@@ -13,8 +13,9 @@ class AllocationItemData extends Data
     public function __construct(
         #[Required]
         public int $categoryId,
-
         #[Required, Min(1)]
         public int $amount,
+        public ?int $toAccountId = null,
+        public ?int $id = null,
     ) {}
 }

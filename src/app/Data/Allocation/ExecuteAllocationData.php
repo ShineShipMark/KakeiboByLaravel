@@ -18,6 +18,6 @@ class ExecuteAllocationData extends Data
 
         #[WithCast(DateTimeInterfaceCast::class, format: 'Y-m-d')]
         #[TypeScriptType('string')]
-        public Carbon $executeData,
+        public Carbon $executeDate,
     ){}
 }

@@ -1,6 +1,6 @@
 <?php
 
-use App\DTO\AllocationDTO;
+use App\Data\Allocation\AllocationItemData;
 use App\Models\AllocationRule;
 use App\Models\AllocationRuleItem;
 use App\Models\Transaction;
@@ -42,7 +42,7 @@ class AllocationService
     {
         return DB::transaction(function() use($allocations, $fromAccountId, $executeDate) {
             // Transactionインスタンスを生成し、null項目を除外、個別の取引ルールをチェックして、取引をDBへ保存する
-            return $allocations->map(function (AllocationDTO $item) use ($fromAccountId, $executeDate){
+            return $allocations->map(function (AllocationItemData $item) use ($fromAccountId, $executeDate){
                 $transaction = new Transaction([
                     'from_account_id' => $fromAccountId,
                     'to_account_id' => $item->toAccountId,
@@ -63,7 +63,7 @@ class AllocationService
         return DB::transaction(function () use ($parentTransactionId, $allocations, $fromAccountId, $date){
             Transaction::where('parent_transaction_id', $parentTransactionId)->delete();
 
-            return collect($allocations)->map(function ($item) use ($parentTransactionId, $fromAccountId, $date){
+            return collect($allocations)->map(function (AllocationItemData $item) use ($parentTransactionId, $fromAccountId, $date){
                 $transaction = new Transaction([
                     'parent_transaction_id' => $parentTransactionId,
                     'from_account_id' => $fromAccountId,
@@ -71,7 +71,7 @@ class AllocationService
                     'category_id' => $item->categoryId,
                     'amount' => $item->amount,
                     'date' => $item->$date,
-                    'type' => $item->type,
+                    'type' => 'transfer',
                 ]);
 
                 $transaction->validateInvariants();

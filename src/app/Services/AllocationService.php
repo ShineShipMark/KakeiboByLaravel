@@ -57,4 +57,28 @@ class AllocationService
             });
         });
     }
+
+    public function updateAllocations(int $parentTransactionId, array $allocations, int $fromAccountId, Carbon $date):Collection
+    {
+        return DB::transaction(function () use ($parentTransactionId, $allocations, $fromAccountId, $date){
+            Transaction::where('parent_transaction_id', $parentTransactionId)->delete();
+
+            return collect($allocations)->map(function ($item) use ($parentTransactionId, $fromAccountId, $date){
+                $transaction = new Transaction([
+                    'parent_transaction_id' => $parentTransactionId,
+                    'from_account_id' => $fromAccountId,
+                    'to_account_id' => $item->toAccountId,
+                    'category_id' => $item->categoryId,
+                    'amount' => $item->amount,
+                    'date' => $item->$date,
+                    'type' => $item->type,
+                ]);
+
+                $transaction->validateInvariants();
+                $transaction->save();
+
+                return $transaction;
+            });
+        });
+    }
 }

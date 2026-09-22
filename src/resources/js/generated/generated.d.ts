@@ -81,6 +81,7 @@ declare namespace App {
         toAccountId: number | null;
         categoryId: number | null;
         description: string | null;
+        parentTransactionId: number | null;
         allocations: App.Data.Allocation.AllocationItemData[] | null;
       };
       export type TransactionFilterData = {

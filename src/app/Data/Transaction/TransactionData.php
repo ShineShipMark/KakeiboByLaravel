@@ -29,6 +29,8 @@ class TransactionData extends Data
         public ?int $toAccountId,
         public ?int $categoryId,
         public ?string $description,
+        public ?int $parentTransactionId = null,
+
         #[DataCollectionOf(AllocationItemData::class)]
         /** @var AllocationItemData[]|null */
         public ?array $allocations = [],

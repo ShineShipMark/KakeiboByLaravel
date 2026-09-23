@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\AccountId;
+use App\Services\AccountBalanceService;
 use App\UseCases\GetBalance;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -11,14 +13,11 @@ class HomeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $requsest, GetBalance $useCase)
+    public function index(AccountBalanceService $service)
     {
-        $balances = $useCase->handle();
+        $balances = $service->getMultipleAccountSummries([AccountId::MainBank->value, AccountId::Cash->value]);
 
-        return Inertia::render('/home', [
-            'accountAmount' => $balances['accountAmount'],
-            'cashAmount' => $balances['cashAccount']
-        ]);
+        return Inertia::render('home', ['balances' => $balances]);
     }
 
     /**

@@ -10,16 +10,27 @@ declare namespace App {
       };
     }
     namespace Allocation {
+      export type AllocationData = {
+        id: number;
+        transactionId: number;
+        categoryId: number;
+        amount: number;
+        memo: string | null;
+      };
       export type AllocationItemData = {
         categoryId: number;
         amount: number;
         toAccountId: number | null;
         id: number | null;
       };
+      export type AllocationPreviewData = {
+        categoryId: number;
+      };
       export type ExecuteAllocationData = {
         allocationRuleId: number;
         sourceAmount: number;
         executeDate: string;
+        allocations: App.Data.Allocation.AllocationItemData[] | null;
       };
     }
     namespace Budget {

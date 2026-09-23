@@ -8,6 +8,8 @@ use App\Data\Transaction\TransactionFilterData;
 use App\Models\Account;
 use App\Models\Category;
 use App\Services\TransactionService;
+use App\UseCases\StoreTransactionAction;
+use App\UseCases\UpdateTransactionAction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -16,13 +18,6 @@ use Inertia\Response;
 
 class TransactionController extends Controller
 {
-    public function __construct(
-        private readonly TransactionService $transactionService
-    )
-    {
-        throw new \Exception('Not implemented');
-    }
-
     public function index(TransactionFilterData $filters, TransactionService $service): Response
     {
         $transactions = $service->getPaginatedTransactions($filters);
@@ -43,29 +38,16 @@ class TransactionController extends Controller
         ]);
     }
 
-    public function store(TransactionData $data, TransactionService $transactionService, AllocationService $allocationService)
+    public function store(TransactionData $data, StoreTransactionAction $action)
     {
-       DB::transaction(function () use ($data, $transactionService, $allocationService){
-            $transactionService->createTransaction($data);
+        $action($data);
 
-            if (!empty($data->allocations)) {
-                $executeDate = new Carbon($data->date);
-                $allocationService->executeCustomAllocation($data->allocations, $data->fromAccountId, $executeDate);
-            }
-        });
         return redirect()->route('transaction.index')->with('success', '登録完了');
     }
 
-    public function update(int $id, TransactionData $data,TransactionService $transactionService, AllocationService $allocationService)
+    public function update(int $id, TransactionData $data, UpdateTransactionAction $action)
     {
-        DB::transaction(function () use ($id, $data, $transactionService, $allocationService){
-            $transactionService->updateTransaction($id,$data);
-
-            if (!(empty($data->allocations))) {
-                $convertedDate = new Carbon($data->date);
-                $allocationService->updateAllocations($id, $data->allocations, $data->fromAccountId, $convertedDate);
-            }
-        });
+        $action($id, $data);
 
         return redirect()->back()->with('success', '編集完了');
     }

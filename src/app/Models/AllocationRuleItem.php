@@ -82,7 +82,7 @@ class AllocationRuleItem extends Model
         return new Transaction([
             'from_account_id'  => $fromAccountId,
             'to_account_id' =>  $this->to_account_id,
-            'category_is' => $this->category_id,
+            'category_id' => $this->category_id,
             'amount' =>  $allocatedAmount,
             'type' => TransactionType::Transfer,
             'date' => $executeDate->toDateString(),

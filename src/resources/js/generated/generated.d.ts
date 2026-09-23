@@ -32,6 +32,20 @@ declare namespace App {
         executeDate: string;
         allocations: App.Data.Allocation.AllocationItemData[] | null;
       };
+      export type SaveAllocationRuleData = {
+        id: number | null;
+        name: number;
+        items: App.Data.Allocation.SaveAllocationRuleItemData[];
+      };
+      export type SaveAllocationRuleItemData = {
+        id: number | null;
+        toAccountId: number;
+        categoryId: number;
+        type: App.Enum.AllocationType;
+        amount: number | null;
+        percentage: number | null;
+        priority: number;
+      };
     }
     namespace Budget {
       export type BudgetData = {

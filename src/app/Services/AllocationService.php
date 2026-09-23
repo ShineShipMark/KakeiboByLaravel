@@ -1,6 +1,7 @@
 <?php
 
 use App\Data\Allocation\AllocationItemData;
+use App\Models\Allocation;
 use App\Models\AllocationRule;
 use App\Models\AllocationRuleItem;
 use App\Models\Transaction;
@@ -80,5 +81,12 @@ class AllocationService
                 return $transaction;
             });
         });
+    }
+
+    public function getPreview(int $categoryId):Collection
+    {
+        return Allocation::where('category_id', $categoryId)
+            ->with('category')
+            ->get();
     }
 }

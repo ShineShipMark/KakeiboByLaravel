@@ -2,21 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Allocation;
-use Illuminate\Http\Request;
+use AllocationService;
+use App\Data\Allocation\AllocationData;
+use App\Data\Allocation\AllocationPreviewData;
 
 class AllocationController extends Controller
 {
-    public function preview(Request $request) 
+    public function preview(AllocationPreviewData $data, AllocationService $service) 
     {
-        $validate = $request->validate([
-            'category_id' => ['required', 'exits:categories,id'],
-        ]);
 
-        $allocations = Allocation::where('category_id', $validate['category_id'])
-            ->with('category')
-            ->get();
+        $allocations = $service->getPreview($data->categoryId);
         
-        return back()->with('allocations', $allocations);
+        return back()->with('allocations', AllocationData::collect($allocations));
     }
 }

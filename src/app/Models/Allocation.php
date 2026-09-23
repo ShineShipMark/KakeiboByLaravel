@@ -14,7 +14,7 @@ class Allocation extends Model
         'transaction_id',
         'category_id',
         'amount',
-        'mamo'
+        'memo'
     ];
 
     public function transaction(): BelongsTo

@@ -8,6 +8,13 @@ declare namespace App {
         allocatedBalance: number;
         unallocatedBalance: number;
       };
+      export type GetAccountData = {
+        id: number;
+        name: string;
+        type: App.Enum.AccountType;
+        balance: number;
+        is_active: boolean;
+      };
     }
     namespace Allocation {
       export type AllocationData = {
@@ -32,9 +39,20 @@ declare namespace App {
         executeDate: string;
         allocations: App.Data.Allocation.AllocationItemData[] | null;
       };
+      export type GetAllocationRuleItemData = {
+        id: number | null;
+        toAccountId: number | null;
+        toAccount: App.Data.Account.GetAccountData | null;
+        categoryId: number | null;
+        category: App.Data.Category.CategoryResponseData | null;
+        type: App.Enum.AllocationType;
+        amount: number | null;
+        percentage: number | null;
+        priority: number;
+      };
       export type SaveAllocationRuleData = {
         id: number | null;
-        name: number;
+        name: string;
         items: App.Data.Allocation.SaveAllocationRuleItemData[];
       };
       export type SaveAllocationRuleItemData = {

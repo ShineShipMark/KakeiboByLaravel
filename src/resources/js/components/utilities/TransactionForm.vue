@@ -18,7 +18,7 @@ type TransactionData = App.Data.Transaction.TransactionData;
 type CategoryData = App.Data.Category.CategoryResponseData;
 // 検索結果のために、TransactionData型を拡張して分配内容を持てるようにする
 type TransactionSearchedData = Omit<TransactionData, 'allocations'> & {
-    allocations?: Array<{ categoryId: number; amount: number }>
+    allocations?: Array<{ id: number, amount: number, toAccountId: number, categoryId: number; }>
 }
 type AllocationItemData = App.Data.Allocation.AllocationItemData;
 type TransactionType = App.Enum.TransactionType;
@@ -63,6 +63,7 @@ const getInitialValues = (): TransactionFormType => {
         toAccountId: null,   // ← undefined にならないよう明確に null にする
         categoryId: null,
         description: '',
+        parentTransactionId: null,
         allocations: [],     // ← defaultValues に型注釈 (: TransactionForm) を付けていれば never[] 回避できます
     }
 }
@@ -89,7 +90,7 @@ const handleSubmit = () => {
 }
 
 // 分配モーダルが閉じられた場合、フォームの送信内容に分配内容を格納してフォーム送信を行う
-const handleAllocationConfirm = (allocations: Array<{ categoryId: number, amount: number }>) => {
+const handleAllocationConfirm = (allocations: AllocationItemData[]): void => {
     form.allocations = allocations;
     handleSubmit();
 }
@@ -143,11 +144,12 @@ watch(() => form.type, (newType) => {
             </FieldSet>
 
             <AllocationModal v-model:open="isAllocationModalOpen" :total-amount="form.amount" :categories="categories"
-                @close="isAllocationModalOpen = false" @confirm="handleAllocationConfirm" />
+                :initial-allocations="form.allocations" @close="isAllocationModalOpen = false"
+                @confirm="handleAllocationConfirm" />
 
             <Field>
                 <Button v-if="showSubmitButton" type="submit" :disabled="form.processing">{{ form.id ? '更新する' : '登録する'
-                    }}</Button>
+                }}</Button>
             </Field>
         </FieldGroup>
     </Card>

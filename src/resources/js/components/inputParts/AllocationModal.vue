@@ -15,26 +15,28 @@ import { computed, ref } from 'vue';
 import Button from '../ui/button/Button.vue';
 
 type CategoryData = App.Data.Category.CategoryResponseData;
-
+type AllocationItemData = App.Data.Allocation.AllocationItemData;
 // 分配内容についてのPropsを受け取る
 const props = defineProps<{
     totalAmount: number,
     categories: CategoryData[],
-    initialAllocations?: Array<{ categoryId: number, amount: number }>
+    initialAllocations?: AllocationItemData[]
 }>();
 
 // モーダルの開閉についての真偽値をPropsで受け取る
 const isOpen = defineModel<boolean>('open', { default: false });
 
 // emitイベントの型定義
-const emit = defineEmits<{ confirm: [allocations: Array<{ categoryId: number, amount: number }>] }>();
+const emit = defineEmits<{ confirm: [allocations: AllocationItemData[]] }>();
 
 // カテゴリごとに分かれている分配ルールについて、選択中のカテゴリに合致したデータを取得する
-const localAllocations = ref<Array<{ categoryId: number; amount: number }>>(
-    props.categories.map(p => {
-        const exist = props.initialAllocations?.find(a => a.categoryId === p.id);
+const localAllocations = ref<AllocationItemData[]>(
+    props.categories.map((category) => {
+        const exist = props.initialAllocations?.find((a) => a.categoryId === category.id);
         return {
-            categoryId: p.id,
+            id: exist?.id ?? null,
+            categoryId: category.id,
+            toAccountId: exist?.toAccountId ?? null,
             amount: exist ? exist.amount : 0,
         }
     })

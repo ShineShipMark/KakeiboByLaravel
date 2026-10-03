@@ -13,6 +13,7 @@ class AllocationRuleItem extends Model
     use HasFactory;
 
     protected $fillable = [
+        'id',
         'allocation_rule_id',
         'to_account_id',
         'category_id', // タイポ修正

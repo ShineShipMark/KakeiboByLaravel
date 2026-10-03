@@ -48,14 +48,19 @@ class Transaction extends Model
         return $this->belongsTo(Category::class);
     }
 
+    // 振替（移動）や自動配分によって発生した関連取引を自己結合（Self-Join）でスマートに管理する
+
+    // 親取引(Transactionモデル同士での取引)を自己参照リレーションで定義する
     public function parent(): BelongsTo
     {
         return $this->belongsTo(Transaction::class, 'parent_transaction_id');
     }
 
+    // 子取引または配分操作において、親取引により発生またはそれに付随する取引を定義する
+    // 例)収入登録(親)のときの分配(子)、引き出し登録(親)のときの手数料(子)など
     public function allocations():HasMany
     {
-        return $this->hanMany(Transaction::class, 'parent_transaction_id');
+        return $this->hasMany(Transaction::class, 'parent_transaction_id');
     }
 
     /* =========================================================================

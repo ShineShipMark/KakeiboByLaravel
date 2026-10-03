@@ -14,6 +14,7 @@ class AllocationRule extends Model
     use HasFactory;
 
     protected $fillable = [
+        'id',
         'name',
         'from_account_id',
         'execution_day',

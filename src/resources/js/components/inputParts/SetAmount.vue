@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/number-field';
 import { Label } from '@/components/ui/label'
 
-const amount = defineModel<number>();
+const amount = defineModel<number | null>();
 
 </script>
 <template>

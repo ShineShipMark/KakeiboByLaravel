@@ -3,6 +3,7 @@ import Card from '@/components/ui/card/Card.vue';
 import { ref } from 'vue';
 import { FieldGroup, Field, FieldLabel, FieldSet } from '@/components/ui/field';
 import { useForm } from '@inertiajs/vue3';
+import SetAmount from '@/components/inputParts/SetAmount.vue';
 
 type SaveAllocationRuleItemData = App.Data.Allocation.SaveAllocationRuleItemData;
 type SaveAllocationRuleData = App.Data.Allocation.SaveAllocationRuleData;

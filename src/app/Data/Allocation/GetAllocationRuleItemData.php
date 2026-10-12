@@ -14,7 +14,7 @@ class GetAllocationRuleItemData extends Data
 {
     public function __construct(
         public ?int $id,
-        public ?int $toAccountId,
+        public int $toAccountId,
         public ?GetAccountData $toAccount,
         public ?int $categoryId,
         public ?CategoryResponseData $category,

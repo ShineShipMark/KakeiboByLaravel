@@ -13,7 +13,7 @@ class SaveAllocationRuleItemData extends Data
     public function __construct(
         public ?int $id,
         #[Required]
-        public int $toAccountId,
+        public ?int $toAccountId,
         #[Required]
         public int $categoryId,
         #[Required]
@@ -24,6 +24,5 @@ class SaveAllocationRuleItemData extends Data
         public int $priority = 1,
     )
     {
-        throw new \Exception('Not implemented');
     }
 }

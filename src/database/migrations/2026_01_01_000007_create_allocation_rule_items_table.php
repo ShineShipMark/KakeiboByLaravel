@@ -18,16 +18,22 @@ return new class extends Migration
             $table->foreignId('allocation_rule_id')
                 ->constrained('allocation_rules') 
                 ->cascadeOnDelete();
+
+            $table->foreignId('to_account_id')
+                ->constrained('accounts')
+                ->restrictOnDelete();
         
             // カテゴリへの外部キー（明示的に指定）
             $table->foreignId('category_id')
                 ->constrained('categories')
                 ->cascadeOnDelete();
                 
-            $table->integer('amount');
-            $table->string('calc_type')->default('percentage'); 
-            $table->decimal('value', 10, 2)->default(0); 
-        
+            $table->string('type');
+                
+            $table->decimal('amount', 12, 2)->default(0);
+            $table->decimal('percentage', 5, 2)->default(0); 
+            $table->integer('priority'); 
+            
             $table->timestamps();
         });
     }

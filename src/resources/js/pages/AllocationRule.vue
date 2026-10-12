@@ -1,30 +1,36 @@
 <script setup lang='ts'>
 import Card from '@/components/ui/card/Card.vue';
-import { ref } from 'vue';
 import { FieldGroup, Field, FieldLabel, FieldSet } from '@/components/ui/field';
 import { useForm } from '@inertiajs/vue3';
 import SetAmount from '@/components/inputParts/SetAmount.vue';
+import Button from '@/components/ui/button/Button.vue';
+
 
 type SaveAllocationRuleItemData = App.Data.Allocation.SaveAllocationRuleItemData;
 type SaveAllocationRuleData = App.Data.Allocation.SaveAllocationRuleData;
+type AllocationsCategoriesData = App.Data.Allocation.AllocationsCategoriesData;
 
-const rule_items = ref(['家賃', 'スマホ代', '奨学金', '生命保険', 'NISA', '趣味', '雑費', '諸貯金', '趣味貯金'])
+const props = defineProps<AllocationsCategoriesData>();
+
+const rule_items = props.categories.find(category =>
+    (category.type === 'income' && category.name === '給料からの各種費用差し引き')
+)?.children ?? [];
+
 const getInitialItemData = (): SaveAllocationRuleItemData[] => {
-    const itemsData: SaveAllocationRuleItemData[] = [];
-    const initialItem = (priority_num: number): SaveAllocationRuleItemData => {
+    const initialItem = (categoryId: number, priority_num: number): SaveAllocationRuleItemData => {
         return {
             id: null,
-            toAccountId: 0,
-            categoryId: 0,
+            toAccountId: null,
+            categoryId: categoryId,
             type: 'fixed' as const,
             amount: 0,
             percentage: 0,
             priority: priority_num,
         }
     }
-    rule_items.value.forEach((items, index) => {
-        itemsData.push(initialItem(index))
-    })
+
+    const itemsData = rule_items.map(
+        (category, index) => initialItem(category.id, index + 1));
 
     return itemsData;
 }
@@ -49,7 +55,7 @@ const form = useForm<SaveAllocationRuleData>(getInitialData());
                     <FieldSet>
                         <FieldGroup>
                             <FieldLabel>
-                                {{ rule_items[index] }}
+                                {{ rule_items[index].name }}
                             </FieldLabel>
                             <Field>
                                 <SetAmount v-model="item.amount" />

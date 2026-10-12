@@ -3,9 +3,9 @@ import Card from '@/components/ui/card/Card.vue';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Button } from '@/components/ui/button';
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, } from 'vue';
 import {
-    Dialog,
+    Dialog, DialogTrigger
 } from '@/components/ui/dialog';
 import EditModal from '@/components/historyParts/EditModal.vue';
 import SetAtDate from '@/components/inputParts/SetAtDate.vue';
@@ -15,26 +15,24 @@ import SetSelectAccount from '@/components/inputParts/SetSelectAccount.vue';
 import { router, useForm } from '@inertiajs/vue3';
 import TypeChangeButtons from '@/components/utilities/TypeChangeButtons.vue';
 
-type TransactionData = App.Data.Transaction.TransactionData;
 type TransactionSearchForm = App.Data.Transaction.TransactionFilterData;
 type TransactionType = App.Enum.TransactionType;
-type AccountBalanceSummaryData = App.Data.Account.AccountBalanceSummaryData;
+type TransactionIndexData = App.Data.Transaction.TransactionIndexData;
 
 type CategoryData = App.Data.Category.CategoryResponseData;
 
-type TransactionSearchedData = Omit<TransactionData, 'allocations'> & {
-    allocations?: Array<{ categoryId: number; amount: number }>
-}
-
 // 検索結果を受け取る
 const props = defineProps<{
-    transaction?: TransactionSearchedData[], filters?: TransactionSearchForm,
-    categories: CategoryData[], accounts: AccountBalanceSummaryData[]
+    transactions?: TransactionIndexData['transactions'], filters?: TransactionIndexData['filters'],
+    categories: CategoryData[], accounts: TransactionIndexData['accounts'],
 }>();
 
 // 受け取った結果から、一致する口座とカテゴリの情報を算出
-const accountMap = computed(() => { return new Map(props.accounts.map(acc => [acc.accountId, acc.accountName])) });
-const categoryMap = computed(() => { return new Map(props.categories.map(cat => [cat.id, cat])) });
+const accountMap = computed(() => { return new Map(props.accounts.map(acc => [acc.id, acc.name])) });
+const categoryMap = computed(() => {
+    return new Map<number, { name: string, parentName: string }>(
+        props.categories.flatMap(pc => pc.children?.map(cc => [cc.id, { name: cc.name, parentName: pc.name }]) ?? []))
+});
 
 // 口座名を取得
 const getAccountName = (id?: number | null) => id ? (accountMap.value.get(id) ?? '-') : '-';
@@ -42,15 +40,13 @@ const getAccountName = (id?: number | null) => id ? (accountMap.value.get(id) ??
 //親カテゴリを取得
 const getParentCategoryName = (categoryId: number | null): string => {
     if (!categoryId) return '未設定';
-    const category = categoryMap.value.get(categoryId)?.parent
-    return category?.parent?.name ?? '未設定';
+    return categoryMap.value.get(categoryId)?.parentName ?? '未設定';
 }
 
 // 子カテゴリを取得
 const getChildrenCategoryName = (categoryId: number | null): string => {
     if (!categoryId) return '未設定';
-    const category = categoryMap.value.get(categoryId)
-    return category?.name ?? '未設定';
+    return categoryMap.value.get(categoryId)?.name ?? '未設定';
 }
 
 // 検索条件の初期値を設定
@@ -84,16 +80,6 @@ onMounted(async () => {
 });
 
 // モーダルの開閉決定の真偽値
-const isModalOpen = ref(false)
-// 選択された記録
-const selectedTransaction = ref<TransactionSearchedData | undefined>(undefined)
-
-// 編集モーダルを開く
-const openEditModal = (data: TransactionSearchedData) => {
-    // 選択された記録に、引数で渡されたデータを格納
-    selectedTransaction.value = data;
-    isModalOpen.value = true;
-}
 
 // カラム名
 const columnName = {
@@ -110,7 +96,7 @@ const searchData = () => {
     router.get('transactions', {
         ...form.data(),
     }, {
-        only: ['searchedData'],
+        only: ['transactions'],
         preserveState: true,
     });
 }
@@ -146,10 +132,9 @@ const handleTypeChange = (newType: TransactionType) => {
     </Button>
 
     <Card>
-        <Card v-for="acc in props.accounts" :key="acc.accountId">
-            <h3>{{ acc.accountName }}</h3>
-            <p>実残高:{{ acc.actualBalance.toLocaleString() }}円</p>
-            <p>未割当:{{ acc.unallocatedBalance.toLocaleString() }}円</p>
+        <Card v-for="acc in props.accounts" :key="acc.id">
+            <h3>{{ acc.name }}</h3>
+            <p>実残高:{{ acc.balance.toLocaleString() }}円</p>
         </Card>
     </Card>
 
@@ -178,7 +163,7 @@ const handleTypeChange = (newType: TransactionType) => {
                     <FieldLabel>
                         所在
                     </FieldLabel>
-                    <SetSelectAccount v-model:account-id="form.accountId" :accountData="props.accounts" />
+                    <SetSelectAccount v-model="form.accountId" :accountDatas="props.accounts" />
                 </Field>
                 <Field>
                     <FieldLabel>
@@ -203,7 +188,7 @@ const handleTypeChange = (newType: TransactionType) => {
                 </TableRow>
             </TableHeader>
             <TableBody>
-                <TableRow v-for="data in props.transaction" :key="data.id!">
+                <TableRow v-for="data in props.transactions?.data" :key="data.id!">
                     <TableCell>
                         {{ data.date }}
                     </TableCell>
@@ -224,12 +209,12 @@ const handleTypeChange = (newType: TransactionType) => {
                     </TableCell>
                     <TableCell>
                         <Dialog>
-                            <Button variant="outline" @click="openEditModal(data)">
-                                編集
-                            </Button>
-                            <EditModal v-model:open="isModalOpen" :transaction="selectedTransaction"
-                                :categories="categories" :allocations="data.allocations"
-                                :key="selectedTransaction?.id ?? 'new'" />
+                            <DialogTrigger as-child>
+                                <Button variant="outline">
+                                    編集
+                                </Button>
+                            </DialogTrigger>
+                            <EditModal :transaction="data" :categories="categories" />
                         </Dialog>
                     </TableCell>
                     <TableCell>

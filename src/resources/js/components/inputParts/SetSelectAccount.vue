@@ -9,23 +9,21 @@ import {
     SelectValue,
 } from '@/components/ui/select'
 
-type AccountBalanceSummaryData = App.Data.Account.AccountBalanceSummaryData;
-
-const props = defineProps<{ accountData: AccountBalanceSummaryData[] }>()
+const props = defineProps<{ accountDatas: { id: number, name: string }[] }>()
 
 const accountId = defineModel<number | null>();
 
 </script>
 <template>
-    <Select v-if="props.accountData.length > 0" v-model="accountId">
+    <Select v-if="props.accountDatas.length > 0" v-model="accountId">
         <SelectTrigger class="w-[180px]">
             <SelectValue placeholder="目的を選択" />
         </SelectTrigger>
         <SelectContent>
             <SelectGroup>
                 <SelectLabel>目的</SelectLabel>
-                <SelectItem :key="acc.accountId" v-for="acc in props.accountData" :value="acc.accountId">
-                    {{ acc.accountName }}
+                <SelectItem :key="data.id" v-for="data in props.accountDatas" :value="data.id">
+                    {{ data.name }}
                 </SelectItem>
             </SelectGroup>
         </SelectContent>

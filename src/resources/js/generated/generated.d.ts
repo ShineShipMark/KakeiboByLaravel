@@ -33,6 +33,10 @@ declare namespace App {
       export type AllocationPreviewData = {
         categoryId: number;
       };
+      export type AllocationsCategoriesData = {
+        categories: App.Data.Category.CategoryResponseData[];
+        accounts: App.Data.Account.GetAccountData[];
+      };
       export type ExecuteAllocationData = {
         allocationRuleId: number;
         sourceAmount: number;
@@ -41,7 +45,7 @@ declare namespace App {
       };
       export type GetAllocationRuleItemData = {
         id: number | null;
-        toAccountId: number | null;
+        toAccountId: number;
         toAccount: App.Data.Account.GetAccountData | null;
         categoryId: number | null;
         category: App.Data.Category.CategoryResponseData | null;
@@ -57,7 +61,7 @@ declare namespace App {
       };
       export type SaveAllocationRuleItemData = {
         id: number | null;
-        toAccountId: number;
+        toAccountId: number | null;
         categoryId: number;
         type: App.Enum.AllocationType;
         amount: number | null;
@@ -133,9 +137,14 @@ declare namespace App {
         categoryId: number | null;
         startDate: string | null;
         endDate: string | null;
-        accountId: number;
+        accountId: number | null;
         page: number;
         perPage: number;
+      };
+      export type TransactionIndexData = {
+        transactions: Paginated<App.Data.Transaction.TransactionData>;
+        filters: App.Data.Transaction.TransactionFilterData;
+        accounts: App.Data.Account.GetAccountData[];
       };
     }
   }

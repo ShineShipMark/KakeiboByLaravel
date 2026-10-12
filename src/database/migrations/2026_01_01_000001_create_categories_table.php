@@ -20,6 +20,7 @@ return new class extends Migration
                 ->nullable()
                 ->constrained('categories')
                 ->nullOnDelete();
+            $table->integer('sort_order')->default(1);
 
             $table->timestamps();
         });

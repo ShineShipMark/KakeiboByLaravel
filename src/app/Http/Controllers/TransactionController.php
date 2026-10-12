@@ -22,7 +22,7 @@ class TransactionController extends Controller
     {
         $transactions = $service->getPaginatedTransactions($filters);
 
-        return Inertia::render('Transaction/Index', [
+        return Inertia::render('history', [
             'transactions' => $transactions,
             'filters' => $filters,
             'categories' => Category::all(),

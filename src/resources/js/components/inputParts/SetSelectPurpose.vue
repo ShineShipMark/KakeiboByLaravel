@@ -43,7 +43,7 @@ watch(() => props.transactionType, () => {
             <SelectGroup>
                 <SelectLabel>目的</SelectLabel>
                 <SelectItem :key="child.id" v-for="child in filteredCategories" :value="child.id">
-                    {{ child.children }}
+                    {{ child.name }}
                 </SelectItem>
             </SelectGroup>
         </SelectContent>

@@ -20,6 +20,8 @@ return new class extends Migration
 
             $table->foreignId('account_id')->nullable()->constrained()->nullOnDelete();
 
+            $table->integer('sort_order')->default(1);
+
             $table->timestamps();
         });
     }

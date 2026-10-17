@@ -10,9 +10,6 @@ use App\Models\Category;
 use App\Services\TransactionService;
 use App\UseCases\StoreTransactionAction;
 use App\UseCases\UpdateTransactionAction;
-use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -50,5 +47,10 @@ class TransactionController extends Controller
         $action($id, $data);
 
         return redirect()->back()->with('success', '編集完了');
+    }
+
+    public function destroy(int $id, TransactionService $service)
+    {
+        $service->deleteTransaction($id);
     }
 }

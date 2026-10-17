@@ -3,7 +3,7 @@ import Card from '@/components/ui/card/Card.vue';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Button } from '@/components/ui/button';
-import { computed, onMounted, } from 'vue';
+import { computed } from 'vue';
 import {
     Dialog, DialogTrigger
 } from '@/components/ui/dialog';
@@ -13,7 +13,6 @@ import SetSelectPurpose from '@/components/inputParts/SetSelectPurpose.vue';
 import Textarea from '@/components/ui/textarea/Textarea.vue';
 import SetSelectAccount from '@/components/inputParts/SetSelectAccount.vue';
 import { router, useForm } from '@inertiajs/vue3';
-import TypeChangeButtons from '@/components/utilities/TypeChangeButtons.vue';
 
 type TransactionSearchForm = App.Data.Transaction.TransactionFilterData;
 type TransactionType = App.Enum.TransactionType;
@@ -23,7 +22,7 @@ type CategoryData = App.Data.Category.CategoryResponseData;
 
 // 検索結果を受け取る
 const props = defineProps<{
-    transactions?: TransactionIndexData['transactions'], filters?: TransactionIndexData['filters'],
+    transactions: TransactionIndexData['transactions'], filters: TransactionIndexData['filters'],
     categories: CategoryData[], accounts: TransactionIndexData['accounts'],
 }>();
 
@@ -74,12 +73,6 @@ const getInitialValues = (): TransactionSearchForm => {
 // フォームの初期値を設定
 const form = useForm<TransactionSearchForm>(getInitialValues());
 
-// ロード時に検索実行
-onMounted(async () => {
-    searchData();
-});
-
-// モーダルの開閉決定の真偽値
 
 // カラム名
 const columnName = {
@@ -91,26 +84,16 @@ const columnName = {
     description: '詳細'
 }
 
-// 検索を実行
-const searchData = () => {
-    router.get('transactions', {
-        ...form.data(),
-    }, {
-        only: ['transactions'],
-        preserveState: true,
-    });
-}
-
 // データを削除
 const deleteData = (id: number) => {
     if (confirm('本当に削除しますか？')) {
-        form.delete(`${window.location.pathname}/${id}`)
+        router.delete(`/transactions/${id}`)
     }
 }
 
 // 現在の条件のまま検索のGET送信実行
 const handleSubmit = () => {
-    form.get('/transactions', { preserveState: true, preserveScroll: true });
+    form.get('/transactions', { only: ['transactions'], preserveState: true, preserveScroll: true });
 }
 
 // 収支がボタンで変更されたとき、
@@ -121,28 +104,22 @@ const handleTypeChange = (newType: TransactionType) => {
 
 </script>
 <template>
-    <Button type="button" @click="handleTypeChange('expense')">
-        支出
-    </Button>
-    <Button type="button" @click="handleTypeChange('income')">
-        収入
-    </Button>
-    <Button type="button" @click="handleTypeChange('transfer')">
-        振替
-    </Button>
-
-    <Card>
-        <Card v-for="acc in props.accounts" :key="acc.id">
-            <h3>{{ acc.name }}</h3>
-            <p>実残高:{{ acc.balance.toLocaleString() }}円</p>
-        </Card>
-    </Card>
-
-    <form @submit.prevent="searchData">
+    <form @submit.prevent="handleSubmit">
         <FieldGroup>
             <FieldGroup>
                 <Field>
-                    <TypeChangeButtons v-model="form" />
+                    <Button type="button" @click="handleTypeChange('all')">
+                        全て
+                    </Button>
+                    <Button type="button" @click="handleTypeChange('expense')">
+                        支出
+                    </Button>
+                    <Button type="button" @click="handleTypeChange('income')">
+                        収入
+                    </Button>
+                    <Button type="button" @click="handleTypeChange('transfer')">
+                        振替
+                    </Button>
                 </Field>
                 <Field>
                     <FieldLabel>
@@ -174,6 +151,7 @@ const handleTypeChange = (newType: TransactionType) => {
                         placeholder="Type your message here." />
                 </Field>
             </FieldGroup>
+            <Button type="submit" :disabled="form.processing">検索</Button>
         </FieldGroup>
     </form>
 

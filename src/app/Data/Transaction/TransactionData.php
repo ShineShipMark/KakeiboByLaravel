@@ -42,7 +42,7 @@ class TransactionData extends Data
             id: $transaction->id,
             type: $transaction->type,
             amount:$transaction->amount,
-            date:$transaction->date,
+            date:$transaction->date->toDateString(),
             fromAccountId:$transaction->from_account_id,
             toAccountId:$transaction->to_account_id,
             categoryId:$transaction->category_id,
@@ -51,6 +51,7 @@ class TransactionData extends Data
             allocations: $transaction->relationLoaded('allocations')
             ? AllocationItemData::collect($transaction->allocations)->toArray()
             : [],
+            parentTransactionId:$transaction->parent_transaction_id,
         );
     }
 }

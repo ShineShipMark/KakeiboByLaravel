@@ -10,6 +10,7 @@ use App\Models\Account;
 use App\Models\Transaction;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
+use Spatie\LaravelData\PaginatedDataCollection;
 
 class TransactionService
 {
@@ -17,9 +18,9 @@ class TransactionService
      * ページ数で制限された取得結果を返す
      * @param TransactionFilterData $filters 検索条件
      * @param int $perPage 1っページあたりの表示件数
-     * @return LengthAwarePaginator 取得結果
+     * @return PaginatedDataCollection 取得結果
      */
-    public function getPaginatedTransactions(TransactionFilterData $filters, int $perPage = 20): LengthAwarePaginator
+    public function getPaginatedTransactions(TransactionFilterData $filters, int $perPage = 20): PaginatedDataCollection
     {
         // ドメインモデルの各ロジック(categoryなど)からリレーション定義を取得して、
         // 関連するキーでHWEREしたSELECTで自動取得してくれる
@@ -45,17 +46,16 @@ class TransactionService
         }
 
         // 特定の口座・財布に関わる取引（出金元 OR 入金先）
-        if (!empty($filters['account_id'])) {
+        if (!empty($filters->accountId)) {
             $query->where(function ($q) use ($filters) {
                 $q->where('from_account_id', $filters->accountId)
                   ->orWhere('to_account_id', $filters->accountId);
             });
         }
 
-        return $query->paginate($perPage)
-            ->appends($filters)
-            ->through(fn(Transaction $transaction) => TransactionData::fromModel($transaction)
-        );
+        $paginator = $query->paginate($perPage)->withQueryString();
+
+        return TransactionData::collect($paginator, PaginatedDataCollection::class);
     }
 
     /**

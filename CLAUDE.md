@@ -101,6 +101,6 @@ php artisan typescript:transform  # → resources/js/generated/generated.d.ts
 - **ルーティング未接続**: `HomeController`・`AllocationController@store/getCategories` にルートがない。`allocationrule.input` / `transaction.index` というルート名は存在しない。サイドバーの `/home`・`/graph` も未定義。
 - `AllocationRuleItem::calculateAmount()` の割合計算は四捨五入（`(int) round()`）。
 - `AllocationService::getPreview` は旧方式の `allocations` テーブルを参照している。
-- `TransactionSeeder` の収入データが `from_account_id` に口座を入れ `to_account_id` が null（不変条件違反）。
+- シーダーの取引は `TransactionService::createTransaction` 経由で作成する（不変条件と残高更新を通すため）。口座の初期残高は 0 で、残高は取引から積み上げる。
 - `TransactionService::getPaginatedTransactions` の口座フィルタが `$filters['account_id']`（Data のプロパティは `accountId`）。
 - コメント・メッセージは日本語。

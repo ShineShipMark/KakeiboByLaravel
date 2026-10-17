@@ -24,7 +24,10 @@ const categoryId = defineModel<number | null>('categoryId')
 
 // 4. 種別（transactionType）に合わせてカテゴリを自動絞り込み
 const filteredCategories = computed(() => {
-    return props.categories.filter((cat) => cat.type === props.transactionType)
+    if (props.transactionType === 'all') return props.categories;
+    return props.categories.filter((cat) => {
+        return cat.type === props.transactionType
+    })
 })
 
 // 5. 種別が変わったら選択中の ID を自動リセット

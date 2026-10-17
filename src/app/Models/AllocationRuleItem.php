@@ -56,7 +56,7 @@ class AllocationRuleItem extends Model
     /**
      * 基準額（給与など）をもとに、定額または割合に応じて配分金額を算出する
      */
-    public function calculateAmount(float $baseAmount = 0.0): float
+    public function calculateAmount(float $baseAmount = 0.0): int
     {
         if ($this->type === AllocationType::Fixed) {
             return (float) $this->amount;
@@ -64,12 +64,12 @@ class AllocationRuleItem extends Model
 
         if ($this->type === AllocationType::Percentage) {
             if ($baseAmount <= 0) {
-                return 0.0;
+                return 0;
             }
-            return round($baseAmount * ($this->percentage / 100), 2);
+            return (int)round($baseAmount * ($this->percentage / 100));
         }
 
-        return 0.0;
+        return 0;
     }
 
     public function createTransaction(int $fromAccountId, int $sourceAmount, Carbon $executeDate): ?Transaction

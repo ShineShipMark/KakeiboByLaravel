@@ -66,7 +66,7 @@ class TransactionService
     public function createTransaction(TransactionData $data): TransactionData
     {
         return DB::transaction(function () use($data){
-            $transaction = Transaction::create([
+            $transaction = new Transaction([
                 'type'=>$data->type,
                 'amount'=>$data->amount,
                 'date'=>$data->date,
@@ -74,7 +74,11 @@ class TransactionService
                 'to_account_id'=>$data->toAccountId,
                 'category_id'=>$data->categoryId,
                 'description'=>$data->description,
+                'parent_transaction_id' =>$data->parentTransactionId,
             ]);
+
+            $transaction->validateInvariants();
+            $transaction->save();
 
             $this->applyBalanceChanges($data);
 
@@ -105,14 +109,6 @@ class TransactionService
                 'category_id'=>$newData->categoryId,
                 'description'=>$newData->description,
             ]);
-
-            $transaction->allocations()->delete();
-            if(!empty($newData->allocations)){
-                $allocationsArray = array_map(fn($item)=>$item instanceof AllocationItemData ? $item->toArray():$item,
-                $newData->allocations
-                );
-                $transaction->allocations()->createMany($allocationsArray);
-            }
 
             $this->applyBalanceChanges($newData);
             return TransactionData::fromModel($transaction);

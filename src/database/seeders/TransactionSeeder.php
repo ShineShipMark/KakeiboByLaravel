@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Data\Transaction\TransactionData;
 use App\Enum\TransactionType;
 use App\Models\Account;
 use App\Models\Category;
-use App\Models\Transaction;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Services\TransactionService;
 use Illuminate\Database\Seeder;
 
 class TransactionSeeder extends Seeder
@@ -14,34 +14,42 @@ class TransactionSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run(): void
+    public function run(TransactionService $service): void
     {
         $account = Account::first();
         $fishingCategory = Category::where('name', '釣り')->first();
         $salaryCategory = Category::where('name', '基本給')->first();
 
         if($account && $fishingCategory) {
-            Transaction::create([
-                'type' => TransactionType::Expense->value,
-                'from_account_id' => $account->id,
-                'to_account_id' => null,
-                'category_id' => $fishingCategory->id,
-                'amount' => 3000,
-                'date' => '2026-08-08',
-                'description' => 'テスト'
-            ]);
+            $fishingData = new TransactionData(
+                    id:null,
+                    type:TransactionType::Expense,
+                    amount:30000,
+                    date:'2026-08-02',
+                    fromAccountId:$account->id,
+                    toAccountId:null,
+                    categoryId:$fishingCategory->id,
+                    description:null,
+                    parentTransactionId:null,
+            );
+
+            $service->createTransaction($fishingData);
         }
 
         if($account && $salaryCategory) {
-            Transaction::create([
-                'type' => TransactionType::Income->value,
-                'from_account_id' => $account->id,
-                'to_account_id' => null,
-                'category_id' => $salaryCategory->id,
-                'amount' => 240000,
-                'date' => '2026-08-25',
-                'description' => 'テスト'
-            ]);
+            $salaryData = new TransactionData(
+                id:null,
+                type:TransactionType::Income,
+                amount:300000,
+                date:'2026-08-01',
+                fromAccountId:null,
+                toAccountId:$account->id,
+                categoryId:$salaryCategory->id,
+                description:null,
+                parentTransactionId:null,
+            );
+
+            $service->createTransaction($salaryData);
         }
     }
 }

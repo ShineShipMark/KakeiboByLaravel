@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use AllocationService;
+use App\Services\AllocationService;
 use App\Data\Allocation\AllocationData;
 use App\Data\Allocation\AllocationPreviewData;
 use App\Data\Allocation\SaveAllocationRuleData;

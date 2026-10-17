@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use AllocationService;
+use App\Services\AllocationService;
 use App\Data\Transaction\TransactionData;
 use App\Data\Transaction\TransactionFilterData;
 use App\Models\Account;

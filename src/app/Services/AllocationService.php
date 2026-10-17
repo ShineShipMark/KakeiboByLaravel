@@ -1,6 +1,10 @@
 <?php
 
+namespace App\Services;
+
 use App\Data\Allocation\AllocationItemData;
+use App\Data\Transaction\TransactionData;
+use App\Enum\TransactionType;
 use App\Models\Allocation;
 use App\Models\AllocationRule;
 use App\Models\AllocationRuleItem;
@@ -12,9 +16,13 @@ use Illuminate\Support\Facades\DB;
 class AllocationService
 {
 
-    public function executeCustomAllocation(array $customAllocations, int $fromAccountId, Carbon $executeDate):Collection
+    public function __construct(private TransactionService $transactionService)
     {
-        return $this->saveAllocations(collect($customAllocations), $fromAccountId, $executeDate);
+    }
+
+    public function executeCustomAllocation(array $customAllocations, int $fromAccountId,int $parentTransactionId, Carbon $executeDate):Collection
+    {
+        return $this->saveAllocations($customAllocations, $fromAccountId, $parentTransactionId, $executeDate);
     }
 
     /**
@@ -24,63 +32,55 @@ class AllocationService
      * @param Carbon $executeDate 配分の実行日
      * @return Collection 結果の一覧
      */
-    public function executeRuleAllocation(int $allocationRuleId, int $sourceAmount, int $fromAccountId, Carbon $executeDate): Collection
+    public function executeRuleAllocation(int $allocationRuleId, int $sourceAmount, int $fromAccountId, int $parentTransactionId, Carbon $executeDate): Collection
     {
         // 配分ルールと内訳項目(家、スマホ料金など)を取得            
         $rule = AllocationRule::with('items')->findOrFail($allocationRuleId);
         $allocations = $rule->items->map(function(AllocationRuleItem $item) use ($sourceAmount){
-            return [
-                'category_id' => $item->category_id,
-                'amount' => $item->calculateAmount($sourceAmount),
-                'to_account_id' => $item->to_account_id,
-            ];
-        });
+            return new AllocationItemData(
+                categoryId: $item->category_id,
+                amount: $item->calculateAmount($sourceAmount),
+                toAccountId: $item->to_account_id,
+            );
+        })->all();
         
-        return $this->saveAllocations($allocations, $fromAccountId, $executeDate);
+        return $this->saveAllocations($allocations, $fromAccountId, $parentTransactionId, $executeDate);
     }
 
-    private function saveAllocations(Collection $allocations, int $fromAccountId, Carbon $executeDate):Collection
+    private function saveAllocations(array $allocations, int $fromAccountId, int $parentTransactionId, Carbon $executeDate):Collection
     {
-        return DB::transaction(function() use($allocations, $fromAccountId, $executeDate) {
-            // Transactionインスタンスを生成し、null項目を除外、個別の取引ルールをチェックして、取引をDBへ保存する
-            return $allocations->map(function (AllocationItemData $item) use ($fromAccountId, $executeDate){
-                $transaction = new Transaction([
-                    'from_account_id' => $fromAccountId,
-                    'to_account_id' => $item->toAccountId,
-                    'category_id' => $item->categoryId,
-                    'amount' => $item->amount,
-                    'date' => $executeDate,
-                    'type' => 'transfer',
-                ]);
-                $transaction->validateInvariants();
-                $transaction->save();
-                return $transaction;
-            });
+        $allocationsCollection = collect($allocations);
+        return DB::transaction(function() use($allocationsCollection, $fromAccountId, $parentTransactionId, $executeDate) {
+            return $allocationsCollection->filter(fn(AllocationItemData $item)=>$item->amount > 0)
+            ->map(function(AllocationItemData $item) use ($fromAccountId, $parentTransactionId, $executeDate){
+                $data = new TransactionData(
+                    id:null,
+                    type:TransactionType::Transfer,
+                    amount:$item->amount,
+                    date:$executeDate->toDateString(),
+                    fromAccountId:$fromAccountId,
+                    toAccountId:$item->toAccountId,
+                    categoryId:$item->categoryId,
+                    description:null,
+                    parentTransactionId:$parentTransactionId,
+
+                );
+                return $this->transactionService->createTransaction($data);
+            })->values();
         });
     }
 
-    public function updateAllocations(int $parentTransactionId, array $allocations, int $fromAccountId, Carbon $date):Collection
+    public function updateAllocations(array $allocations, int $fromAccountId, int $parentTransactionId, Carbon $executeDate):Collection
     {
-        return DB::transaction(function () use ($parentTransactionId, $allocations, $fromAccountId, $date){
-            Transaction::where('parent_transaction_id', $parentTransactionId)->delete();
+        $parentTransaction = Transaction::findOrFail($parentTransactionId);
 
-            return collect($allocations)->map(function (AllocationItemData $item) use ($parentTransactionId, $fromAccountId, $date){
-                $transaction = new Transaction([
-                    'parent_transaction_id' => $parentTransactionId,
-                    'from_account_id' => $fromAccountId,
-                    'to_account_id' => $item->toAccountId,
-                    'category_id' => $item->categoryId,
-                    'amount' => $item->amount,
-                    'date' => $item->$date,
-                    'type' => 'transfer',
-                ]);
+        $childAllocations = $parentTransaction->allocations;
 
-                $transaction->validateInvariants();
-                $transaction->save();
-
-                return $transaction;
-            });
+        $childAllocations->each(function($item){
+            $this->transactionService->deleteTransaction($item->id);
         });
+
+        return $this->saveAllocations($allocations, $fromAccountId, $parentTransactionId, $executeDate);
     }
 
     public function getPreview(int $categoryId):Collection

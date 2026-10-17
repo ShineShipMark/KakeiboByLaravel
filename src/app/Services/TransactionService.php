@@ -30,14 +30,14 @@ class TransactionService
             ->orderBy('id', 'desc');    
 
         if ($filters->startDate) {
-            $query->where('date', '>', $filters->startDate);
+            $query->where('date', '>=', $filters->startDate);
         }
 
         if ($filters->endDate) {
-            $query->where('date', '<', $filters->endDate);
+            $query->where('date', '=<', $filters->endDate);
         }
 
-        if ($filters->type) {
+        if ($filters->type !== TransactionType::All) {
             $query->where('type', $filters->type);
         }
 

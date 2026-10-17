@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Data\Account\GetAccountData;
 use App\Services\AllocationService;
 use App\Data\Transaction\TransactionData;
 use App\Data\Transaction\TransactionFilterData;
+use App\Data\Transaction\TransactionIndexData;
 use App\Models\Account;
 use App\Models\Category;
 use App\Services\TransactionService;
@@ -18,13 +20,9 @@ class TransactionController extends Controller
     public function index(TransactionFilterData $filters, TransactionService $service): Response
     {
         $transactions = $service->getPaginatedTransactions($filters);
-
-        return Inertia::render('history', [
-            'transactions' => $transactions,
-            'filters' => $filters,
-            'categories' => Category::all(),
-            'accounts' => Account::all(),
-        ]);
+        $accounts = GetAccountData::collect(Account::all()->all());
+        $indexData = new TransactionIndexData(transactions:$transactions, filters:$filters, accounts:$accounts);
+        return Inertia::render('History', $indexData);
     }
 
     public function create(): Response

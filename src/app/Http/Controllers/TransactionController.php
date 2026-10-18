@@ -10,6 +10,7 @@ use App\Data\Transaction\TransactionIndexData;
 use App\Models\Account;
 use App\Models\Category;
 use App\Services\TransactionService;
+use App\UseCases\DeleteTransactionAction;
 use App\UseCases\StoreTransactionAction;
 use App\UseCases\UpdateTransactionAction;
 use Inertia\Inertia;
@@ -37,18 +38,20 @@ class TransactionController extends Controller
     {
         $action($data);
 
-        return redirect()->route('transaction.index')->with('success', '登録完了');
+        return redirect()->route('transaction.index')->with('message', '登録完了');
     }
 
     public function update(int $id, TransactionData $data, UpdateTransactionAction $action)
     {
         $action($id, $data);
 
-        return redirect()->back()->with('success', '編集完了');
+        return redirect()->back()->with('message', '編集完了');
     }
 
-    public function destroy(int $id, TransactionService $service)
+    public function destroy(int $id, DeleteTransactionAction $action)
     {
-        $service->deleteTransaction($id);
+        $action($id);
+
+        return redirect()->back()->with('message', '削除完了');
     }
 }

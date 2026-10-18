@@ -93,7 +93,8 @@ php artisan typescript:transform  # → resources/js/generated/generated.d.ts
 
 - `app/Enum/AccountId.php` の namespace が `App\Enums` でディレクトリ（`Enum`）と不一致。
 - `bootstrap/providers.php` が存在しない `App\Providers\KakeiboProvider` を登録している。
-- `TransactionController@index` は `render('history')`（小文字。ファイルは `History.vue`）で、`TransactionIndexData` への移行も未完了。`create` が描画する `Transaction/Create` は存在しない。
+- 履歴一覧は `TransactionController@index` → `TransactionIndexData` → `History.vue`。`create` が描画する `Transaction/Create` は存在しない。
+- フラッシュメッセージは `->with('message', ...)` に統一する（`HandleInertiaRequests` が共有するのは `flash.message` だけ）。フロントでの表示はまだない。
 - **取引の保存は `TransactionService::createTransaction` / `deleteTransaction` に一本化**（残高更新を含む）。配分の子取引も `AllocationService` がこれらを経由して作成・削除する。
 - **スキーマとモデルの不一致**:
   - `transactions.amount` は integer 列だが、モデルは `decimal:2` キャスト。

@@ -72,6 +72,13 @@ class AllocationService
 
     public function updateAllocations(array $allocations, int $fromAccountId, int $parentTransactionId, Carbon $executeDate):Collection
     {
+        $this->deleteAllocations($parentTransactionId);
+
+        return $this->saveAllocations($allocations, $fromAccountId, $parentTransactionId, $executeDate);
+    }
+
+    public function deleteAllocations(int $parentTransactionId):void
+    {
         $parentTransaction = Transaction::findOrFail($parentTransactionId);
 
         $childAllocations = $parentTransaction->allocations;
@@ -79,8 +86,6 @@ class AllocationService
         $childAllocations->each(function($item){
             $this->transactionService->deleteTransaction($item->id);
         });
-
-        return $this->saveAllocations($allocations, $fromAccountId, $parentTransactionId, $executeDate);
     }
 
     public function getPreview(int $categoryId):Collection

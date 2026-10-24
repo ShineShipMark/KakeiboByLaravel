@@ -1,5 +1,4 @@
 import { PageProps as InertiaPageProps } from "@inertiajs/core";
-import { CategoryResponseData } from "../generated/generated";
 
 export interface Auth {
   user: User;
@@ -23,20 +22,10 @@ export interface User {
   updated_at: string;
 }
 // 2. 自作の共有 Props 型（Inertia の基底 PageProps を継承・合成する）
-export type PageProps<
+//    Inertia の PageProps と区別するため PagePropsWith<T>（共有 props に T を足したもの）とする
+export type PagePropsWith<
   T extends Record<string, unknown> = Record<string, unknown>,
-> = T &
-  InertiaPageProps & {
-    auth: {
-      user: User | null;
-    };
-    categories: Array<CategoryResponseData>;
-    flash: {
-      message?: string;
-      success?: string;
-      error?: string;
-    };
-  };
+> = T & InertiaPageProps;
 
 // 3. Inertia 内部の PageProps インターフェースを拡張（Augmentation）
 declare module "@inertiajs/core" {
@@ -44,11 +33,12 @@ declare module "@inertiajs/core" {
     auth: {
       user: User | null;
     };
-    categories: Array<CategoryResponseData>;
+    categories: Array<App.Data.Category.CategoryResponseData>;
     flash: {
       message?: string;
       success?: string;
       error?: string;
     };
+    accounts: Array<App.Data.Account.GetAccountData>;
   }
 }

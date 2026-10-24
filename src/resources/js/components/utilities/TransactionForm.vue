@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import Card from '@/components/ui/card/Card.vue';
 import Button from '@/components/ui/button/Button.vue';
 import { Field, FieldSet, FieldGroup, FieldLabel } from '@/components/ui/field';
@@ -7,14 +7,14 @@ import Textarea from '@/components/ui/textarea/Textarea.vue';
 import SetAmount from '@/components/inputParts/SetAmount.vue';
 import SetSelectPurpose from '@/components/inputParts/SetSelectPurpose.vue';
 import SetAtDate from '@/components/inputParts/SetAtDate.vue';
-import Label from '@/components/ui/label/Label.vue';
 import AllocationModal from '@/components/inputParts/AllocationModal.vue';
 import { router, useForm } from '@inertiajs/vue3';
 import TransactionController from '@/actions/App/Http/Controllers/TransactionController';
 import AllocationController from '@/actions/App/Http/Controllers/AllocationController';
 import TypeChangeButtons from '@/components/utilities/TypeChangeButtons.vue';
 import type { Page } from '@inertiajs/core';
-import { PageProps } from '@/types';
+import { PagePropsWith } from '@/types';
+import SetSelectAccount from '@/components/inputParts/SetSelectAccount.vue';
 
 type TransactionData = App.Data.Transaction.TransactionData;
 type CategoryData = App.Data.Category.CategoryResponseData;
@@ -28,15 +28,6 @@ type TransactionType = App.Enum.TransactionType;
 type TransactionFormType = Omit<TransactionData, 'id' | 'allocations'> & {
     id?: number | null,
     allocations?: Array<AllocationItemData>
-}
-
-// 1. サーバー（Laravel）から返ってくる Shared Data / Props の型を定義
-interface CustomPageProps extends PageProps {
-    flash: {
-        success?: string;
-        error?: string;
-    };
-    allocations?: AllocationItemData[];
 }
 
 // definePropsで受け取るデータの型を指定して受け取り、オプショナル(?が付いている)なPropsに対して渡される値がない場合のデフォルト値をwithDefaultsで指定する
@@ -102,7 +93,7 @@ watch(() => form.type, (newType) => {
         router.patch(AllocationController.preview.url(), { category_id: form.categoryId }, {
             preserveScroll: true,
             preserveState: true,
-            onSuccess: (page: Page<CustomPageProps>) => {
+            onSuccess: (page: Page<PagePropsWith<{ allocations?: AllocationItemData[] }>>) => {
                 // 2. page.props.allocations が存在することを確認して代入
                 if (page.props.allocations) {
                     form.allocations = page.props.allocations;
@@ -115,6 +106,11 @@ watch(() => form.type, (newType) => {
     }
 })
 
+const showFromAccount = computed(() => form.type === 'expense' || form.type === 'transfer')
+const showToAccount = computed(() => form.type === 'income' || form.type === 'transfer')
+const fromAccountLabel = computed(() => form.type === 'transfer' ? '振替元' : '出金元');
+const toAccountLabel = computed(() => form.type === 'transfer' ? '振替元' : '入金先');
+
 </script>
 <template>
     <Card>
@@ -123,12 +119,18 @@ watch(() => form.type, (newType) => {
         <FieldGroup>
             <FieldSet>
                 <FieldGroup>
-
+                    <Field v-if="showFromAccount">
+                        <FieldLabel>{{ fromAccountLabel }}</FieldLabel>
+                        <SetSelectAccount v-model="form.fromAccountId" />
+                    </Field>
+                    <Field v-if="showToAccount">
+                        <FieldLabel>{{ toAccountLabel }}</FieldLabel>
+                        <SetSelectAccount v-model="form.toAccountId" />
+                    </Field>
                     <Field>
                         <FieldLabel>
                             目的
                         </FieldLabel>
-                        <Label>{{ form.categoryId ? categories[form.categoryId] : '未選択' }}</Label>
                         <SetSelectPurpose v-model:category-id="form.categoryId" :categories="categories"
                             :transaction-type="form.type" />
                     </Field>

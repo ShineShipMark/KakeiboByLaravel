@@ -8,21 +8,24 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
+import { usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
 
-const props = defineProps<{ accountDatas: { id: number, name: string }[] }>()
+const page = usePage();
 
+const accounts = computed(() => page.props.accounts);
 const accountId = defineModel<number | null>();
 
 </script>
 <template>
-    <Select v-if="props.accountDatas.length > 0" v-model="accountId">
+    <Select v-if="accounts.length > 0" v-model="accountId">
         <SelectTrigger class="w-[180px]">
             <SelectValue placeholder="目的を選択" />
         </SelectTrigger>
         <SelectContent>
             <SelectGroup>
                 <SelectLabel>目的</SelectLabel>
-                <SelectItem :key="data.id" v-for="data in props.accountDatas" :value="data.id">
+                <SelectItem :key="data.id" v-for="data in accounts" :value="data.id">
                     {{ data.name }}
                 </SelectItem>
             </SelectGroup>

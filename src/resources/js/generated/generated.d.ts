@@ -13,7 +13,7 @@ declare namespace App {
         name: string;
         type: App.Enum.AccountType;
         balance: number;
-        is_active: boolean;
+        isActive: boolean;
       };
     }
     namespace Allocation {

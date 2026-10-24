@@ -38,7 +38,7 @@ class TransactionController extends Controller
     {
         $action($data);
 
-        return redirect()->route('transaction.index')->with('message', '登録完了');
+        return redirect()->route('transactions.index')->with('message', '登録完了');
     }
     public function update(int $id, TransactionData $data, UpdateTransactionAction $action)
     {

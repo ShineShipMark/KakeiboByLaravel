@@ -2,7 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Data\Account\GetAccountData;
 use App\Data\Category\CategoryResponseData;
+use App\Models\Account;
 use App\Models\Category;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
@@ -49,6 +51,9 @@ class HandleInertiaRequests extends Middleware
             'flash' => [
                 'message' => fn () => $request->session()->get('message'),
             ],
+            'accounts' => fn () => GetAccountData::collect(
+                Account::orderBy('id')->get(),
+            ),
         ]);
     
     }

@@ -141,7 +141,7 @@ const handleTypeChange = (newType: TransactionType) => {
                     <FieldLabel>
                         所在
                     </FieldLabel>
-                    <SetSelectAccount v-model="form.accountId" :accountDatas="props.accounts" />
+                    <SetSelectAccount v-model="form.accountId" />
                 </Field>
                 <Field>
                     <FieldLabel>

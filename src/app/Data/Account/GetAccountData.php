@@ -15,7 +15,7 @@ class GetAccountData extends Data
         public string $name,
         public AccountType $type,
         public float $balance,
-        public bool $is_active
+        public bool $isActive
     )
     {
     }

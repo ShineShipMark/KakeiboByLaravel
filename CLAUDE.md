@@ -104,5 +104,4 @@ php artisan typescript:transform  # → resources/js/generated/generated.d.ts
 - `AllocationRuleItem::calculateAmount()` の割合計算は四捨五入（`(int) round()`）。
 - `AllocationService::getPreview` は旧方式の `allocations` テーブルを参照している。
 - シーダーの取引は `TransactionService::createTransaction` 経由で作成する（不変条件と残高更新を通すため）。口座の初期残高は 0 で、残高は取引から積み上げる。
-- `TransactionService::getPaginatedTransactions` の口座フィルタが `$filters['account_id']`（Data のプロパティは `accountId`）。
 - コメント・メッセージは日本語。

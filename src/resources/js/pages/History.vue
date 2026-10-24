@@ -13,6 +13,7 @@ import SetSelectPurpose from '@/components/inputParts/SetSelectPurpose.vue';
 import Textarea from '@/components/ui/textarea/Textarea.vue';
 import SetSelectAccount from '@/components/inputParts/SetSelectAccount.vue';
 import { router, useForm } from '@inertiajs/vue3';
+import TransactionController from '@/actions/App/Http/Controllers/TransactionController';
 
 type TransactionSearchForm = App.Data.Transaction.TransactionFilterData;
 type TransactionType = App.Enum.TransactionType;
@@ -87,13 +88,13 @@ const columnName = {
 // データを削除
 const deleteData = (id: number) => {
     if (confirm('本当に削除しますか？')) {
-        router.delete(`/transactions/${id}`)
+        router.delete(TransactionController.destroy.url(id))
     }
 }
 
 // 現在の条件のまま検索のGET送信実行
 const handleSubmit = () => {
-    form.get('/transactions', { only: ['transactions'], preserveState: true, preserveScroll: true });
+    form.get(TransactionController.index.url(), { only: ['transactions'], preserveState: true, preserveScroll: true });
 }
 
 // 収支がボタンで変更されたとき、

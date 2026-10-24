@@ -5,6 +5,12 @@ src/.env
 src/storage/*.key
 src/storage/logs/
 src/storage/framework/
+src/public/hot
+
+# Wayfinder（Vite プラグインが自動生成する）
+src/resources/js/actions/
+src/resources/js/routes/
+src/resources/js/wayfinder/
 
 # Docker
 docker/mysql/

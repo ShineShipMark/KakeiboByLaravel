@@ -4,7 +4,7 @@ FROM php:8.4-fpm
 RUN apt-get update && apt-get install -y \
     git unzip libzip-dev libicu-dev libonig-dev procps curl \
  && docker-php-ext-install pdo_mysql intl zip \
- && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+ && curl -fsSL https://deb.nodesource.com/setup_24.x | bash - \
  && apt-get install -y nodejs
 
 # Composer

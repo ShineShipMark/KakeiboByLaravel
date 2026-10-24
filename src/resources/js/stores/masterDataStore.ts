@@ -7,6 +7,7 @@ import type {
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import axios from "axios";
+import MasterController from "@/actions/App/Http/Controllers/MasterController";
 
 type TransactionType = App.Enum.TransactionType;
 
@@ -20,7 +21,7 @@ export const useMasterDataStore = defineStore("masterData", () => {
     if (isLoaded.value) return;
 
     try {
-      const response = await axios.get<PurposeAndCategory>("/api/masters");
+      const response = await axios.get<PurposeAndCategory>(MasterController.index.url());
 
       purpose_category.value = response.data;
     } catch (error) {

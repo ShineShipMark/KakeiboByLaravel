@@ -10,11 +10,14 @@ import {
     SidebarFooter,
     SidebarHeader
 } from '@/components/ui/sidebar';
+import InputController from '@/actions/App/Http/Controllers/InputController';
+import TransactionController from '@/actions/App/Http/Controllers/TransactionController';
 
+// TODO: /home・/graph はルート未定義のため直書きのまま
 const menuItems = [
     { title: 'ホーム', url: '/home' },
-    { title: '入力', url: '/input' },
-    { title: '履歴', url: '/history' },
+    { title: '入力', url: InputController.index.url() },
+    { title: '履歴', url: TransactionController.index.url() },
     { title: 'グラフ', url: '/graph' }
 ]
 

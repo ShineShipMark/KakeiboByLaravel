@@ -10,6 +10,8 @@ import SetAtDate from '@/components/inputParts/SetAtDate.vue';
 import Label from '@/components/ui/label/Label.vue';
 import AllocationModal from '@/components/inputParts/AllocationModal.vue';
 import { router, useForm } from '@inertiajs/vue3';
+import TransactionController from '@/actions/App/Http/Controllers/TransactionController';
+import AllocationController from '@/actions/App/Http/Controllers/AllocationController';
 import TypeChangeButtons from '@/components/utilities/TypeChangeButtons.vue';
 import type { Page } from '@inertiajs/core';
 import { PageProps } from '@/types';
@@ -78,14 +80,14 @@ const isAllocationModalOpen = ref<boolean>(false);
 const handleSubmit = () => {
     // IDが既に存在する＝編集作業の場合、put送信で更新
     if (form.id) {
-        form.put(`/transactions/${form.id}`, {
+        form.put(TransactionController.update.url(form.id), {
             onSuccess: () => {
                 isAllocationModalOpen.value = false
             }
         });
         // 登録作業の場合、Post送信で登録
     } else {
-        form.post('/transactions');
+        form.post(TransactionController.store.url());
     }
 }
 
@@ -97,7 +99,7 @@ const handleAllocationConfirm = (allocations: AllocationItemData[]): void => {
 
 watch(() => form.type, (newType) => {
     if (newType === 'income' && form.categoryId) {
-        router.patch('/allocations/preview', { category_id: form.categoryId }, {
+        router.patch(AllocationController.preview.url(), { category_id: form.categoryId }, {
             preserveScroll: true,
             preserveState: true,
             onSuccess: (page: Page<CustomPageProps>) => {
@@ -121,6 +123,7 @@ watch(() => form.type, (newType) => {
         <FieldGroup>
             <FieldSet>
                 <FieldGroup>
+
                     <Field>
                         <FieldLabel>
                             目的

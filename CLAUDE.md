@@ -87,7 +87,8 @@ php artisan typescript:transform  # → resources/js/generated/generated.d.ts
   - そのため **`#[DataCollectionOf]` は TS 生成に効かない**。配列の要素型は docblock（`/** @var X[] */` や `@param array<X>`）で指定する。
   - `PaginatedDataCollection` などライブラリのクラスは変換できない（`undefined` になる）。`#[TypeScriptType]` / `#[LiteralTypeScriptType]` で TS 型を明示する。ページネーションは `resources/js/types/paginated.d.ts` のグローバル型 `Paginated<T>` を使う（laravel-data の出力 `{ data, links, meta }`、`meta` のキーは snake_case）。
   - **`defineProps<App.Data.X>()` のようにグローバル型を丸ごと渡すと Vue コンパイラが解決できずエラー**。props のキーは `defineProps<{ foo: App.Data.X['foo']; ... }>()` のように列挙する。
-- ルートヘルパーは Laravel Wayfinder（Vite プラグインが `resources/js/actions`・`resources/js/routes` を自動生成）。
+- ルートヘルパーは Laravel Wayfinder（Vite プラグインが `resources/js/actions`・`resources/js/routes`・`resources/js/wayfinder` を自動生成）。**生成物は git 管理外**（`.gitignore`）なので、clone 直後は `npm run dev` / `npm run build` か `php artisan wayfinder:generate` で生成してから型チェックする。
+  - フロントの URL は直書きせず、`import TransactionController from '@/actions/App/Http/Controllers/TransactionController'` → `TransactionController.update.url(id)` のように使う。ルート未定義の `/home`・`/graph` だけ直書きが残っている。
 
 ## 既知の注意点
 

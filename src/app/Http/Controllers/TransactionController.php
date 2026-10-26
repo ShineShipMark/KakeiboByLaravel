@@ -21,7 +21,6 @@ class TransactionController extends Controller
     public function index(TransactionFilterData $filters, TransactionService $service): Response
     {
         $transactions = $service->getPaginatedTransactions($filters);
-        $accounts = GetAccountData::collect(Account::all()->all());
         $indexData = new TransactionIndexData(transactions:$transactions, filters:$filters);
         return Inertia::render('History', $indexData);
     }

@@ -21,7 +21,7 @@ const props = defineProps<{ allowAll?: boolean }>();
 <template>
     <Select v-if="accounts.length > 0" v-model="accountId">
         <SelectTrigger class="w-[180px]">
-            <SelectValue placeholder="目的を選択" />
+            <SelectValue placeholder="口座を選択" />
         </SelectTrigger>
         <SelectContent>
             <SelectGroup>

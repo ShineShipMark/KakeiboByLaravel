@@ -14,6 +14,15 @@ import Textarea from '@/components/ui/textarea/Textarea.vue';
 import SetSelectAccount from '@/components/inputParts/SetSelectAccount.vue';
 import { router, useForm, usePage } from '@inertiajs/vue3';
 import TransactionController from '@/actions/App/Http/Controllers/TransactionController';
+import { config } from '@/types/vue-types';
+import {
+    NumberField,
+    NumberFieldContent,
+    NumberFieldDecrement,
+    NumberFieldIncrement,
+    NumberFieldInput,
+} from '@/components/ui/number-field';
+import { Label } from '@/components/ui/label'
 
 type TransactionSearchForm = App.Data.Transaction.TransactionFilterData;
 type TransactionType = App.Enum.TransactionType;
@@ -81,6 +90,7 @@ const form = useForm<TransactionSearchForm>(getInitialValues());
 
 // カラム名
 const columnName = {
+    type: '種類',
     date: '日付',
     category: '大目的',
     purpose: '小目的',
@@ -97,7 +107,8 @@ const deleteData = (id: number) => {
 }
 
 // 現在の条件のまま検索のGET送信実行
-const handleSubmit = () => {
+const handleSubmit = (page = 1) => {
+    form.page = page;
     form.get(TransactionController.index.url(), { only: ['transactions'], preserveState: true, preserveScroll: true });
 }
 
@@ -107,9 +118,26 @@ const handleTypeChange = (newType: TransactionType) => {
     handleSubmit();
 }
 
+const showFromAccount = (type: TransactionType): boolean => {
+    return type === 'expense' || type === 'transfer'
+};
+const showToAccount = (type: TransactionType): boolean => {
+    return type === 'income' || type === 'transfer';
+};
+
+const showPageGo = computed(() => {
+    return meta.value.current_page < meta.value.last_page
+});
+
+const showPageBack = computed(() => {
+    return meta.value.current_page !== 1
+});
+
+const meta = computed(() => props.transactions.meta);
+
 </script>
 <template>
-    <form @submit.prevent="handleSubmit">
+    <form @submit.prevent="handleSubmit()">
         <FieldGroup>
             <FieldGroup>
                 <Field>
@@ -173,6 +201,9 @@ const handleTypeChange = (newType: TransactionType) => {
             <TableBody>
                 <TableRow v-for="data in props.transactions?.data" :key="data.id!">
                     <TableCell>
+                        {{ config[data.type].ja.label }}
+                    </TableCell>
+                    <TableCell>
                         {{ data.date }}
                     </TableCell>
                     <TableCell>
@@ -185,8 +216,12 @@ const handleTypeChange = (newType: TransactionType) => {
                         {{ data.amount }}
                     </TableCell>
                     <TableCell>
-                        {{ getAccountName(data.fromAccountId) }}
-                        {{ getAccountName(data.toAccountId) }}
+                        <Card v-if="showFromAccount(data.type)">
+                            {{ getAccountName(data.fromAccountId) }}
+                        </Card>
+                        <Card v-if="showToAccount(data.type)">
+                            {{ getAccountName(data.toAccountId) }}
+                        </Card>
                     </TableCell>
                     <TableCell>
                         {{ data.description }}
@@ -207,5 +242,19 @@ const handleTypeChange = (newType: TransactionType) => {
                 </TableRow>
             </TableBody>
         </Table>
+        <Button type="button" v-if="showPageBack" @click="handleSubmit(meta.current_page - 1)"
+            variant="default">前へ</Button>
+        <Button type="button" v-if="showPageGo" @click="handleSubmit(meta.current_page + 1)"
+            variant="default">次へ</Button>
+        <NumberField :min="1" :max="meta.last_page" v-model="form.page">
+            <Label>ページ数</Label>
+            <NumberFieldContent>
+                <NumberFieldDecrement />
+                <NumberFieldInput />
+                <NumberFieldIncrement />
+            </NumberFieldContent>
+            /{{ meta.last_page }}
+        </NumberField>
+        <Button type="button" @click="handleSubmit(form.page)" variant="default">ページ数で遷移</Button>
     </Card>
 </template>

@@ -14,8 +14,9 @@ type LinksParam = {
 };
 
 type MetaParam = {
-  currentPage: number;
-  lastPage: number;
-  perPage: number;
+  current_page: number;
+  last_page: number;
   total: number;
+  from: number | null;
+  to: number | null;
 };

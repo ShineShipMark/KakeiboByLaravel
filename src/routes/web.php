@@ -13,7 +13,7 @@ Route::get('/', function () {
     return Inertia::render('Welcome');
 })->name('home');
 
-Route::resource('transactions', TransactionController::class);
+Route::resource('transactions', TransactionController::class)->only(['index', 'create', 'store', 'update', 'destroy']);
 Route::resource('categories', CategoryController::class);
 
 Route::get('/input',[InputController::class, 'index'])->name('input.index');

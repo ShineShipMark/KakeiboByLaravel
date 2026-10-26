@@ -16,9 +16,6 @@ class TransactionIndexData extends Data
         #[LiteralTypeScriptType('Paginated<App.Data.Transaction.TransactionData>')]
         public PaginatedDataCollection $transactions,
         public TransactionFilterData $filters,
-        #[DataCollectionOf(GetAccountData::class)]
-        /** @var GetAccountData[] */
-        public array $accounts = [],
     )
     {
     }

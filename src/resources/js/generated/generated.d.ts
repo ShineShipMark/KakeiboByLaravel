@@ -144,7 +144,6 @@ declare namespace App {
       export type TransactionIndexData = {
         transactions: Paginated<App.Data.Transaction.TransactionData>;
         filters: App.Data.Transaction.TransactionFilterData;
-        accounts: App.Data.Account.GetAccountData[];
       };
     }
   }

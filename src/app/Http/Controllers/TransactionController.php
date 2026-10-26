@@ -22,16 +22,13 @@ class TransactionController extends Controller
     {
         $transactions = $service->getPaginatedTransactions($filters);
         $accounts = GetAccountData::collect(Account::all()->all());
-        $indexData = new TransactionIndexData(transactions:$transactions, filters:$filters, accounts:$accounts);
+        $indexData = new TransactionIndexData(transactions:$transactions, filters:$filters);
         return Inertia::render('History', $indexData);
     }
 
     public function create(): Response
     {
-        return Inertia::render('Transaction/Create', [
-            'accounts' => Account::all(),
-            'categories' => Category::all(),
-        ]);
+        return Inertia::render('Input');
     }
 
     public function store(TransactionData $data, StoreTransactionAction $action)

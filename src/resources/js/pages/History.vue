@@ -12,7 +12,7 @@ import SetAtDate from '@/components/inputParts/SetAtDate.vue';
 import SetSelectPurpose from '@/components/inputParts/SetSelectPurpose.vue';
 import Textarea from '@/components/ui/textarea/Textarea.vue';
 import SetSelectAccount from '@/components/inputParts/SetSelectAccount.vue';
-import { router, useForm } from '@inertiajs/vue3';
+import { router, useForm, usePage } from '@inertiajs/vue3';
 import TransactionController from '@/actions/App/Http/Controllers/TransactionController';
 
 type TransactionSearchForm = App.Data.Transaction.TransactionFilterData;
@@ -24,11 +24,15 @@ type CategoryData = App.Data.Category.CategoryResponseData;
 // 検索結果を受け取る
 const props = defineProps<{
     transactions: TransactionIndexData['transactions'], filters: TransactionIndexData['filters'],
-    categories: CategoryData[], accounts: TransactionIndexData['accounts'],
+    categories: CategoryData[]
 }>();
 
+const pages = usePage();
+
+const accounts = computed(() => pages.props.accounts);
+
 // 受け取った結果から、一致する口座とカテゴリの情報を算出
-const accountMap = computed(() => { return new Map(props.accounts.map(acc => [acc.id, acc.name])) });
+const accountMap = computed(() => { return new Map(accounts.value.map(acc => [acc.id, acc.name])) });
 const categoryMap = computed(() => {
     return new Map<number, { name: string, parentName: string }>(
         props.categories.flatMap(pc => pc.children?.map(cc => [cc.id, { name: cc.name, parentName: pc.name }]) ?? []))
@@ -64,7 +68,7 @@ const getInitialValues = (): TransactionSearchForm => {
         type: 'expense' as TransactionType, // または該当の Enum 値
         startDate: new Date().toISOString().split('T')[0],
         endDate: new Date().toISOString().split('T')[0],
-        accountId: 1,   // ← undefined にならないよう明確に null にする
+        accountId: null,   // ← undefined にならないよう明確に null にする
         categoryId: null,
         page: 1,
         perPage: 30,
@@ -77,7 +81,7 @@ const form = useForm<TransactionSearchForm>(getInitialValues());
 
 // カラム名
 const columnName = {
-    type: '種類',
+    date: '日付',
     category: '大目的',
     purpose: '小目的',
     amount: '金額',
@@ -139,9 +143,9 @@ const handleTypeChange = (newType: TransactionType) => {
                 </Field>
                 <Field>
                     <FieldLabel>
-                        所在
+                        口座
                     </FieldLabel>
-                    <SetSelectAccount v-model="form.accountId" />
+                    <SetSelectAccount v-model="form.accountId" allow-all />
                 </Field>
                 <Field>
                     <FieldLabel>
@@ -182,6 +186,7 @@ const handleTypeChange = (newType: TransactionType) => {
                     </TableCell>
                     <TableCell>
                         {{ getAccountName(data.fromAccountId) }}
+                        {{ getAccountName(data.toAccountId) }}
                     </TableCell>
                     <TableCell>
                         {{ data.description }}

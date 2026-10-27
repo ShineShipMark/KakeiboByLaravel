@@ -35,9 +35,7 @@ declare module "@inertiajs/core" {
     };
     categories: Array<App.Data.Category.CategoryResponseData>;
     flash: {
-      message?: string;
-      success?: string;
-      error?: string;
+      message: string | null;
     };
     accounts: Array<App.Data.Account.GetAccountData>;
   }

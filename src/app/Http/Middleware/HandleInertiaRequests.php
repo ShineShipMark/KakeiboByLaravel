@@ -8,6 +8,7 @@ use App\Models\Account;
 use App\Models\Category;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -48,9 +49,9 @@ class HandleInertiaRequests extends Middleware
             'categories' => fn () => CategoryResponseData::collect(
                     Category::with('children')->whereNull('parent_id')->get()
                 ),
-            'flash' => [
+            'flash' => Inertia::always([
                 'message' => fn () => $request->session()->get('message'),
-            ],
+            ]),
             'accounts' => fn () => GetAccountData::collect(
                 Account::orderBy('id')->get(),
             ),
